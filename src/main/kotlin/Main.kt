@@ -19,6 +19,7 @@ fun main() {
 
     val csvParser = CsvParser()
 
+    /** ONLY FOR TESTING THE DATA!! **/
     val tmp = File("output.csv")
     tmp.createNewFile()
 
