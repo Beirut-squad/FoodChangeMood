@@ -2,6 +2,7 @@ package org.example.data
 
 import org.example.model.Recipe
 import org.example.model.toNutrition
+import org.example.stringToDate
 
 class CsvParser {
 
@@ -16,16 +17,17 @@ class CsvParser {
             Recipe(
                 name = csvLine.getOrNull(RecipesColumnIndex.NAME),
                 id = csvLine.getOrNull(RecipesColumnIndex.ID),
-                minutes = csvLine.getOrNull(RecipesColumnIndex.MINUTES),
+                minutes = csvLine.getOrNull(RecipesColumnIndex.MINUTES)?.toIntOrNull(),
                 contributorId = csvLine.getOrNull(RecipesColumnIndex.CONTRIBUTOR_ID),
-                submittedDate = csvLine.getOrNull(RecipesColumnIndex.DATE),
+                submittedDate = csvLine.getOrNull(RecipesColumnIndex.DATE)?.let { stringToDate(it) },
                 tags = csvLine.getOrNull(RecipesColumnIndex.TAGS)?.let { splitList(it) },
                 nutrition = it,
-                numberOfSteps = csvLine.getOrNull(RecipesColumnIndex.NUMBER_OF_STEPS),
-                steps = splitList(csvLine.getOrNull(RecipesColumnIndex.STEPS)!!),
+                numberOfSteps = csvLine.getOrNull(RecipesColumnIndex.NUMBER_OF_STEPS)?.toIntOrNull(),
+                steps = csvLine.getOrNull(RecipesColumnIndex.STEPS)?.let { splitList(it) } ?: emptyList(),
                 description = csvLine.getOrNull(RecipesColumnIndex.DESCRIPTION),
-                ingredients = splitList(csvLine.getOrNull(RecipesColumnIndex.INGREDIENTS)!!),
-                numberOfIngredients = csvLine.getOrNull(RecipesColumnIndex.NUMBER_OF_INGREDIENTS)
+                ingredients = csvLine.getOrNull(RecipesColumnIndex.INGREDIENTS)?.let { splitList(it) }
+                    ?: emptyList(),
+                numberOfIngredients = csvLine.getOrNull(RecipesColumnIndex.NUMBER_OF_INGREDIENTS)?.toIntOrNull()
             )
         }
     }
@@ -54,8 +56,6 @@ class CsvParser {
     }
 
     private fun splitList(listAsString: String): List<String> {
-        val removedBracesList = listAsString.drop(1).dropLast(1)
-        val result = removedBracesList.split(',')
-        return result
+        return listAsString.drop(1).dropLast(1).split(',').map { it.trim() }
     }
 }
