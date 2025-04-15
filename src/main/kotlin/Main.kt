@@ -1,34 +1,16 @@
 package org.example
 
-import org.example.data.CsvParser
-import org.example.data.CsvReader
-import org.example.data.FileNames.FOOD_CSV_FILE
-import org.example.data.FileNames.PROCESSED_CSV_FILE
-import org.example.data.RecipesRepositoryCsvImpl
-import java.io.File
+import org.example.di.dataModule
+import org.example.logic.RecipesRepository
+import org.koin.core.context.startKoin
+import org.koin.java.KoinJavaComponent.getKoin
 
 fun main() {
-    val inputCsvFile = File(FOOD_CSV_FILE)
-    val processedCsvFile = File(PROCESSED_CSV_FILE)
-
-    val csvReader = CsvReader(
-        inputCsvFile,
-        processedCsvFile
-    )
-
-    val csvFile = csvReader.readCsv()
-
-    val csvParser = CsvParser()
-
-    /** ONLY FOR TESTING THE DATA!! **/
-    val tmp = File("output.csv")
-    tmp.createNewFile()
-
-//    val recipes = csvParser.parseCsvFile(csvFile)
-    val recipesRepository = RecipesRepositoryCsvImpl(csvReader, csvParser)
-    val recipes = recipesRepository.getAllRecipes()
-    for (recipe in recipes) {
-        tmp.appendText(recipe.toString())
-        tmp.appendText("\n\n\n")
+    startKoin {
+        modules(dataModule)
     }
+
+    val recipesRepository: RecipesRepository = getKoin().get()
+
+    println(recipesRepository.getAllRecipes().first())
 }
