@@ -47,3 +47,5 @@ bin/
 
 # Ignore dataset file
 food.csv
+output.csv
+processed_food.csv
