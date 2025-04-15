@@ -4,6 +4,7 @@ import org.example.data.CsvParser
 import org.example.data.CsvReader
 import org.example.data.FileNames.FOOD_CSV_FILE
 import org.example.data.FileNames.PROCESSED_CSV_FILE
+import org.example.data.RecipesRepositoryCsvImpl
 import java.io.File
 
 fun main() {
@@ -23,10 +24,11 @@ fun main() {
     val tmp = File("output.csv")
     tmp.createNewFile()
 
-    val recipes = csvParser.parseCsvFile(csvFile)
-
+//    val recipes = csvParser.parseCsvFile(csvFile)
+    val recipesRepository = RecipesRepositoryCsvImpl(csvReader, csvParser)
+    val recipes = recipesRepository.getAllRecipes()
     for (recipe in recipes) {
-        tmp.appendText(recipe?.toString() ?: "")
+        tmp.appendText(recipe.toString())
         tmp.appendText("\n\n\n")
     }
 }
