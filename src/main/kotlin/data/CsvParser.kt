@@ -1,8 +1,8 @@
 package org.example.data
 
+import Utils.stringToDate
 import org.example.model.Recipe
 import org.example.model.toNutrition
-import utils.stringToDate
 
 class CsvParser {
 

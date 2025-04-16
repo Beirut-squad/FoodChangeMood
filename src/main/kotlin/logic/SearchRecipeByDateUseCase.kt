@@ -3,7 +3,7 @@ package org.example.logic
 import org.example.error.NoRecipesFoundForTheGivenDateException
 import org.example.error.RecipeNotFoundException
 import org.example.model.Recipe
-import utils.stringToDate
+import Utils.stringToDate
 
 
 class SearchRecipeByDateUseCase (
