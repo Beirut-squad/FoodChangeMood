@@ -15,9 +15,9 @@ class GetHealthyRecipesUseCase(
             .filter { hasLowFatAndCarb(it, nutritionAverages) }
             .sortedWith(
                 compareBy(
-                    { it.nutrition.totalFat },
-                    { it.nutrition.saturatedFat },
-                    { it.nutrition.carbohydrates }
+                    { it.nutrition?.totalFat },
+                    { it.nutrition?.saturatedFat },
+                    { it.nutrition?.carbohydrates }
                 ))
             .take(count)
     }
@@ -29,7 +29,7 @@ class GetHealthyRecipesUseCase(
     }
 
     private fun hasLowFatAndCarb(recipe: Recipe, averages: NutritionAverages): Boolean {
-        return recipe.nutrition.totalFat != null &&
+        return recipe.nutrition?.totalFat != null &&
                 recipe.nutrition.saturatedFat != null &&
                 recipe.nutrition.carbohydrates != null &&
                 recipe.nutrition.totalFat < averages.totalFat &&
@@ -39,9 +39,9 @@ class GetHealthyRecipesUseCase(
 
     private fun calculateNutritionAverages(recipes: List<Recipe>): NutritionAverages {
         return NutritionAverages(
-            totalFat = recipes.mapNotNull { it.nutrition.totalFat }.average(),
-            saturatedFat = recipes.mapNotNull { it.nutrition.saturatedFat }.average(),
-            carbohydrates = recipes.mapNotNull { it.nutrition.carbohydrates }.average()
+            totalFat = recipes.mapNotNull { it.nutrition?.totalFat }.average(),
+            saturatedFat = recipes.mapNotNull { it.nutrition?.saturatedFat }.average(),
+            carbohydrates = recipes.mapNotNull { it.nutrition?.carbohydrates }.average()
         )
     }
 
