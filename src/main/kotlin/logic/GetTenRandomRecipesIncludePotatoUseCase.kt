@@ -4,10 +4,11 @@ import org.example.data.RecipesRepositoryCsvImpl
 import org.example.model.Recipe
 import kotlin.random.Random
 
-class GetTenRandomRecipesIncludePotato( private val recipesRepoImp:RecipesRepositoryCsvImpl) {
+class GetTenRandomRecipesIncludePotatoUseCase
+    (private val recipesRepoImp:RecipesRepositoryCsvImpl)
+{
     fun findPotatoMeals(): List<Recipe> {
         val allRecipes = recipesRepoImp.getAllRecipes()
-        //17679
         return allRecipes.filter { recipe ->
             recipe.ingredients?.any { ingredient ->
                 ingredient.contains("potato", ignoreCase = true)
