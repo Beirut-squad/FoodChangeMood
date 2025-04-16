@@ -2,11 +2,14 @@ package org.example.ui
 
 import org.example.logic.EasyFoodSuggestionUseCase
 import org.example.logic.RandomTenRecipesIncludePotatoUseCase
+import org.example.logic.ThinProblemUseCase
+import org.example.model.Recipe
 
 
 class FoodChangeMoodUi(
     private val easyFoodSuggestionUseCase: EasyFoodSuggestionUseCase,
-    private val randomTenRecipesIncludePotatoUseCase: RandomTenRecipesIncludePotatoUseCase
+    private val randomTenRecipesIncludePotatoUseCase: RandomTenRecipesIncludePotatoUseCase,
+    private val thinProblem: ThinProblemUseCase
 ) {
     fun start() {
         showWelcomeMessage()
@@ -63,4 +66,6 @@ class FoodChangeMoodUi(
             println("\t\t $it")
         }
     }
+
+
 }
