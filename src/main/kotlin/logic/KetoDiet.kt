@@ -10,11 +10,13 @@ class KetoDiet(private val recipesRepository: RecipesRepository) {
     private val recipes = recipesRepository.getAllRecipes()
 
     fun suggestKetoRecipe(): Recipe{
-        val ketoRecipes = sortKetoRecipes()
+        val ketoRecipes = getSortedKetoRecipesDescending()
+//        println("size = ${ketoRecipes.size}")
         return ketoRecipes[i++ % ketoRecipes.size]
+
     }
 
-    fun sortKetoRecipes(): List<Recipe>{
+    fun getSortedKetoRecipesDescending(): List<Recipe>{
         return getAllKetoRecipes().sortedByDescending { ketoRecipe ->
             ketoRecipe.nutrition?.getKetoScore()
         }
@@ -36,9 +38,10 @@ class KetoDiet(private val recipesRepository: RecipesRepository) {
                 sugar < 5.0f &&
                 carbohydrates < 10.0f &&
                 ketoScore >= 5.0f)
+
     }
 
-    private fun getAllKetoRecipes(): List<Recipe> {
+     fun getAllKetoRecipes(): List<Recipe> {
         return recipes.filter { recipe ->
             isValidKetoRecipe(
                 recipe.nutrition?.totalFat,
