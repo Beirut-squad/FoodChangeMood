@@ -8,11 +8,18 @@ class EasyFoodSuggestionUseCase(
     fun getTenEasyFoodSuggestions(): List<Recipe> {
         return repository.getAllRecipes()
             .filter {
-                (it.minutes)!! <= 30 &&
-                        (it.ingredients?.size)!! <= 5 &&
-                        (it.steps?.size)!! <= 6
+                (it.minutes?: Int.MAX_VALUE) <= MAX_EASY_MINUTES &&
+                        (it.ingredients?.size?: Int.MAX_VALUE) <= MAX_INGREDIENTS &&
+                        (it.steps?.size?: Int.MAX_VALUE) <= MAX_STEPS
             }
             .shuffled()
-            .take(10)
+            .take(SUGGESTION_COUNT)
     }
+    companion object {
+        private const val MAX_EASY_MINUTES = 30
+        private const val MAX_INGREDIENTS = 5
+        private const val MAX_STEPS = 6
+        private const val SUGGESTION_COUNT = 10
+    }
+
 }
