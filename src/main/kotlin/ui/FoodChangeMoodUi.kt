@@ -24,6 +24,7 @@ class FoodChangeMoodUi(
             when (input) {
                 4 -> launchEasyFoodSuggestionUseCase()
                 12 -> launchRandomTenPotatoUseCase()
+                13 -> launchThinProblemUseCase()
                 0 -> {
                     println("Goodbye :)")
                     isRunning = false
@@ -42,6 +43,7 @@ class FoodChangeMoodUi(
         println("\n=== Please enter the number of the service you want: ")
         println("4- Easy Food Suggestion ")
         println("12- I love potato ")
+        println("13- Thin problem Suggestion ")
         println("0- Enter 0 to exit the app")
     }
 
@@ -66,6 +68,27 @@ class FoodChangeMoodUi(
             println("\t\t $it")
         }
     }
+    private fun launchThinProblemUseCase(): Recipe? {
 
+        while (true) {
+            val suggestion = thinProblem.findThinProblem()
 
+            if (suggestion == null) {
+                println("No more meals over 700 calories available!")
+                return null
+            }
+
+            println("Suggested Meal: ${suggestion.name}")
+            println("Description: ${suggestion.description}")
+            println("Calories: ${suggestion.nutrition?.calories}")
+            println("Like it? Enter 1")
+            println("Want another? Enter anything else:")
+
+            val choice = readln().toIntOrNull()
+            if (choice == 1) {
+                println("Great choice: ${suggestion.name}")
+                return suggestion
+            }
+        }
+    }
 }
