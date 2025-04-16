@@ -9,7 +9,7 @@ data class Recipe (
     val contributorId: String?,
     val submittedDate: Date?,
     val tags: List<String>?,
-    val nutrition: Nutrition,
+    val nutrition: Nutrition?,
     val numberOfSteps: Int?,
     val steps: List<String>?,
     val description: String?,
