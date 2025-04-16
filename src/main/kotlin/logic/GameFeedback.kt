@@ -1,10 +1,10 @@
 package org.example.logic
 
 sealed class GameFeedback {
-    class Correct(val actual: Int) : GameFeedback()
-    class GameOver(val actual: Int, val name: String) : GameFeedback()
-    class VeryClose(val attemptsLeft: Int) : GameFeedback()
-    class WayOff(val attemptsLeft: Int) : GameFeedback()
-    class NotQuite(val attemptsLeft: Int) : GameFeedback()
-    class Error(val message: String) : GameFeedback()
+    class CorrectGuess(val actualTime: Int) : GameFeedback()
+    class NoAttemptsLeft(val actualTime: Int) : GameFeedback()
+    class GuessIsVeryClose(val remainingAttempts: Int) : GameFeedback()
+    class GuessIsWayOff(val remainingAttempts: Int) : GameFeedback()
+    class GuessIsNotQuiteRight(val remainingAttempts: Int) : GameFeedback()
+    class RecipeTimeNotAvailable(val errorMessage: String) : GameFeedback()
 }
