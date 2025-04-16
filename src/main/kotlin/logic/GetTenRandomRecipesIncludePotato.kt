@@ -16,6 +16,6 @@ class GetTenRandomRecipesIncludePotato( private val recipesRepoImp:RecipesReposi
     }
 }
 object POTATO {
-    const val NUMBER_OF_RECIPES = 0
+    const val NUMBER_OF_RECIPES = 10
 }
 
