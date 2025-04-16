@@ -41,7 +41,7 @@ class FoodChangeMoodUi(
         println("Enter the number of meals you want")
         getUserInput()?.let { count ->
             getHealthyRecipesUseCase.getHealthyRecipes(count).forEach {
-                println(it)
+                println(RecipeFormatter.format(it))
             }
         } ?: println("Invalid input :(")
     }
