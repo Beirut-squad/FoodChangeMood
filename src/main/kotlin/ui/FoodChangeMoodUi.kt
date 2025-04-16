@@ -1,10 +1,12 @@
 package org.example.ui
 
 import org.example.logic.EasyFoodSuggestionUseCase
+import org.example.logic.RandomTenRecipesIncludePotatoUseCase
 
 
 class FoodChangeMoodUi(
-    private val easyFoodSuggestionUseCase: EasyFoodSuggestionUseCase
+    private val easyFoodSuggestionUseCase: EasyFoodSuggestionUseCase,
+    private val randomTenRecipesIncludePotatoUseCase: RandomTenRecipesIncludePotatoUseCase
 ) {
     fun start() {
         showWelcomeMessage()
@@ -18,6 +20,7 @@ class FoodChangeMoodUi(
             val input = getUserInput()
             when (input) {
                 4 -> launchEasyFoodSuggestionUseCase()
+                12 -> launchRandomTenPotatoUseCase()
                 0 -> {
                     println("Goodbye :)")
                     isRunning = false
@@ -35,6 +38,7 @@ class FoodChangeMoodUi(
     private fun showOptions() {
         println("\n=== Please enter the number of the service you want: ")
         println("4- Easy Food Suggestion ")
+        println("12- I love potato ")
         println("0- Enter 0 to exit the app")
     }
 
@@ -50,5 +54,13 @@ class FoodChangeMoodUi(
 
     private fun getUserInput(): Int? {
         return readlnOrNull()?.toIntOrNull()
+    }
+
+    private fun launchRandomTenPotatoUseCase()
+    {
+        val potatoMeals= randomTenRecipesIncludePotatoUseCase.findPotatoMeals()
+        potatoMeals.forEach {
+            println("\t\t $it")
+        }
     }
 }
