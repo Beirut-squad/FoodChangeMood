@@ -25,7 +25,7 @@ fun List<String>.toNutrition(): Nutrition {
 }
 
 private fun List<String>.getFloatOrNull(index: Int): Float? {
-    return if (index in indices) this[index].trim().toFloatOrNull() else null
+    return this[index].toFloatOrNull()
 }
 
 fun Nutrition.getKetoScore(): Float{

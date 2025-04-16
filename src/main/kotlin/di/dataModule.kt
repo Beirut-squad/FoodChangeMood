@@ -3,11 +3,12 @@ package org.example.di
 import org.example.data.CsvParser
 import org.example.data.CsvReader
 import org.example.data.FileNames.FOOD_CSV_FILE
-import org.example.data.FileNames.PROCESSED_CSV_FILE
 import org.example.data.RecipesRepositoryCsvImpl
+import org.example.logic.EasyFoodSuggestionUseCase
 import org.example.logic.KetoDiet
 import org.example.logic.RecipesRepository
-import org.example.ui.FoodChangeMoodU
+import org.example.ui.FoodChangeMoodUi
+import org.koin.core.scope.get
 import org.koin.dsl.module
 import java.io.File
 
@@ -19,7 +20,6 @@ val dataModule = module {
     single {
         CsvReader(
             csvInputFile = File(FOOD_CSV_FILE),
-            csvProcessedFile = File(PROCESSED_CSV_FILE)
         )
     }
 
@@ -27,10 +27,8 @@ val dataModule = module {
         RecipesRepositoryCsvImpl(get(), get())
     }
 
-    single {
-        KetoDiet(get())
-    }
-    single {
-        FoodChangeMoodU(get())
-    }
+    single { FoodChangeMoodUi(get(),get()) }
+
+
+
 }
