@@ -3,11 +3,13 @@ package org.example.ui
 import org.example.logic.EasyFoodSuggestionUseCase
 import org.example.logic.SweetWithNoEggsUseCase
 import org.example.model.Recipe
+import org.example.logic.RandomTenRecipesIncludePotatoUseCase
 
 
 class FoodChangeMoodUi(
     private val easyFoodSuggestionUseCase: EasyFoodSuggestionUseCase,
     private val sweetWithNoEggs: SweetWithNoEggsUseCase
+    private val randomTenRecipesIncludePotatoUseCase: RandomTenRecipesIncludePotatoUseCase
 ) {
     fun start() {
         showWelcomeMessage()
@@ -22,6 +24,7 @@ class FoodChangeMoodUi(
             when (input) {
                 4 -> launchEasyFoodSuggestionUseCase()
                 6 -> launchSweetWithoutEggsUseCase()
+                12 -> launchRandomTenPotatoUseCase()
                 0 -> {
                     println("Goodbye :)")
                     isRunning = false
@@ -40,6 +43,7 @@ class FoodChangeMoodUi(
         println("\n=== Please enter the number of the service you want: ")
         println("4- Easy Food Suggestion ")
         println("6- Sweets with no eggs")
+        println("12- I love potato ")
         println("0- Enter 0 to exit the app")
     }
 
@@ -76,6 +80,14 @@ class FoodChangeMoodUi(
                 println("Yay! You selected: ${suggestion.name}")
                 return suggestion
             }
+        }
+    }
+
+    private fun launchRandomTenPotatoUseCase()
+    {
+        val potatoMeals= randomTenRecipesIncludePotatoUseCase.findPotatoMeals()
+        potatoMeals.forEach {
+            println("\t\t $it")
         }
     }
 }
