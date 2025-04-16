@@ -19,6 +19,7 @@ class FoodChangeMoodUi(
             showOptions()
             val input = getUserInput()
             when (input) {
+                1 -> launchHealthyRecipes()
                 4 -> launchEasyFoodSuggestionUseCase()
                 0 -> {
                     println("Goodbye :)")
@@ -36,6 +37,7 @@ class FoodChangeMoodUi(
 
     private fun showOptions() {
         println("\n=== Please enter the number of the service you want: ")
+        println("1- Get Quick and Healthy Meals")
         println("4- Easy Food Suggestion ")
         println("0- Enter 0 to exit the app")
     }

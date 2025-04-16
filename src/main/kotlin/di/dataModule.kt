@@ -19,7 +19,6 @@ val dataModule = module {
     single {
         CsvReader(
             csvInputFile = File(FOOD_CSV_FILE),
-            csvProcessedFile = File(PROCESSED_CSV_FILE)
         )
     }
 
@@ -27,6 +26,6 @@ val dataModule = module {
         RecipesRepositoryCsvImpl(get(), get())
     }
     // ui
-    single{ FoodChangeMoodUi(get()) }
+    single{ FoodChangeMoodUi(get(), get()) }
 
 }
