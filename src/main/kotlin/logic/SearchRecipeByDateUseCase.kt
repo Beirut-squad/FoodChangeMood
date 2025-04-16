@@ -10,13 +10,6 @@ class SearchRecipeByDateUseCase (
     private val recipesRepository: RecipesRepository
 ){
 
-    /*   Search Foods by Add Date: Use Kotlin’s Date class to represent the date in the meal entity. (Done)
-         Let the user input a date and return a list of IDs and names of meals added on that date.  (Done)
-         The user should be able to view details of a specific meal by entering its ID. (Done)
-          Handle exceptions for: (In UI)
-        - Incorrect date format.
-        - No meals were found for the given date. Ensure different exceptions are used for both cases. */
-
     fun searchRecipeByDate(enteredDate:String): List<Pair<String, String>>{
         return recipesRepository.getAllRecipes()
             .filter(::checkNoNullValue)
@@ -27,10 +20,10 @@ class SearchRecipeByDateUseCase (
             } ?: throw NoRecipesFoundForTheGivenDateException("No meals were found for the given date")
     }
 
-    fun viewDetailsOfRecipeByID(recipeId: String): Recipe?{
+    fun viewDetailsOfRecipeByID(recipeId: String): Recipe{
         return recipesRepository.getAllRecipes()
             .filter { it.id == recipeId }
-            ?.let { it[0] } ?: throw RecipeNotFoundException("Recipe Not Found")
+            .let { it.getOrNull(0) ?: throw RecipeNotFoundException("Recipe Not Found")}
     }
 
 
