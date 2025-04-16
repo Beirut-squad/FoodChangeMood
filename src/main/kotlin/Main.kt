@@ -6,28 +6,18 @@ import org.example.data.FileNames.FOOD_CSV_FILE
 import org.example.data.FileNames.PROCESSED_CSV_FILE
 import org.example.data.RecipesRepositoryCsvImpl
 import org.example.di.dataModule
+import org.example.di.useCaseModule
 import org.example.logic.EasyFoodSuggestionUseCase
 import org.example.ui.FoodChangeMoodUi
 import org.koin.core.context.startKoin
+import org.koin.mp.KoinPlatform.getKoin
 import java.io.File
 
 fun main() {
-//    startKoin {
-//        modules(dataModule)
-//    }
+    startKoin {
+        modules(dataModule , useCaseModule )
+    }
 
-
-    val reader = CsvReader(File(FOOD_CSV_FILE))
-    val parser = CsvParser()
-    val repository = RecipesRepositoryCsvImpl(reader, parser)
-    val easyFoodUseCase = EasyFoodSuggestionUseCase(repository)
-
-//    val easyMeals = easyFoodUseCase.getTenEasyFoodSuggestions()
-//    easyMeals.forEachIndexed { index, recipe ->
-//        println("${index + 1}. ${recipe.name} - ${recipe.minutes} min - ${recipe.ingredients?.size} ingredients - ${recipe.steps?.size} steps")
-//
-//    }
-
-    val ui = FoodChangeMoodUi(easyFoodUseCase)
+    val ui : FoodChangeMoodUi = getKoin().get()
     ui.start()
 }
