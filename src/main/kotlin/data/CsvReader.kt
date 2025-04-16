@@ -2,34 +2,42 @@ package org.example.data
 
 import java.io.File
 
-class CsvReader(
-    private val csvInputFile: File, private val csvProcessedFile: File
-) {
+class CsvReader(private val csvInputFile: File) {
 
     fun readCsv(): List<String> {
-        removeExtraNewLines()
-        return readProcessedCsv()
+        val content = csvInputFile.readText()
+        return splitIntoRows(content)
     }
 
-    private fun removeExtraNewLines() {
-        val csvInputBufferedReader = csvInputFile.bufferedReader()
-        val csvProcessedBufferedWriter = csvProcessedFile.bufferedWriter()
-        val builder = StringBuilder()
-        var quoteCount = 0
-        csvInputBufferedReader.forEachLine { line ->
-            builder.append(line).append(" ")
-            quoteCount += line.count { it == '"' }
-            if (quoteCount % 2 == 0) {
-                csvProcessedBufferedWriter.write(builder.toString().trim())
-                csvProcessedBufferedWriter.newLine()
-                builder.clear()
-                quoteCount = 0
+    private fun splitIntoRows(content: String): List<String> {
+        val rows = mutableListOf<String>()
+        val currentRow = StringBuilder()
+        var inQuotes = false
+
+        for (char in content) {
+            when {
+                char == '"' -> {
+                    inQuotes = !inQuotes
+                    currentRow.append(char)
+                }
+
+                char == '\n' && !inQuotes -> {
+                    // True end of row
+                    rows.add(currentRow.toString())
+                    currentRow.clear()
+                }
+
+                else -> {
+                    currentRow.append(char)
+                }
             }
         }
-    }
 
-    private fun readProcessedCsv(): List<String> {
-        return csvProcessedFile.takeIf { csvProcessedFile.exists() }?.let { it.readLines() }
-            ?: throw Exception("Couldn't find the csv file.")
+        // Add the last row if it's not empty
+        if (currentRow.isNotEmpty()) {
+            rows.add(currentRow.toString())
+        }
+
+        return rows
     }
 }
