@@ -70,7 +70,10 @@ class FoodChangeMoodUi(
             val calories = readlnOrNull()
 
             if (validator.validateGymHelperInput(calories, protein)) {
-                val recipes = getRecipesForGymHelper(calories!!, protein!!)
+                val recipes =  gymHelperUseCase.getRecipesMatchOrApproximateAmountOfCaloriesAndProtein(
+                    calories = calories?.toFloat() ?: 0f,
+                    protein = protein?.toFloat() ?: 0f
+                )
                 displayRecipesForGymHelper(recipes)
                 break
             } else {
@@ -79,13 +82,6 @@ class FoodChangeMoodUi(
         }
 
 
-    }
-
-    private fun getRecipesForGymHelper(calories: String, protein: String): List<Recipe> {
-        return gymHelperUseCase.getRecipesMatchOrApproximateAmountOfCaloriesAndProtein(
-            calories = calories.toFloat(),
-            protein = protein.toFloat()
-        )
     }
 
     private fun displayRecipesForGymHelper(recipes: List<Recipe>) {
