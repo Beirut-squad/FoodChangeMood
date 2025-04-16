@@ -60,7 +60,7 @@ class FoodChangeMoodUi(
     {
         val potatoMeals= randomTenRecipesIncludePotatoUseCase.findPotatoMeals()
         potatoMeals.forEach {
-            println("\t\t $it")
+            println("\t$it")
         }
     }
 }
