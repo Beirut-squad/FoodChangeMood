@@ -1,10 +1,12 @@
 package org.example.ui
 
 import org.example.logic.EasyFoodSuggestionUseCase
+import org.example.logic.ItalianGroupMealsUseCase
 
 
 class FoodChangeMoodUi(
-    private val easyFoodSuggestionUseCase: EasyFoodSuggestionUseCase
+    private val easyFoodSuggestionUseCase: EasyFoodSuggestionUseCase,
+    private val italianGroupMealsUseCase: ItalianGroupMealsUseCase,
 ) {
     fun start() {
         showWelcomeMessage()
@@ -18,6 +20,7 @@ class FoodChangeMoodUi(
             val input = getUserInput()
             when (input) {
                 4 -> launchEasyFoodSuggestionUseCase()
+                15 -> launchItalianGroupMealsUseCase()
                 0 -> {
                     println("Goodbye :)")
                     isRunning = false
@@ -35,6 +38,7 @@ class FoodChangeMoodUi(
     private fun showOptions() {
         println("\n=== Please enter the number of the service you want: ")
         println("4- Easy Food Suggestion ")
+        println("15- Italian Group Meals ")
         println("0- Enter 0 to exit the app")
     }
 
@@ -43,12 +47,26 @@ class FoodChangeMoodUi(
         easyFoodSuggestionUseCase
             .getTenEasyFoodSuggestions()
             .forEachIndexed { index, recipe ->
-            println("${index + 1}. ${recipe.name} - ${recipe.minutes} min - ${recipe.ingredients?.size} ingredients - ${recipe.steps?.size} steps")
+                println("${index + 1}. ${recipe.name} - ${recipe.minutes} min - ${recipe.ingredients?.size} ingredients - ${recipe.steps?.size} steps")
 
-        }
+            }
+    }
+
+    private fun launchItalianGroupMealsUseCase() {
+        italianGroupMealsUseCase
+            .getItalianGroupMeals()
+            .forEachIndexed { index, recipe ->
+                println("${index + 1}. ${recipe.name} ")
+
+            }
+
     }
 
     private fun getUserInput(): Int? {
         return readlnOrNull()?.toIntOrNull()
     }
+
 }
+
+
+
