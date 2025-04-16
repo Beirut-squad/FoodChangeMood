@@ -8,7 +8,7 @@ import org.example.logic.RandomTenRecipesIncludePotatoUseCase
 
 class FoodChangeMoodUi(
     private val easyFoodSuggestionUseCase: EasyFoodSuggestionUseCase,
-    private val sweetWithNoEggs: SweetWithNoEggsUseCase
+    private val sweetWithNoEggs: SweetWithNoEggsUseCase,
     private val randomTenRecipesIncludePotatoUseCase: RandomTenRecipesIncludePotatoUseCase
 ) {
     fun start() {
