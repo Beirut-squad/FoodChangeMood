@@ -2,7 +2,8 @@ package org.example
 
 import org.example.di.dataModule
 import org.example.logic.di.useCasesModule
-import org.example.logic.use_case.GymHelperUseCase
+import org.example.ui.FoodChangeMoodUi
+import org.example.ui.uiModule
 import org.koin.core.context.startKoin
 import org.koin.java.KoinJavaComponent.getKoin
 
@@ -10,14 +11,12 @@ fun main() {
     startKoin {
         modules(
             dataModule,
-            useCasesModule
+            useCasesModule,
+            uiModule
         )
     }
 
-    val gymHelperUseCase: GymHelperUseCase = getKoin().get()
+    val foodChangeMoodUi: FoodChangeMoodUi = getKoin().get()
 
-    println(gymHelperUseCase.getRecipesMatchOrApproximateAmountOfCaloriesAndProtein(
-        calories = 5f,
-        protein = 1.5f
-    ))
+    foodChangeMoodUi.launchGymHelperUi()
 }

@@ -1,10 +1,11 @@
 package org.example.logic.use_case
 
 import org.example.logic.RecipesRepository
+import org.example.logic.Validator
 import org.example.model.Recipe
 
 class GymHelperUseCase(
-    private val recipesRepository: RecipesRepository
+    private val recipesRepository: RecipesRepository,
 ) {
 
     fun getRecipesMatchOrApproximateAmountOfCaloriesAndProtein(
