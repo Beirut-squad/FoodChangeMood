@@ -1,8 +1,10 @@
 package org.example.ui
 
+import org.example.logic.EasyFoodSuggestionUseCase
+
 
 class FoodChangeMoodUi(
-
+    private val easyFoodSuggestionUseCase: EasyFoodSuggestionUseCase
 ) {
     fun start() {
         showWelcomeMessage()
@@ -15,7 +17,7 @@ class FoodChangeMoodUi(
             showOptions()
             val input = getUserInput()
             when (input) {
-                1 -> launchExampleUseCase()
+                4 -> launchEasyFoodSuggestionUseCase()
                 0 -> {
                     println("Goodbye :)")
                     isRunning = false
@@ -32,11 +34,19 @@ class FoodChangeMoodUi(
 
     private fun showOptions() {
         println("\n=== Please enter the number of the service you want: ")
-        println("1- Example useCase")
+        println("4- Easy Food Suggestion ")
         println("0- Enter 0 to exit the app")
     }
 
     private fun launchExampleUseCase() {}
+    private fun launchEasyFoodSuggestionUseCase() {
+        easyFoodSuggestionUseCase
+            .getTenEasyFoodSuggestions()
+            .forEachIndexed { index, recipe ->
+            println("${index + 1}. ${recipe.name} - ${recipe.minutes} min - ${recipe.ingredients?.size} ingredients - ${recipe.steps?.size} steps")
+
+        }
+    }
 
     private fun getUserInput(): Int? {
         return readlnOrNull()?.toIntOrNull()
