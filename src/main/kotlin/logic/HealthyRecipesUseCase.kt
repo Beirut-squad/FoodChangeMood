@@ -30,11 +30,11 @@ class HealthyRecipesUseCase(
 
     private fun hasLowFatAndCarb(recipe: Recipe, averages: NutritionAverages): Boolean {
         return recipe.nutrition?.totalFat != null &&
-                recipe.nutrition.saturatedFat != null &&
-                recipe.nutrition.carbohydrates != null &&
-                recipe.nutrition.totalFat < averages.totalFat &&
-                recipe.nutrition.saturatedFat < averages.saturatedFat &&
-                recipe.nutrition.carbohydrates < averages.carbohydrates
+                recipe.nutrition?.saturatedFat != null &&
+                recipe.nutrition?.carbohydrates != null &&
+                recipe.nutrition.totalFat < averages.totalFat * LOW_AVERAGE_RATIO &&
+                recipe.nutrition.saturatedFat < averages.saturatedFat * LOW_AVERAGE_RATIO &&
+                recipe.nutrition.carbohydrates < averages.carbohydrates * LOW_AVERAGE_RATIO
     }
 
     private fun calculateNutritionAverages(recipes: List<Recipe>): NutritionAverages {
@@ -53,5 +53,6 @@ class HealthyRecipesUseCase(
 
     companion object {
         private const val MAX_PREPARATION_TIME_MINUTES = 15
+        private const val LOW_AVERAGE_RATIO = 0.5
     }
 }
