@@ -5,7 +5,7 @@ import org.example.di.useCaseModule
 import org.example.ui.FoodChangeMoodUi
 import org.example.ui.uiModule
 import org.koin.core.context.startKoin
-import org.koin.java.KoinJavaComponent.getKoin
+import org.koin.mp.KoinPlatform.getKoin
 
 fun main() {
     startKoin {

@@ -4,12 +4,14 @@ import org.example.logic.Validator
 import org.example.logic.use_case.GymHelperUseCase
 import org.example.model.Recipe
 import org.example.logic.EasyFoodSuggestionUseCase
+import org.example.logic.RandomTenRecipesIncludePotatoUseCase
 
 
 class FoodChangeMoodUi(
     private val easyFoodSuggestionUseCase: EasyFoodSuggestionUseCase,
     private val gymHelperUseCase: GymHelperUseCase,
-    private val validator: Validator
+    private val validator: Validator,
+    private val randomTenRecipesIncludePotatoUseCase: RandomTenRecipesIncludePotatoUseCase
 ) {
     fun start() {
         showWelcomeMessage()
@@ -23,6 +25,7 @@ class FoodChangeMoodUi(
             val input = getUserInput()
             when (input) {
                 4 -> launchEasyFoodSuggestionUseCase()
+                12 -> launchRandomTenPotatoUseCase()
                 0 -> {
                     println("Goodbye :)")
                     isRunning = false
@@ -40,6 +43,7 @@ class FoodChangeMoodUi(
     private fun showOptions() {
         println("\n=== Please enter the number of the service you want: ")
         println("4- Easy Food Suggestion ")
+        println("12- I love potato ")
         println("0- Enter 0 to exit the app")
     }
 
@@ -55,8 +59,7 @@ class FoodChangeMoodUi(
 
     private fun getUserInput(): Int? {
         return readlnOrNull()?.toIntOrNull()
-    }
-    
+    }    
     fun launchGymHelperUi() {
         println("Gym helper: Get meals that match the protein and calories amounts you choose or close to them.")
         while (true) {
@@ -114,6 +117,14 @@ class FoodChangeMoodUi(
         steps.forEachIndexed { stepIndex, step ->
             print("Step ${stepIndex + 1}: ")
             println(step)
+        }
+    }
+
+    private fun launchRandomTenPotatoUseCase()
+    {
+        val potatoMeals= randomTenRecipesIncludePotatoUseCase.findPotatoMeals()
+        potatoMeals.forEach {
+            println("\t\t $it")
         }
     }
 }
