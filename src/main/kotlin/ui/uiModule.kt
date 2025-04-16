@@ -4,6 +4,6 @@ import org.koin.dsl.module
 
 val uiModule = module {
     single {
-        FoodChangeMoodUi(get(), get(), get())
+        FoodChangeMoodUi(get(), get(), get(), get())
     }
 }
