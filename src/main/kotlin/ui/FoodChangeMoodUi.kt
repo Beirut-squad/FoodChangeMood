@@ -95,7 +95,7 @@ class FoodChangeMoodUi(
     private fun displaySingleRecipeForGymHelper(recipe: Recipe, index: Int) {
         println("Meal $index: ${recipe.name}")
 
-        println("Calories: ${recipe.nutrition.calories}, Protein: ${recipe.nutrition.protein}")
+        println("Calories: ${recipe.nutrition?.calories ?: 0.0}, Protein: ${recipe.nutrition?.protein ?: 0.0}")
 
         recipe.ingredients?.let { displayIngredients(recipe.ingredients) }
 

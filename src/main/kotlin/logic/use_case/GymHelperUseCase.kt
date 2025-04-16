@@ -1,7 +1,6 @@
 package org.example.logic.use_case
 
 import org.example.logic.RecipesRepository
-import org.example.logic.Validator
 import org.example.model.Recipe
 
 class GymHelperUseCase(
@@ -16,13 +15,13 @@ class GymHelperUseCase(
             .filter { recipe ->
                 isCaloriesAmountInApproximateRange(
                     demandedCalories = calories,
-                    mealCalories = recipe.nutrition.calories ?: 0f
+                    mealCalories = recipe.nutrition?.calories ?: 0f
                 )
             }
             .filter { recipe ->
                 isProteinAmountInApproximateRange(
                     demandedProtein = protein,
-                    mealProtein = recipe.nutrition.protein ?: 0f
+                    mealProtein = recipe.nutrition?.protein ?: 0f
                 )
             }
     }
