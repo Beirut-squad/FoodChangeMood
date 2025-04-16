@@ -3,7 +3,7 @@ package org.example.logic
 import org.example.error.NoRecipesFoundForTheGivenDateException
 import org.example.error.RecipeNotFoundException
 import org.example.model.Recipe
-import Utils.stringToDate
+import Utils.toDate
 
 
 class SearchRecipeByDateUseCase (
@@ -20,7 +20,7 @@ class SearchRecipeByDateUseCase (
     fun searchRecipeByDate(enteredDate:String): List<Pair<String, String>>{
         return recipesRepository.getAllRecipes()
             .filter(::checkNoNullValue)
-            .filter { it.submittedDate == stringToDate(enteredDate) }
+            .filter { it.submittedDate == enteredDate.toDate() }
             .takeIf { it.isNotEmpty() }
             ?.map {recipe->
                 (recipe.id)!! to recipe.name!!

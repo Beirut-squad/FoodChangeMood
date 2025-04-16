@@ -2,6 +2,6 @@ package Utils
 
 import java.time.LocalDate
 
-fun stringToDate(date: String): LocalDate {
-    return LocalDate.parse(date)
+fun String.toDate(): LocalDate {
+    return LocalDate.parse(this)
 }
