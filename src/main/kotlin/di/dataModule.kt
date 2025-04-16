@@ -5,7 +5,7 @@ import org.example.data.CsvReader
 import org.example.data.FileNames.FOOD_CSV_FILE
 import org.example.data.FileNames.PROCESSED_CSV_FILE
 import org.example.data.RecipesRepositoryCsvImpl
-import org.example.logic.GetHealthyRecipesUseCase
+import org.example.logic.HealthyRecipesUseCase
 import org.example.logic.RecipesRepository
 import org.example.ui.FoodChangeMoodUi
 import org.koin.dsl.module
@@ -28,8 +28,5 @@ val dataModule = module {
     }
     // ui
     single{ FoodChangeMoodUi(get()) }
-
-    // use cases
-    single{ GetHealthyRecipesUseCase(get()) }
 
 }

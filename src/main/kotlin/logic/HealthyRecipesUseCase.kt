@@ -3,7 +3,7 @@ package org.example.logic
 import org.example.model.Recipe
 import kotlin.collections.sortedWith
 
-class GetHealthyRecipesUseCase(
+class HealthyRecipesUseCase(
     private val recipesRepository: RecipesRepository,
 ) {
     fun getHealthyRecipes(count: Int): List<Recipe> {

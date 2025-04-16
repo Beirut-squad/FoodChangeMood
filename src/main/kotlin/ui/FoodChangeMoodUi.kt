@@ -1,9 +1,9 @@
 package org.example.ui
 
-import org.example.logic.GetHealthyRecipesUseCase
+import org.example.logic.HealthyRecipesUseCase
 
 class FoodChangeMoodUi(
-    private val getHealthyRecipesUseCase: GetHealthyRecipesUseCase
+    private val healthyRecipesUseCase: HealthyRecipesUseCase
 ) {
     fun start() {
         showWelcomeMessage()
@@ -40,7 +40,7 @@ class FoodChangeMoodUi(
     private fun launchHealthyRecipes() {
         println("Enter the number of meals you want")
         getUserInput()?.let { count ->
-            getHealthyRecipesUseCase.getHealthyRecipes(count).forEach {
+            healthyRecipesUseCase.getHealthyRecipes(count).forEach {
                 println(RecipeFormatter.format(it))
             }
         } ?: println("Invalid input :(")
