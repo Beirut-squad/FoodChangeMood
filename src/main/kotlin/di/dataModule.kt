@@ -3,7 +3,6 @@ package org.example.di
 import org.example.data.CsvParser
 import org.example.data.CsvReader
 import org.example.data.FileNames.FOOD_CSV_FILE
-import org.example.data.FileNames.PROCESSED_CSV_FILE
 import org.example.data.RecipesRepositoryCsvImpl
 import org.example.logic.EasyFoodSuggestionUseCase
 import org.example.logic.RecipesRepository
@@ -19,7 +18,7 @@ val dataModule = module {
 
     single {
         CsvReader(
-            csvInputFile = File(PROCESSED_CSV_FILE),
+            csvInputFile = File(FOOD_CSV_FILE),
         )
     }
 
@@ -27,8 +26,6 @@ val dataModule = module {
         RecipesRepositoryCsvImpl(get(), get())
     }
 
-    single { FoodChangeMoodUi(get() , get()) }
-
-
+    single { FoodChangeMoodUi(get(),get(), get(), get()) }
 
 }
