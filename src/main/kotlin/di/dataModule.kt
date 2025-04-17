@@ -25,6 +25,6 @@ val dataModule = module {
     }
 
 
-    single { FoodChangeMoodUi(get(),get(), get(), get(), get(),get()) }
+    single { FoodChangeMoodUi(get(),get(), get(), get(), get(),get() , get()) }
 
 }

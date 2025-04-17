@@ -14,7 +14,8 @@ class FoodChangeMoodUi(
     private val gymHelperUseCase: GymHelperUseCase,
     private val validator: Validator,
     private val randomTenRecipesIncludePotatoUseCase: RandomTenRecipesIncludePotatoUseCase,
-    private val recipeTimeGuessGame: RecipeTimeGuessGame
+    private val recipeTimeGuessGame: RecipeTimeGuessGame,
+    private val italianGroupMealsUseCase: ItalianGroupMealsUseCase
 ) {
     private val colors = Colors()
 
@@ -33,6 +34,7 @@ class FoodChangeMoodUi(
                 5 -> guessPrepTimeGame()
                 6 -> launchSweetWithoutEggsUseCase()
                 12 -> launchRandomTenPotatoUseCase()
+                15 -> launchItalianGroupMeals()
                 0 -> {
                     println("Goodbye :)")
                     isRunning = false
@@ -53,6 +55,7 @@ class FoodChangeMoodUi(
         println("5- Time Guess Game")
         println("6- Sweets with no eggs")
         println("12- I love potato ")
+        println("15- Italian Group Meals ")
         println("0- Enter 0 to exit the app")
     }
 
@@ -193,4 +196,13 @@ class FoodChangeMoodUi(
                 println(colors.red("Error: ${result.errorMessage}")) }
         }
     }
+    private fun launchItalianGroupMeals(){
+        italianGroupMealsUseCase
+            .getItalianGroupMeals()
+            .forEachIndexed { index, recipe ->
+                println("${index + 1}. ${recipe.name} ")
+
+            }
+    }
+
 }
