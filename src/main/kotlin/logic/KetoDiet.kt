@@ -28,7 +28,7 @@ class KetoDiet(private val recipesRepository: RecipesRepository) {
     ): Boolean {
 
          if (totalFats == null || saturatedFats == null || sugar == null || carbohydrates == null)
-            return true
+            return false
 
         val ketoScore = (totalFats + saturatedFats) - (sugar + carbohydrates)
         return (totalFats in 10.0f..90.0f &&
