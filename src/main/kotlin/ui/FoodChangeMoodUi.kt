@@ -3,12 +3,17 @@ package org.example.ui
 import org.example.logic.EasyFoodSuggestionUseCase
 import org.example.logic.ItalianGroupMealsUseCase
 import org.example.logic.RandomTenRecipesIncludePotatoUseCase
+import org.example.logic.Validator
+import org.example.logic.use_case.GymHelperUseCase
 import org.example.model.Recipe
 
 
 class FoodChangeMoodUi(
-    private val easyFoodSuggestionUseCase: EasyFoodSuggestionUseCase
+    private val easyFoodSuggestionUseCase: EasyFoodSuggestionUseCase,
     private val italianGroupMealsUseCase: ItalianGroupMealsUseCase,
+    private val validator: Validator,
+    private val randomTenRecipesIncludePotatoUseCase: RandomTenRecipesIncludePotatoUseCase,
+    val gymHelperUseCase: GymHelperUseCase
 ) {
     fun start() {
         showWelcomeMessage()
@@ -69,69 +74,70 @@ class FoodChangeMoodUi(
     private fun getUserInput(): Int? {
         return readlnOrNull()?.toIntOrNull()
     }
-}
+    fun launchGymHelperUi() {
+        println("Gym helper: Get meals that match the protein and calories amounts you choose or close to them.")
+        while (true) {
+            print("Enter the amount of protein: ")
+            val protein = readlnOrNull()
 
-fun launchGymHelperUi() {
-    println("Gym helper: Get meals that match the protein and calories amounts you choose or close to them.")
-    while (true) {
-        print("Enter the amount of protein: ")
-        val protein = readlnOrNull()
+            print("Enter the amount of calories: ")
+            val calories = readlnOrNull()
 
-        print("Enter the amount of calories: ")
-        val calories = readlnOrNull()
+            if (validator.validateGymHelperInput(calories, protein)) {
+                val recipes =  gymHelperUseCase.getRecipesMatchOrApproximateAmountOfCaloriesAndProtein(
+                    calories = calories?.toFloat() ?: 0f,
+                    protein = protein?.toFloat() ?: 0f
+                )
+                displayRecipesForGymHelper(recipes)
+                break
+            } else {
+                println("Invalid input.")
+            }
+        }
 
-        if (validator.validateGymHelperInput(calories, protein)) {
-            val recipes =  gymHelperUseCase.getRecipesMatchOrApproximateAmountOfCaloriesAndProtein(
-                calories = calories?.toFloat() ?: 0f,
-                protein = protein?.toFloat() ?: 0f
-            )
-            displayRecipesForGymHelper(recipes)
-            break
-        } else {
-            println("Invalid input.")
+
+    }
+
+    private fun displayRecipesForGymHelper(recipes: List<Recipe>) {
+        recipes.forEachIndexed { index, recipe ->
+            displaySingleRecipeForGymHelper(recipe, index + 1)
+            println()
         }
     }
 
+    private fun displaySingleRecipeForGymHelper(recipe: Recipe, index: Int) {
+        println("Meal $index: ${recipe.name}")
 
-}
+        println("Calories: ${recipe.nutrition?.calories ?: 0.0}, Protein: ${recipe.nutrition?.protein ?: 0.0}")
 
-private fun displayRecipesForGymHelper(recipes: List<Recipe>) {
-    recipes.forEachIndexed { index, recipe ->
-        displaySingleRecipeForGymHelper(recipe, index + 1)
-        println()
+        recipe.ingredients?.let { displayIngredients(recipe.ingredients) }
+
+        recipe.steps?.let { displaySteps(recipe.steps) }
     }
-}
 
-private fun displaySingleRecipeForGymHelper(recipe: Recipe, index: Int) {
-    println("Meal $index: ${recipe.name}")
-
-    println("Calories: ${recipe.nutrition?.calories ?: 0.0}, Protein: ${recipe.nutrition?.protein ?: 0.0}")
-
-    recipe.ingredients?.let { displayIngredients(recipe.ingredients) }
-
-    recipe.steps?.let { displaySteps(recipe.steps) }
-}
-
-private fun displayIngredients(ingredients: List<String>) {
-    print("Ingredients: ")
-    ingredients.forEach {
-        print("$it, ")
+    private fun displayIngredients(ingredients: List<String>) {
+        print("Ingredients: ")
+        ingredients.forEach {
+            print("$it, ")
+        }
     }
+
+    private fun displaySteps(steps: List<String>) {
+        println("How to Make: ")
+        steps.forEachIndexed { stepIndex, step ->
+            print("Step ${stepIndex + 1}: ")
+            println(step)
+        }
+    }
+
+    private fun launchRandomTenPotatoUseCase()
+    {
+        val potatoMeals= randomTenRecipesIncludePotatoUseCase.findPotatoMeals()
+        potatoMeals.forEach {
+            println("\t\t $it")
+        }
+    }
+
 }
 
-private fun displaySteps(steps: List<String>) {
-    println("How to Make: ")
-    steps.forEachIndexed { stepIndex, step ->
-        print("Step ${stepIndex + 1}: ")
-        println(step)
-    }
-}
 
-private fun launchRandomTenPotatoUseCase()
-{
-    val potatoMeals= randomTenRecipesIncludePotatoUseCase.findPotatoMeals()
-    potatoMeals.forEach {
-        println("\t\t $it")
-    }
-}
-}
