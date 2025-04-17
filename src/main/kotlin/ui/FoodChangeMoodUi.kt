@@ -4,16 +4,16 @@ import org.example.logic.Validator
 import org.example.logic.use_case.GymHelperUseCase
 import org.example.model.Recipe
 import org.example.logic.EasyFoodSuggestionUseCase
-import org.example.logic.RandomTenRecipesIncludePotatoUseCase
 import org.example.logic.HealthyRecipesUseCase
+import org.example.logic.RandomTenRecipesIncludePotatoUseCase
 
 
 class FoodChangeMoodUi(
     private val easyFoodSuggestionUseCase: EasyFoodSuggestionUseCase,
+    private val healthyRecipesUseCase: HealthyRecipesUseCase
     private val gymHelperUseCase: GymHelperUseCase,
     private val validator: Validator,
-    private val randomTenRecipesIncludePotatoUseCase: RandomTenRecipesIncludePotatoUseCase,
-    private val healthyRecipesUseCase: HealthyRecipesUseCase
+    private val randomTenRecipesIncludePotatoUseCase: RandomTenRecipesIncludePotatoUseCase
 ) {
     fun start() {
         showWelcomeMessage()
@@ -71,7 +71,7 @@ class FoodChangeMoodUi(
 
     private fun getUserInput(): Int? {
         return readlnOrNull()?.toIntOrNull()
-    }
+    }    
     fun launchGymHelperUi() {
         println("Gym helper: Get meals that match the protein and calories amounts you choose or close to them.")
         while (true) {
