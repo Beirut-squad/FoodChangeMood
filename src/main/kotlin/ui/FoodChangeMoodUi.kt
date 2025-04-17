@@ -61,33 +61,31 @@ class FoodChangeMoodUi(
         return readlnOrNull()?.toIntOrNull()
     }
 
-    private fun launchSweetWithoutEggsUseCase(): Recipe? {
+    private fun launchSweetWithoutEggsUseCase() {
         while (true) {
-            val suggestion = sweetWithNoEggs.findSweetsFreeEggs().firstOrNull()
-
-            if (suggestion == null) {
-                println("Sorry, no egg-free sweets found.")
-                return null
-            }
-
-            println("Suggested Sweet: ${suggestion.name}")
-            println("Description: ${suggestion.description}")
-            println("If you like this sweet, enter 1.")
-            println("If you want to see another sweet, enter anything else:")
-
+            val suggestion = sweetWithNoEggs.findSweetsFreeEggs()
+            printSweetWithNoEggs()
             val choice = readln().toIntOrNull()
             if (choice == 1) {
-                println("Yay! You selected: ${suggestion.name}")
-                return suggestion
-            }
+                suggestion?.let {
+                    println("$it")
+                }
+            } else break
         }
+    }
+    private fun printSweetWithNoEggs(){
+        val suggestion = sweetWithNoEggs.findSweetsFreeEggs()
+        println("Suggested Sweet: ${suggestion?.name}")
+        println("Description: ${suggestion?.description}")
+        println("If you like this sweet, enter 1.")
+        println("If you want to see another sweet, enter anything else:")
     }
 
     private fun launchRandomTenPotatoUseCase()
     {
         val potatoMeals= randomTenRecipesIncludePotatoUseCase.findPotatoMeals()
         potatoMeals.forEach {
-            println("\t\t $it")
+            println("$it")
         }
     }
 }
