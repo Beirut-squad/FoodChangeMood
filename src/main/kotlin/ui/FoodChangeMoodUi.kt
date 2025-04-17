@@ -8,10 +8,10 @@ import org.example.model.Recipe
 import org.example.logic.EasyFoodSuggestionUseCase
 import org.example.logic.RandomTenRecipesIncludePotatoUseCase
 import org.example.model.Nutrition
-
 import Colors
 import org.example.logic.GameFeedback
 import org.example.logic.RecipeTimeGuessGame
+
 
 
 class FoodChangeMoodUi(
@@ -254,7 +254,6 @@ class FoodChangeMoodUi(
     }
 
 
-}
 
     private fun guessPrepTimeGame() {
         val recipe = recipeTimeGuessGame.startNewGame()
@@ -298,3 +297,6 @@ class FoodChangeMoodUi(
         }
     }
 }
+
+
+
