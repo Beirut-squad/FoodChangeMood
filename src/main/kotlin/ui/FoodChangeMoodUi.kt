@@ -1,20 +1,23 @@
 package org.example.ui
 
-import org.example.logic.EasyFoodSuggestionUseCase
-import org.example.logic.ItalianGroupMealsUseCase
-import org.example.logic.RandomTenRecipesIncludePotatoUseCase
-import org.example.logic.Validator
+import org.example.logic.*
 import org.example.logic.use_case.GymHelperUseCase
 import org.example.model.Recipe
+import Colors
+import org.example.logic.GameFeedback
+import org.example.logic.RecipeTimeGuessGame
 
 
 class FoodChangeMoodUi(
     private val easyFoodSuggestionUseCase: EasyFoodSuggestionUseCase,
-    private val italianGroupMealsUseCase: ItalianGroupMealsUseCase,
+    private val sweetWithNoEggs: SweetWithNoEggsUseCase,
+    private val gymHelperUseCase: GymHelperUseCase,
     private val validator: Validator,
     private val randomTenRecipesIncludePotatoUseCase: RandomTenRecipesIncludePotatoUseCase,
-    val gymHelperUseCase: GymHelperUseCase
+    private val recipeTimeGuessGame: RecipeTimeGuessGame
 ) {
+    private val colors = Colors()
+
     fun start() {
         showWelcomeMessage()
         presentAvailableFeatures()
@@ -27,8 +30,9 @@ class FoodChangeMoodUi(
             val input = getUserInput()
             when (input) {
                 4 -> launchEasyFoodSuggestionUseCase()
+                5 -> guessPrepTimeGame()
+                6 -> launchSweetWithoutEggsUseCase()
                 12 -> launchRandomTenPotatoUseCase()
-                15 -> launchItalianGroupMealsUseCase()
                 0 -> {
                     println("Goodbye :)")
                     isRunning = false
@@ -46,12 +50,12 @@ class FoodChangeMoodUi(
     private fun showOptions() {
         println("\n=== Please enter the number of the service you want: ")
         println("4- Easy Food Suggestion ")
+        println("5- Time Guess Game")
+        println("6- Sweets with no eggs")
         println("12- I love potato ")
-        println("15- Italian Group Meals ")
         println("0- Enter 0 to exit the app")
     }
 
-    private fun launchExampleUseCase() {}
     private fun launchEasyFoodSuggestionUseCase() {
         easyFoodSuggestionUseCase
             .getTenEasyFoodSuggestions()
@@ -59,16 +63,6 @@ class FoodChangeMoodUi(
             println("${index + 1}. ${recipe.name} - ${recipe.minutes} min - ${recipe.ingredients?.size} ingredients - ${recipe.steps?.size} steps")
 
         }
-    }
-
-    private fun launchItalianGroupMealsUseCase() {
-        italianGroupMealsUseCase
-            .getItalianGroupMeals()
-            .forEachIndexed { index, recipe ->
-                println("${index + 1}. ${recipe.name} ")
-
-            }
-
     }
 
     private fun getUserInput(): Int? {
@@ -130,14 +124,73 @@ class FoodChangeMoodUi(
         }
     }
 
+    private fun launchSweetWithoutEggsUseCase() {
+        while (true) {
+            val suggestion = sweetWithNoEggs.findSweetsFreeEggs()
+            printSweetWithNoEggs()
+            val choice = readln().toIntOrNull()
+            when(choice) {
+                1 -> suggestion?.let { println("$it") }
+                0 -> break
+                else -> printSweetWithNoEggs()
+                }
+            }
+        }
+    private fun printSweetWithNoEggs(){
+        val suggestion = sweetWithNoEggs.findSweetsFreeEggs()
+        println("Suggested Sweet: ${suggestion?.name}")
+        println("Description: ${suggestion?.description}")
+        println("If you like this sweet, enter 1.")
+        println("If you want to see another sweet, enter anything else:")
+        println("If you want to go out press 0. ")
+    }
+
     private fun launchRandomTenPotatoUseCase()
     {
         val potatoMeals= randomTenRecipesIncludePotatoUseCase.findPotatoMeals()
         potatoMeals.forEach {
-            println("\t\t $it")
+            println("$it")
+        }
+    }
+    private fun guessPrepTimeGame() {
+        val recipe = recipeTimeGuessGame.startNewGame()
+        println(colors.blue("Guess the preparation time for: ${recipe.name}"))
+
+        var attemptsLeft = 3
+        while (attemptsLeft > 0) {
+            print("Enter your guess number of minutes: ")
+            val guess = readlnOrNull()?.toIntOrNull()
+            if (guess == null) {
+                println(colors.red("Invalid input. Please enter a valid number of minutes."))
+            } else {
+                val result = recipeTimeGuessGame.makeGuess(guess, attemptsLeft)
+                handleGameFeedback(result)
+                if (result is GameFeedback.CorrectGuess || result is GameFeedback.NoAttemptsLeft) {
+                    return
+                }
+                attemptsLeft--
+            }
+        }
+
+        if (attemptsLeft == 0) {
+            println(colors.red("No attempts left. The game is over."))
         }
     }
 
+    private fun handleGameFeedback(result: GameFeedback) {
+        when (result) {
+            is GameFeedback.CorrectGuess -> {
+                println(colors.green("Correct! The preparation time is ${result.actualTime} minutes.")) }
+            is GameFeedback.NoAttemptsLeft -> {
+                println(colors.red("No attempts left. The correct time was ${result.actualTime} minutes.")) }
+            is GameFeedback.GuessIsVeryClose -> {
+                println(colors.yellow("Very close! Try again. Attempts left: ${result.remainingAttempts}")) }
+            is GameFeedback.GuessIsWayOff -> {
+                println(colors.purple("Way off! Try again. Attempts left: ${result.remainingAttempts}")) }
+            is GameFeedback.GuessIsNotQuiteRight -> {
+                println(colors.cyan("Not quite. Try again. Attempts left: ${result.remainingAttempts}")) }
+            is GameFeedback.RecipeTimeNotAvailable -> {
+                println(colors.red("Error: ${result.errorMessage}")) }
+        }
+    }
 }
-
-
