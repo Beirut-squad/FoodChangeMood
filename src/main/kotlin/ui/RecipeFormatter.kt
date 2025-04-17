@@ -6,12 +6,14 @@ object RecipeFormatter {
 
     fun format(recipe: Recipe): String {
         return buildString {
-            appendLine("Recipe Name: ${recipe.name?.replace("'", "")}")
-            appendLine("\tDescription: ${recipe.description?.replace("\"", "") ?: ""}")
-            appendLine("\tIngredients: ")
+            appendLine("Recipe Name: \n\t${recipe.name?.replace("'", "")}")
+            appendLine("Description: \n\t${recipe.description?.replace("\"", "") ?: ""}")
+            appendLine("Ingredients: ")
             appendLine(formatList(recipe.ingredients))
-            appendLine("\tSteps: ")
+            appendLine("Steps: ")
             appendLine(formatSteps(recipe.steps))
+
+            appendLine("============================================================================")
         }
     }
 
