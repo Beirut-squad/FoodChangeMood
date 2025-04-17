@@ -2,7 +2,6 @@ package org.example.ui
 
 import org.example.logic.EasyFoodSuggestionUseCase
 import org.example.logic.SweetWithNoEggsUseCase
-import org.example.model.Recipe
 import org.example.logic.RandomTenRecipesIncludePotatoUseCase
 
 
@@ -47,7 +46,6 @@ class FoodChangeMoodUi(
         println("0- Enter 0 to exit the app")
     }
 
-    private fun launchExampleUseCase() {}
     private fun launchEasyFoodSuggestionUseCase() {
         easyFoodSuggestionUseCase
             .getTenEasyFoodSuggestions()
@@ -66,19 +64,20 @@ class FoodChangeMoodUi(
             val suggestion = sweetWithNoEggs.findSweetsFreeEggs()
             printSweetWithNoEggs()
             val choice = readln().toIntOrNull()
-            if (choice == 1) {
-                suggestion?.let {
-                    println("$it")
+            when(choice) {
+                1 -> suggestion?.let { println("$it") }
+                0 -> break
+                else -> printSweetWithNoEggs()
                 }
-            } else break
+            }
         }
-    }
     private fun printSweetWithNoEggs(){
         val suggestion = sweetWithNoEggs.findSweetsFreeEggs()
         println("Suggested Sweet: ${suggestion?.name}")
         println("Description: ${suggestion?.description}")
         println("If you like this sweet, enter 1.")
         println("If you want to see another sweet, enter anything else:")
+        println("If you want to go out press 0. ")
     }
 
     private fun launchRandomTenPotatoUseCase()
