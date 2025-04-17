@@ -20,12 +20,11 @@ class FoodChangeMoodUi(
     private val iraqiMealsUseCase: IraqiMealsUseCase,
     private val easyFoodSuggestionUseCase: EasyFoodSuggestionUseCase,
     private val sweetWithNoEggs: SweetWithNoEggsUseCase,
-    private val randomTenRecipesIncludePotatoUseCase: RandomTenRecipesIncludePotatoUseCase,
     private val ketoDiet: KetoDiet,
     private val gymHelperUseCase: GymHelperUseCase,
     private val validator: Validator,
     private val randomTenRecipesIncludePotatoUseCase: RandomTenRecipesIncludePotatoUseCase,
-    private val seafoodWithHighProteinUseCase: SeafoodWithHighProteinUseCase
+    private val seafoodWithHighProteinUseCase: SeafoodWithHighProteinUseCase,
     private val recipeTimeGuessGame: RecipeTimeGuessGame
 ) {
     private val colors = Colors()
@@ -180,7 +179,6 @@ class FoodChangeMoodUi(
                 println("${index + 1}. Recipe Name: \n\t${recipe.name} \n\tProtein Amount: \n\t${recipe.nutrition?.protein}")
             }
     }
-}
 
     private fun presentIraqMeals() {
         println(
