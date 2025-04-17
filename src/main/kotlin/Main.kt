@@ -13,7 +13,5 @@ fun main() {
     }
 
     val ui : FoodChangeMoodUi = getKoin().get()
-//    ui.start()
-
-    ui.launchGymHelperUi()
+    ui.start()
 }
