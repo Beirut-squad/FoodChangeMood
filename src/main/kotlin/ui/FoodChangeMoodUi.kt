@@ -13,7 +13,8 @@ class FoodChangeMoodUi(
     private val sweetWithNoEggs: SweetWithNoEggsUseCase,
     private val gymHelperUseCase: GymHelperUseCase,
     private val validator: Validator,
-    private val randomTenRecipesIncludePotatoUseCase: RandomTenRecipesIncludePotatoUseCase
+    private val randomTenRecipesIncludePotatoUseCase: RandomTenRecipesIncludePotatoUseCase,
+    private val recipeTimeGuessGame: RecipeTimeGuessGame
 ) {
     private val colors = Colors()
 
@@ -29,6 +30,7 @@ class FoodChangeMoodUi(
             val input = getUserInput()
             when (input) {
                 4 -> launchEasyFoodSuggestionUseCase()
+                5 -> guessPrepTimeGame()
                 6 -> launchSweetWithoutEggsUseCase()
                 12 -> launchRandomTenPotatoUseCase()
                 0 -> {
@@ -48,6 +50,7 @@ class FoodChangeMoodUi(
     private fun showOptions() {
         println("\n=== Please enter the number of the service you want: ")
         println("4- Easy Food Suggestion ")
+        println("5- Time Guess Game")
         println("6- Sweets with no eggs")
         println("12- I love potato ")
         println("0- Enter 0 to exit the app")
