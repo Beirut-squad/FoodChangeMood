@@ -7,6 +7,7 @@ import org.example.logic.use_case.GymHelperUseCase
 import org.example.model.Recipe
 import org.example.logic.EasyFoodSuggestionUseCase
 import org.example.logic.RandomTenRecipesIncludePotatoUseCase
+import org.example.logic.IraqiMealsUseCase
 import org.example.model.Nutrition
 import Colors
 import org.example.logic.GameFeedback
@@ -15,6 +16,7 @@ import org.example.logic.RecipeTimeGuessGame
 
 
 class FoodChangeMoodUi(
+    private val iraqiMealsUseCase: IraqiMealsUseCase,
     private val easyFoodSuggestionUseCase: EasyFoodSuggestionUseCase,
     private val sweetWithNoEggs: SweetWithNoEggsUseCase,
     private val randomTenRecipesIncludePotatoUseCase: RandomTenRecipesIncludePotatoUseCase,
@@ -36,10 +38,12 @@ class FoodChangeMoodUi(
             showOptions()
             val input = getUserInput()
             when (input) {
+                3 -> presentIraqMeals()
                 4 -> launchEasyFoodSuggestionUseCase()
                 5 -> launchGuessPrepTimeGame()
                 6 -> launchSweetWithoutEggsUseCase()
                 7 -> launchKetoDietUseCase()
+                9 -> launchGymHelperUi()
                 12 -> launchRandomTenPotatoUseCase()
                 0 -> {
                     println("Goodbye :)")
@@ -57,15 +61,16 @@ class FoodChangeMoodUi(
 
     private fun showOptions() {
         println("\n=== Please enter the number of the service you want: ")
+        println("3- Iraq Food")
         println("4- Easy Food Suggestion ")
         println("5- Time Guess Game")
         println("6- Sweets with no eggs")
         println("7- Keto Diet Food Suggestion ")
+        println("9- Gym Helper")
         println("12- I love potato ")
         println("0- Enter 0 to exit the app")
     }
 
-    private fun launchExampleUseCase() {}
     private fun launchEasyFoodSuggestionUseCase() {
         easyFoodSuggestionUseCase
             .getTenEasyFoodSuggestions()
@@ -163,6 +168,22 @@ class FoodChangeMoodUi(
         }
     }
 
+    private fun presentIraqMeals() {
+        println(
+            """
+            ==================================
+            |      Traditional Iraqi Meals    |
+            ==================================
+           """.trimIndent()
+        )
+        iraqiMealsUseCase.getIraqiMeals().forEachIndexed { index, recipe ->
+            println("${index + 1}. ${recipe.name} - ${recipe.minutes} min - ${recipe.ingredients} ingredients ")
+        }
+    }
+
+
+
+
     private fun launchKetoDietUseCase(){
         println("Welcome to Keto Meal Suggester ")
         while (true){
@@ -178,7 +199,7 @@ class FoodChangeMoodUi(
             }
         }
     }
-    
+
     private fun suggestRecipeForUser(){
         val recipe = ketoDiet.suggestKetoRecipe()
         println("Meal name: ${recipe.name}")
