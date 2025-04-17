@@ -10,7 +10,7 @@ import org.example.logic.RandomTenRecipesIncludePotatoUseCase
 
 class FoodChangeMoodUi(
     private val easyFoodSuggestionUseCase: EasyFoodSuggestionUseCase,
-    private val healthyRecipesUseCase: HealthyRecipesUseCase
+    private val healthyRecipesUseCase: HealthyRecipesUseCase,
     private val gymHelperUseCase: GymHelperUseCase,
     private val validator: Validator,
     private val randomTenRecipesIncludePotatoUseCase: RandomTenRecipesIncludePotatoUseCase
