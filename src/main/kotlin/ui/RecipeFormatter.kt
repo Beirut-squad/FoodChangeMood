@@ -6,8 +6,8 @@ object RecipeFormatter {
 
     fun format(recipe: Recipe): String {
         return buildString {
-            appendLine("Recipe Name: ${recipe.name}")
-            appendLine("\tDescription: ${recipe.description ?: ""}")
+            appendLine("Recipe Name: ${recipe.name?.replace("'", "")}")
+            appendLine("\tDescription: ${recipe.description?.replace("\"", "") ?: ""}")
             appendLine("\tIngredients: ")
             appendLine(formatList(recipe.ingredients))
             appendLine("\tSteps: ")
