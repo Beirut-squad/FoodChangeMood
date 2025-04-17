@@ -1,19 +1,26 @@
 package org.example.ui
 
+import org.example.logic.KetoDiet
+import org.example.logic.Validator
 import org.example.logic.*
 import org.example.logic.use_case.GymHelperUseCase
 import org.example.model.Recipe
+import org.example.logic.EasyFoodSuggestionUseCase
+import org.example.logic.RandomTenRecipesIncludePotatoUseCase
+import org.example.model.Nutrition
 import Colors
 import org.example.logic.GameFeedback
 import org.example.logic.RecipeTimeGuessGame
 
 
+
 class FoodChangeMoodUi(
     private val easyFoodSuggestionUseCase: EasyFoodSuggestionUseCase,
     private val sweetWithNoEggs: SweetWithNoEggsUseCase,
+    private val randomTenRecipesIncludePotatoUseCase: RandomTenRecipesIncludePotatoUseCase,
+    private val ketoDiet: KetoDiet,
     private val gymHelperUseCase: GymHelperUseCase,
     private val validator: Validator,
-    private val randomTenRecipesIncludePotatoUseCase: RandomTenRecipesIncludePotatoUseCase,
     private val recipeTimeGuessGame: RecipeTimeGuessGame
 ) {
     private val colors = Colors()
@@ -30,8 +37,9 @@ class FoodChangeMoodUi(
             val input = getUserInput()
             when (input) {
                 4 -> launchEasyFoodSuggestionUseCase()
-                5 -> guessPrepTimeGame()
+                5 -> launchGuessPrepTimeGame()
                 6 -> launchSweetWithoutEggsUseCase()
+                7 -> launchKetoDietUseCase()
                 12 -> launchRandomTenPotatoUseCase()
                 0 -> {
                     println("Goodbye :)")
@@ -52,10 +60,12 @@ class FoodChangeMoodUi(
         println("4- Easy Food Suggestion ")
         println("5- Time Guess Game")
         println("6- Sweets with no eggs")
+        println("7- Keto Diet Food Suggestion ")
         println("12- I love potato ")
         println("0- Enter 0 to exit the app")
     }
 
+    private fun launchExampleUseCase() {}
     private fun launchEasyFoodSuggestionUseCase() {
         easyFoodSuggestionUseCase
             .getTenEasyFoodSuggestions()
@@ -152,7 +162,93 @@ class FoodChangeMoodUi(
             println("$it")
         }
     }
-    private fun guessPrepTimeGame() {
+
+    private fun launchKetoDietUseCase(){
+        println("Welcome to Keto Meal Suggester ")
+        while (true){
+            println("1. Suggest a Keto Recipe \n2. Go Back ")
+            val input: String? = readlnOrNull()
+            when(input){
+                "1" -> {
+                    suggestRecipeForUser()
+                    continue
+                }
+                "2" -> break
+                else -> println("enter a valid number")
+            }
+        }
+    }
+    
+    private fun suggestRecipeForUser(){
+        val recipe = ketoDiet.suggestKetoRecipe()
+        println("Meal name: ${recipe.name}")
+        println("Do you want to proceed with Recipe details ? (Y,n) ")
+        val input: String? = readlnOrNull()
+        if (input == "Y"){
+            printRecipeDetails(recipe)
+        }
+    }
+
+    private fun printRecipeDetails(recipe: Recipe) {
+        println("=== Recipe Details ===")
+        printBasicInfo(recipe)
+        printTags(recipe.tags)
+        printNutritionInfo(recipe.nutrition)
+        printSteps(recipe.steps, recipe.numberOfSteps)
+        printDescription(recipe.description)
+        printIngredients(recipe.ingredients, recipe.numberOfIngredients)
+    }
+
+    private fun printBasicInfo(recipe: Recipe) {
+        println("Name: ${recipe.name ?: "N/A"}")
+        println("ID: ${recipe.id ?: "N/A"}")
+        println("Preparation Time: ${recipe.minutes ?: "N/A"} minutes")
+        println("Contributor ID: ${recipe.contributorId ?: "N/A"}")
+        println("Submitted Date: ${recipe.submittedDate ?: "N/A"}\n")
+    }
+
+    private fun printTags(tags: List<String>?) {
+        println("Tags: ${tags?.joinToString(", ") ?: "None"}\n")
+    }
+
+    private fun printNutritionInfo(nutrition: Nutrition?) {
+        println("--- Nutrition Information ---")
+        nutrition?.let {
+            println("Calories: ${it.calories ?: "N/A"}")
+            println("Total Fat: ${it.totalFat ?: "N/A"} g")
+            println("Sugar: ${it.sugar ?: "N/A"} g")
+            println("Sodium: ${it.sodium ?: "N/A"} mg")
+            println("Protein: ${it.protein ?: "N/A"} g")
+            println("Saturated Fat: ${it.saturatedFat ?: "N/A"} g")
+            println("Carbohydrates: ${it.carbohydrates ?: "N/A"} g")
+        } ?: println("Nutrition Info: N/A\n")
+    }
+
+    private fun printSteps(steps: List<String>?, numberOfSteps: Int?) {
+        println("Number of Steps: ${numberOfSteps ?: "N/A"}")
+        println("--- Steps ---")
+        steps?.forEachIndexed { index, step ->
+            println("${index + 1}. $step")
+        } ?: println("None")
+        println()
+    }
+
+    private fun printDescription(description: String?) {
+        println("Description: ${description ?: "N/A"}\n")
+    }
+
+    private fun printIngredients(ingredients: List<String>?, numberOfIngredients: Int?) {
+        println("--- Ingredients ---")
+        println("Number of Ingredients: ${numberOfIngredients ?: "N/A"}")
+        ingredients?.forEachIndexed { index, ingredient ->
+            println("${index + 1}. $ingredient")
+        } ?: println("None")
+        println()
+    }
+
+
+
+    private fun launchGuessPrepTimeGame() {
         val recipe = recipeTimeGuessGame.startNewGame()
         println(colors.blue("Guess the preparation time for: ${recipe.name}"))
 
@@ -194,3 +290,6 @@ class FoodChangeMoodUi(
         }
     }
 }
+
+
+
