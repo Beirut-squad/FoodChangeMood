@@ -1,6 +1,7 @@
 package org.example.logic
 
 import org.example.model.Recipe
+import org.example.model.isComplete
 
 class SweetWithNoEggsUseCase (
     private val recipesRepo:RecipesRepository
@@ -15,19 +16,5 @@ class SweetWithNoEggsUseCase (
                         (recipe.name.contains("sweet", ignoreCase = true) ||
                                 recipe.description.contains("sweet", ignoreCase = true))
             }.shuffled().firstOrNull()
-    }
-    private fun Recipe.isComplete(): Boolean {
-        return ingredients != null &&
-                name != null &&
-                nutrition != null &&
-                description != null &&
-                steps != null &&
-                contributorId != null &&
-                id != null &&
-                minutes != null &&
-                numberOfIngredients != null &&
-                numberOfSteps != null &&
-                submittedDate != null &&
-                tags != null
     }
 }
