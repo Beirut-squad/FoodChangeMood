@@ -7,7 +7,6 @@ import org.example.data.RecipesRepositoryCsvImpl
 import org.example.logic.HealthyRecipesUseCase
 import org.example.logic.RecipesRepository
 import org.example.ui.FoodChangeMoodUi
-import org.koin.core.scope.get
 import org.koin.dsl.module
 import java.io.File
 
@@ -25,7 +24,6 @@ val dataModule = module {
     single<RecipesRepository> {
         RecipesRepositoryCsvImpl(get(), get())
     }
-
-    single { FoodChangeMoodUi(get(),get(), get(), get(), get()) }
+    single { FoodChangeMoodUi(get(), get(), get(), get(), get(), get(), get(), get(), get()) }
 
 }
