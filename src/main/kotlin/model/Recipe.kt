@@ -9,10 +9,24 @@ data class Recipe (
     val contributorId: String?,
     val submittedDate: Date?,
     val tags: List<String>?,
-    val nutrition: Nutrition,
+    val nutrition: Nutrition?,
     val numberOfSteps: Int?,
     val steps: List<String>?,
     val description: String?,
     val ingredients: List<String>?,
     val numberOfIngredients: Int?
 )
+ fun Recipe.isComplete(): Boolean {
+    return ingredients != null &&
+            name != null &&
+            nutrition != null &&
+            description != null &&
+            steps != null &&
+            contributorId != null &&
+            id != null &&
+            minutes != null &&
+            numberOfIngredients != null &&
+            numberOfSteps != null &&
+            submittedDate != null &&
+            tags != null
+}

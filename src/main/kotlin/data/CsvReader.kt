@@ -2,42 +2,42 @@ package org.example.data
 
 import java.io.File
 
-class CsvReader(
-    private val csvInputFile: File,
-    private val csvProcessedFile: File
-) {
+class CsvReader(private val csvInputFile: File) {
 
     fun readCsv(): List<String> {
-        removeExtraNewLines()
-        return readProcessedCsv()
+        val content = csvInputFile.readText()
+        return splitIntoRows(content)
     }
 
-    private fun removeExtraNewLines() {
-        val csvInputBufferedReader = csvInputFile.bufferedReader()
-        val csvProcessedBufferedWriter = csvProcessedFile.bufferedWriter()
+    private fun splitIntoRows(content: String): List<String> {
+        val rows = mutableListOf<String>()
+        val currentRow = StringBuilder()
+        var inQuotes = false
 
-        val builder = StringBuilder()
-        var quoteCount = 0
+        for (char in content) {
+            when {
+                char == '"' -> {
+                    inQuotes = !inQuotes
+                    currentRow.append(char)
+                }
 
-        csvInputBufferedReader.forEachLine { line ->
-            builder.append(line).append(" ")
+                char == '\n' && !inQuotes -> {
+                    // True end of row
+                    rows.add(currentRow.toString())
+                    currentRow.clear()
+                }
 
-            quoteCount += line.count { it == '"' }
-
-            if (quoteCount % 2 == 0) {
-                csvProcessedBufferedWriter.write(builder.toString().trim())
-                csvProcessedBufferedWriter.newLine()
-                builder.clear()
-                quoteCount = 0
+                else -> {
+                    currentRow.append(char)
+                }
             }
         }
-    }
 
-    private fun readProcessedCsv(): List<String> {
-        if (csvProcessedFile.exists()) {
-            return csvProcessedFile.readLines()
-        } else {
-            throw Exception("Couldn't find the csv file.")
+        // Add the last row if it's not empty
+        if (currentRow.isNotEmpty()) {
+            rows.add(currentRow.toString())
         }
+
+        return rows
     }
 }
