@@ -5,13 +5,15 @@ import org.example.logic.use_case.GymHelperUseCase
 import org.example.model.Recipe
 import org.example.logic.EasyFoodSuggestionUseCase
 import org.example.logic.RandomTenRecipesIncludePotatoUseCase
+import org.example.logic.SeafoodWithHighProteinUseCase
 
 
 class FoodChangeMoodUi(
     private val easyFoodSuggestionUseCase: EasyFoodSuggestionUseCase,
     private val gymHelperUseCase: GymHelperUseCase,
     private val validator: Validator,
-    private val randomTenRecipesIncludePotatoUseCase: RandomTenRecipesIncludePotatoUseCase
+    private val randomTenRecipesIncludePotatoUseCase: RandomTenRecipesIncludePotatoUseCase,
+    private val seafoodWithHighProteinUseCase: SeafoodWithHighProteinUseCase
 ) {
     fun start() {
         showWelcomeMessage()
@@ -26,6 +28,7 @@ class FoodChangeMoodUi(
             when (input) {
                 4 -> launchEasyFoodSuggestionUseCase()
                 12 -> launchRandomTenPotatoUseCase()
+                14 -> launchSeafoodWithHighProteinUseCase()
                 0 -> {
                     println("Goodbye :)")
                     isRunning = false
@@ -44,6 +47,7 @@ class FoodChangeMoodUi(
         println("\n=== Please enter the number of the service you want: ")
         println("4- Easy Food Suggestion ")
         println("12- I love potato ")
+        println("14- Seafood with High Protein ")
         println("0- Enter 0 to exit the app")
     }
 
@@ -122,5 +126,13 @@ class FoodChangeMoodUi(
         potatoMeals.forEach {
             println("\t\t $it")
         }
+    }
+
+    private fun launchSeafoodWithHighProteinUseCase() {
+        println("Loading...")
+        seafoodWithHighProteinUseCase.getSeafoodWithProteinRecipes()
+            .forEachIndexed { index, recipe ->
+                println("${index + 1}. Recipe Name: \n\t${recipe.name} \n\tProtein Amount: \n\t${recipe.nutrition?.protein}")
+            }
     }
 }

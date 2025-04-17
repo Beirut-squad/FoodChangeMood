@@ -4,6 +4,7 @@ import org.example.logic.EasyFoodSuggestionUseCase
 import org.example.logic.Validator
 import org.example.logic.use_case.GymHelperUseCase
 import org.example.logic.RandomTenRecipesIncludePotatoUseCase
+import org.example.logic.SeafoodWithHighProteinUseCase
 import org.koin.dsl.module
 
 val useCaseModule = module {
@@ -15,4 +16,5 @@ val useCaseModule = module {
         GymHelperUseCase(get())
     }
     single { RandomTenRecipesIncludePotatoUseCase(get()) }
+    single { SeafoodWithHighProteinUseCase(get()) }
 }
