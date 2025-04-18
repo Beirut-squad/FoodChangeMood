@@ -9,7 +9,11 @@ class ItalianGroupMealsUseCase(
         return repository.getAllRecipes()
             .filter { recipe ->
                 val tags = recipe.tags?.map { it.replace("'", "").lowercase().trim() } ?: emptyList()
-                "italian" in tags && "for-large-groups" in tags
+                TAG_ITALIAN in tags && TAG_LARGE_GROUPS in tags
             }
+    }
+    companion object {
+        private const val TAG_ITALIAN = "italian"
+        private const val TAG_LARGE_GROUPS = "for-large-groups"
     }
 }
