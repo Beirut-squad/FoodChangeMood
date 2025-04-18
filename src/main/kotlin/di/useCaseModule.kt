@@ -18,6 +18,7 @@ val useCaseModule = module {
     single { RandomTenRecipesIncludePotatoUseCase(get()) }
     single { IraqiMealsUseCase(get()) }
     single { RecipeTimeGuessGame(get()) }
+    single { ItalianGroupMealsUseCase(get()) }
     single { KetoDiet(get()) }
     single { SearchRecipeByDateUseCase(get()) }
     single { SeafoodWithHighProteinUseCase(get()) }

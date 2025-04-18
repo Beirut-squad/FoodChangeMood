@@ -8,6 +8,7 @@ import org.example.logic.EasyFoodSuggestionUseCase
 import org.example.logic.RecipesRepository
 import org.example.ui.FoodChangeMoodUi
 import org.koin.core.scope.get
+import org.koin.core.module.dsl.singleOf
 import org.koin.dsl.module
 import java.io.File
 
@@ -26,4 +27,6 @@ val dataModule = module {
         RecipesRepositoryCsvImpl(get(), get())
     }
 
+
+    singleOf(::FoodChangeMoodUi)
 }

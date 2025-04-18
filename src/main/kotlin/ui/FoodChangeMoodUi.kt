@@ -10,7 +10,6 @@ import org.example.error.NoRecipesFoundForTheGivenDateException
 import org.example.error.RecipeNotFoundException
 import org.example.logic.EasyFoodSuggestionUseCase
 import org.example.logic.RandomTenRecipesIncludePotatoUseCase
-import org.example.logic.SeafoodWithHighProteinUseCase
 import org.example.logic.IraqiMealsUseCase
 import org.example.model.Nutrition
 import Colors
@@ -20,6 +19,7 @@ import org.example.logic.RecipeTimeGuessGame
 import org.example.logic.SearchRecipeByDateUseCase
 import java.text.ParseException
 import java.time.format.DateTimeParseException
+
 
 
 class FoodChangeMoodUi(
@@ -32,6 +32,8 @@ class FoodChangeMoodUi(
     private val gymHelperUseCase: GymHelperUseCase,
     private val validator: Validator,
     private val seafoodWithHighProteinUseCase: SeafoodWithHighProteinUseCase,
+    private val randomTenRecipesIncludePotatoUseCase: RandomTenRecipesIncludePotatoUseCase,
+    private val italianGroupMealsUseCase: ItalianGroupMealsUseCase,
     private val recipeTimeGuessGame: RecipeTimeGuessGame
 ) {
     private val colors = Colors()
@@ -55,6 +57,7 @@ class FoodChangeMoodUi(
                 7 -> launchKetoDietUseCase()
                 9 -> launchGymHelperUi()
                 12 -> launchRandomTenPotatoUseCase()
+                15 -> launchItalianGroupMeals()
                 14 -> launchSeafoodWithHighProteinUseCase()
                 0 -> {
                     println("Goodbye :)")
@@ -81,6 +84,7 @@ class FoodChangeMoodUi(
         println("9- Gym Helper")
         println("12- I love potato ")
         println("14- Seafood with High Protein ")
+        println("15- Italian Group Meals ")
         println("0- Enter 0 to exit the app")
     }
 
@@ -88,15 +92,14 @@ class FoodChangeMoodUi(
         easyFoodSuggestionUseCase
             .getTenEasyFoodSuggestions()
             .forEachIndexed { index, recipe ->
-                println("${index + 1}. ${recipe.name} - ${recipe.minutes} min - ${recipe.ingredients?.size} ingredients - ${recipe.steps?.size} steps")
+            println("${index + 1}. ${recipe.name} - ${recipe.minutes} min - ${recipe.ingredients?.size} ingredients - ${recipe.steps?.size} steps")
 
-            }
+        }
     }
 
     private fun getUserInput(): Int? {
         return readlnOrNull()?.toIntOrNull()
     }
-
     fun launchGymHelperUi() {
         println("Gym helper: Get meals that match the protein and calories amounts you choose or close to them.")
         while (true) {
@@ -107,7 +110,7 @@ class FoodChangeMoodUi(
             val calories = readlnOrNull()
 
             if (validator.validateGymHelperInput(calories, protein)) {
-                val recipes = gymHelperUseCase.getRecipesMatchOrApproximateAmountOfCaloriesAndProtein(
+                val recipes =  gymHelperUseCase.getRecipesMatchOrApproximateAmountOfCaloriesAndProtein(
                     calories = calories?.toFloat() ?: 0f,
                     protein = protein?.toFloat() ?: 0f
                 )
@@ -158,15 +161,14 @@ class FoodChangeMoodUi(
             val suggestion = sweetWithNoEggs.findSweetsFreeEggs()
             printSweetWithNoEggs()
             val choice = readln().toIntOrNull()
-            when (choice) {
+            when(choice) {
                 1 -> suggestion?.let { println("$it") }
                 0 -> break
                 else -> printSweetWithNoEggs()
+                }
             }
         }
-    }
-
-    private fun printSweetWithNoEggs() {
+    private fun printSweetWithNoEggs(){
         val suggestion = sweetWithNoEggs.findSweetsFreeEggs()
         println("Suggested Sweet: ${suggestion?.name}")
         println("Description: ${suggestion?.description}")
@@ -175,8 +177,9 @@ class FoodChangeMoodUi(
         println("If you want to go out press 0. ")
     }
 
-    private fun launchRandomTenPotatoUseCase() {
-        val potatoMeals = randomTenRecipesIncludePotatoUseCase.findPotatoMeals()
+    private fun launchRandomTenPotatoUseCase()
+    {
+        val potatoMeals= randomTenRecipesIncludePotatoUseCase.findPotatoMeals()
         potatoMeals.forEach {
             println("$it")
         }
@@ -441,6 +444,15 @@ class FoodChangeMoodUi(
                 println(colors.red("Error: ${result.errorMessage}")) }
         }
     }
+    private fun launchItalianGroupMeals(){
+        italianGroupMealsUseCase
+            .getItalianGroupMeals()
+            .forEachIndexed { index, recipe ->
+                println("${index + 1}. ${recipe.name} ")
+
+            }
+    }
+
 }
 
 
