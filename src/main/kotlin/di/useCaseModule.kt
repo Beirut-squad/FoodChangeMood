@@ -12,6 +12,7 @@ import org.example.logic.RandomTenRecipesIncludePotatoUseCase
 import org.example.logic.ThinProblemUseCase
 import org.example.logic.SearchRecipeByDateUseCase
 import org.example.logic.SeafoodWithHighProteinUseCase
+import org.koin.core.module.dsl.singleOf
 import org.koin.dsl.module
 
 val useCaseModule = module {
@@ -35,6 +36,9 @@ val useCaseModule = module {
     single { GlobalFoodCultureUI(get(),get()) }
     single { SearchRecipeByDateUseCase(get()) }
     single { SeafoodWithHighProteinUseCase(get()) }
+
+    singleOf(::IngredientGuessingGameUseCase)
+
     single { ThinProblemUseCase(get()) }
 
 }
