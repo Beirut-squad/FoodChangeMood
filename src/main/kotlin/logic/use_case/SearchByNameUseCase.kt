@@ -10,7 +10,7 @@ class SearchByNameUseCase(
 ) {
 
     init {
-        // ملء الـ Trie بالأسماء عند إنشاء الـ UseCase
+        // Fill the Trie with names when creating the UseCase
         recipesRepository.getAllRecipes().forEach {
             it.name?.let { name -> trie.insert(name.lowercase().trim()) }
         }
