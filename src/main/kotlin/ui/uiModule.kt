@@ -15,4 +15,6 @@ val uiModule = module {
     singleOf(::ItalianGroupMealsUi)
     singleOf(::SeafoodWithHighProteinUi)
     singleOf(::SearchRecipeByDateUi)
+    singleOf(::HealthyFoodRecipesUi)
+    singleOf(::ThinProblemUi)
 }

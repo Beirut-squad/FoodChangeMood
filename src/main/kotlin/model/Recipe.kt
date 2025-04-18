@@ -2,7 +2,7 @@ package org.example.model
 
 import java.time.LocalDate
 
-data class Recipe (
+data class Recipe(
     val name: String?,
     val id: String?,
     val minutes: Int?,
@@ -22,11 +22,6 @@ data class Recipe (
             nutrition != null &&
             description != null &&
             steps != null &&
-            contributorId != null &&
-            id != null &&
             minutes != null &&
-            numberOfIngredients != null &&
-            numberOfSteps != null &&
-            submittedDate != null &&
             tags != null
 }

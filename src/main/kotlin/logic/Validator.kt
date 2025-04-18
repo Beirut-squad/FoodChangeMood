@@ -15,4 +15,10 @@ class Validator {
         return amount?.let { amount.isNotBlank() && (amount.toFloatOrNull() != null) && (amount.toFloat() > 0) }
             ?: false
     }
+
+    fun validateRecipesCountInput(
+        count: Int
+    ) : Boolean{
+        return (count > 0)
+    }
 }
