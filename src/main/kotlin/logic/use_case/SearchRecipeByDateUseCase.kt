@@ -3,7 +3,7 @@ package org.example.logic.use_case
 import org.example.error.NoRecipesFoundForTheGivenDateException
 import org.example.error.RecipeNotFoundException
 import org.example.model.Recipe
-import Utils.toDate
+import utils.toDate
 import org.example.logic.RecipesRepository
 
 

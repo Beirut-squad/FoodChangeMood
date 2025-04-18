@@ -1,8 +1,8 @@
 package org.example.ui.features_ui
 
-import Colors
 import org.example.logic.use_case.IngredientGuessingGameUseCase
 import org.example.model.Recipe
+import org.example.utils.Colors
 
 class IngredientsGuessingGameUi(
     private val ingredientGuessingGameUseCase: IngredientGuessingGameUseCase
