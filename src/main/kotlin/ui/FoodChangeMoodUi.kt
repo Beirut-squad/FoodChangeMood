@@ -15,9 +15,9 @@ import org.example.logic.ThinProblemUseCase
 import org.example.logic.IraqiMealsUseCase
 import org.example.model.Nutrition
 import Colors
+import org.example.data.RecipesRepositoryCsvImpl
 import org.example.logic.GameFeedback
 import org.example.logic.RecipeTimeGuessGame
-
 import org.example.logic.SearchRecipeByDateUseCase
 import java.text.ParseException
 import java.time.format.DateTimeParseException
@@ -33,6 +33,8 @@ class FoodChangeMoodUi(
     private val ketoDiet: KetoDiet,
     private val gymHelperUseCase: GymHelperUseCase,
     private val validator: Validator,
+    private val recipeTimeGuessGame: RecipeTimeGuessGame,
+    private val globalFoodCultureUI: GlobalFoodCultureUI,
     private val seafoodWithHighProteinUseCase: SeafoodWithHighProteinUseCase,
     private val randomTenRecipesIncludePotatoUseCase: RandomTenRecipesIncludePotatoUseCase,
     private val italianGroupMealsUseCase: ItalianGroupMealsUseCase,
@@ -60,6 +62,7 @@ class FoodChangeMoodUi(
                 6 -> launchSweetWithoutEggsUseCase()
                 7 -> launchKetoDietUseCase()
                 9 -> launchGymHelperUi()
+                10 -> globalFoodCultureUI.displayCountryFoodCulture()
                 12 -> launchRandomTenPotatoUseCase()
                 13 -> launchThinProblemUseCase()
                 14 -> launchSeafoodWithHighProteinUseCase()
@@ -88,6 +91,7 @@ class FoodChangeMoodUi(
         println("7- Keto Diet Food Suggestion ")
         println("8- Search Recipe by add date")
         println("9- Gym Helper")
+        println("10- Explore Global Food Culture")
         println("12- I love potato ")
         println("13- Thin problem Suggestion ")
         println("14- Seafood with High Protein ")

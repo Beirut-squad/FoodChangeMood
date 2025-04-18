@@ -23,6 +23,7 @@ val dataModule = module {
     single<RecipesRepository> {
         RecipesRepositoryCsvImpl(get(), get())
     }
-
+    
+    singleOf(::FoodChangeMoodUi)
 
 }
