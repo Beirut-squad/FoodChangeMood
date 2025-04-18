@@ -9,6 +9,7 @@ import Utils.checkDateFormat
 import org.example.error.NoRecipesFoundForTheGivenDateException
 import org.example.error.RecipeNotFoundException
 import org.example.logic.EasyFoodSuggestionUseCase
+import org.example.logic.HealthyRecipesUseCase
 import org.example.logic.RandomTenRecipesIncludePotatoUseCase
 import org.example.logic.ThinProblemUseCase
 import org.example.logic.IraqiMealsUseCase
@@ -22,11 +23,10 @@ import java.text.ParseException
 import java.time.format.DateTimeParseException
 
 
-
 class FoodChangeMoodUi(
     private val iraqiMealsUseCase: IraqiMealsUseCase,
     private val easyFoodSuggestionUseCase: EasyFoodSuggestionUseCase,
-    private val randomTenRecipesIncludePotatoUseCase: RandomTenRecipesIncludePotatoUseCase,
+    private val healthyRecipesUseCase: HealthyRecipesUseCase,
     private val thinProblem: ThinProblemUseCase,
     private val searchRecipeByDateUseCase: SearchRecipeByDateUseCase,
     private val sweetWithNoEggs: SweetWithNoEggsUseCase,
@@ -36,6 +36,7 @@ class FoodChangeMoodUi(
     private val recipeTimeGuessGame: RecipeTimeGuessGame,
     private val globalFoodCultureUI: GlobalFoodCultureUI,
     private val seafoodWithHighProteinUseCase: SeafoodWithHighProteinUseCase,
+    private val randomTenRecipesIncludePotatoUseCase: RandomTenRecipesIncludePotatoUseCase,
     private val italianGroupMealsUseCase: ItalianGroupMealsUseCase,
     private val recipeTimeGuessGame: RecipeTimeGuessGame
 ) {
@@ -53,6 +54,7 @@ class FoodChangeMoodUi(
             showOptions()
             val input = getUserInput()
             when (input) {
+                1 -> launchHealthyRecipes()
                 3 -> presentIraqMeals()
                 4 -> launchEasyFoodSuggestionUseCase()
                 8 -> launchSearchRecipeByDateUseCase()
@@ -81,6 +83,7 @@ class FoodChangeMoodUi(
 
     private fun showOptions() {
         println("\n=== Please enter the number of the service you want: ")
+        println("1- Get Quick and Healthy Meals")
         println("3- Iraq Food")
         println("4- Easy Food Suggestion ")
         println("5- Time Guess Game")
@@ -101,14 +104,36 @@ class FoodChangeMoodUi(
         easyFoodSuggestionUseCase
             .getTenEasyFoodSuggestions()
             .forEachIndexed { index, recipe ->
-            println("${index + 1}. ${recipe.name} - ${recipe.minutes} min - ${recipe.ingredients?.size} ingredients - ${recipe.steps?.size} steps")
+                println("${index + 1}. ${recipe.name} - ${recipe.minutes} min - ${recipe.ingredients?.size} ingredients - ${recipe.steps?.size} steps")
 
+            }
+    }
+
+
+    private fun launchHealthyRecipes() {
+        println("Enter the number of meals you want")
+        val count = getUserInput()
+
+        if (count == null || !validator.validateRecipesCountInput(count)) {
+            println("Invalid Input, Enter a Positive Number")
+        } else
+            displayRecipeInfo(count)
+    }
+
+    private fun displayRecipeInfo(count: Int) {
+        println("Loading...")
+        val healthyRecipes = healthyRecipesUseCase.getHealthyRecipes(count)
+        if (healthyRecipes.isEmpty()) {
+            println("No Recipes Available")
+        } else healthyRecipes.forEach {
+            println(RecipeFormatter.format(it))
         }
     }
 
     private fun getUserInput(): Int? {
         return readlnOrNull()?.toIntOrNull()
-    }    
+    }
+
     fun launchGymHelperUi() {
         println("Gym helper: Get meals that match the protein and calories amounts you choose or close to them.")
         while (true) {
@@ -119,7 +144,7 @@ class FoodChangeMoodUi(
             val calories = readlnOrNull()
 
             if (validator.validateGymHelperInput(calories, protein)) {
-                val recipes =  gymHelperUseCase.getRecipesMatchOrApproximateAmountOfCaloriesAndProtein(
+                val recipes = gymHelperUseCase.getRecipesMatchOrApproximateAmountOfCaloriesAndProtein(
                     calories = calories?.toFloat() ?: 0f,
                     protein = protein?.toFloat() ?: 0f
                 )
@@ -170,14 +195,15 @@ class FoodChangeMoodUi(
             val suggestion = sweetWithNoEggs.findSweetsFreeEggs()
             printSweetWithNoEggs()
             val choice = readln().toIntOrNull()
-            when(choice) {
+            when (choice) {
                 1 -> suggestion?.let { println("$it") }
                 0 -> break
                 else -> printSweetWithNoEggs()
-                }
             }
         }
-    private fun printSweetWithNoEggs(){
+    }
+
+    private fun printSweetWithNoEggs() {
         val suggestion = sweetWithNoEggs.findSweetsFreeEggs()
         println("Suggested Sweet: ${suggestion?.name}")
         println("Description: ${suggestion?.description}")
@@ -186,13 +212,13 @@ class FoodChangeMoodUi(
         println("If you want to go out press 0. ")
     }
 
-    private fun launchRandomTenPotatoUseCase()
-    {
-        val potatoMeals= randomTenRecipesIncludePotatoUseCase.findPotatoMeals()
+    private fun launchRandomTenPotatoUseCase() {
+        val potatoMeals = randomTenRecipesIncludePotatoUseCase.findPotatoMeals()
         potatoMeals.forEach {
             println("\t\t $it")
         }
     }
+
     private fun launchThinProblemUseCase() {
 
         while (true) {
@@ -205,7 +231,7 @@ class FoodChangeMoodUi(
         }
     }
 
-    private fun printThinProblem(){
+    private fun printThinProblem() {
         val suggestion = thinProblem.findThinProblem()
         println("Suggested Meal: ${suggestion?.name}")
         println("Description: ${suggestion?.description}")
@@ -213,7 +239,6 @@ class FoodChangeMoodUi(
         println("Like it? Enter 1")
         println("Want another? Enter anything else:")
     }
-}
 
 
     private fun launchSearchRecipeByDateUseCase() {
@@ -327,8 +352,8 @@ class FoodChangeMoodUi(
             .forEachIndexed { index, recipe ->
                 println(
                     "${index + 1}. " +
-                    "Recipe Name: \n\t${recipe.name} " +
-                    "\n\tProtein Amount: \n\t${recipe.nutrition?.protein}"
+                            "Recipe Name: \n\t${recipe.name} " +
+                            "\n\tProtein Amount: \n\t${recipe.nutrition?.protein}"
                 )
             }
     }
@@ -347,30 +372,29 @@ class FoodChangeMoodUi(
     }
 
 
-
-
-    private fun launchKetoDietUseCase(){
+    private fun launchKetoDietUseCase() {
         println("Welcome to Keto Meal Suggester ")
-        while (true){
+        while (true) {
             println("1. Suggest a Keto Recipe \n2. Go Back ")
             val input: String? = readlnOrNull()
-            when(input){
+            when (input) {
                 "1" -> {
                     suggestRecipeForUser()
                     continue
                 }
+
                 "2" -> break
                 else -> println("enter a valid number")
             }
         }
     }
 
-    private fun suggestRecipeForUser(){
+    private fun suggestRecipeForUser() {
         val recipe = ketoDiet.suggestKetoRecipe()
         println("Meal name: ${recipe.name}")
         println("Do you want to proceed with Recipe details ? (Y,n) ")
         val input: String? = readlnOrNull()
-        if (input == "Y"){
+        if (input == "Y") {
             printRecipeDetails(recipe)
         }
     }
@@ -433,7 +457,6 @@ class FoodChangeMoodUi(
     }
 
 
-
     private fun launchGuessPrepTimeGame() {
         val recipe = recipeTimeGuessGame.startNewGame()
         println(colors.blue("Guess the preparation time for: ${recipe.name}"))
@@ -462,20 +485,32 @@ class FoodChangeMoodUi(
     private fun handleGameFeedback(result: GameFeedback) {
         when (result) {
             is GameFeedback.CorrectGuess -> {
-                println(colors.green("Correct! The preparation time is ${result.actualTime} minutes.")) }
+                println(colors.green("Correct! The preparation time is ${result.actualTime} minutes."))
+            }
+
             is GameFeedback.NoAttemptsLeft -> {
-                println(colors.red("No attempts left. The correct time was ${result.actualTime} minutes.")) }
+                println(colors.red("No attempts left. The correct time was ${result.actualTime} minutes."))
+            }
+
             is GameFeedback.GuessIsVeryClose -> {
-                println(colors.yellow("Very close! Try again. Attempts left: ${result.remainingAttempts}")) }
+                println(colors.yellow("Very close! Try again. Attempts left: ${result.remainingAttempts}"))
+            }
+
             is GameFeedback.GuessIsWayOff -> {
-                println(colors.purple("Way off! Try again. Attempts left: ${result.remainingAttempts}")) }
+                println(colors.purple("Way off! Try again. Attempts left: ${result.remainingAttempts}"))
+            }
+
             is GameFeedback.GuessIsNotQuiteRight -> {
-                println(colors.cyan("Not quite. Try again. Attempts left: ${result.remainingAttempts}")) }
+                println(colors.cyan("Not quite. Try again. Attempts left: ${result.remainingAttempts}"))
+            }
+
             is GameFeedback.RecipeTimeNotAvailable -> {
-                println(colors.red("Error: ${result.errorMessage}")) }
+                println(colors.red("Error: ${result.errorMessage}"))
+            }
         }
     }
-    private fun launchItalianGroupMeals(){
+
+    private fun launchItalianGroupMeals() {
         italianGroupMealsUseCase
             .getItalianGroupMeals()
             .forEachIndexed { index, recipe ->

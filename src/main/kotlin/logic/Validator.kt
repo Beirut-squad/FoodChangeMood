@@ -21,3 +21,10 @@ class Validator {
     }
 }
 
+=======
+    fun validateRecipesCountInput(
+        count: Int
+    ) : Boolean{
+        return (count > 0)
+    }
+}

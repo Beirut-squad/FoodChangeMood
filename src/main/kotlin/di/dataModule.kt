@@ -25,4 +25,5 @@ val dataModule = module {
     }
     
     singleOf(::FoodChangeMoodUi)
+
 }
