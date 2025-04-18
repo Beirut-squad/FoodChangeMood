@@ -8,6 +8,7 @@ import org.example.model.Recipe
 import org.example.logic.EasyFoodSuggestionUseCase
 import org.example.logic.HealthyRecipesUseCase
 import org.example.logic.RandomTenRecipesIncludePotatoUseCase
+import org.example.logic.SeafoodWithHighProteinUseCase
 import org.example.logic.IraqiMealsUseCase
 import org.example.model.Nutrition
 import Colors
@@ -20,10 +21,11 @@ class FoodChangeMoodUi(
     private val easyFoodSuggestionUseCase: EasyFoodSuggestionUseCase,
     private val healthyRecipesUseCase: HealthyRecipesUseCase,
     private val sweetWithNoEggs: SweetWithNoEggsUseCase,
-    private val randomTenRecipesIncludePotatoUseCase: RandomTenRecipesIncludePotatoUseCase,
     private val ketoDiet: KetoDiet,
     private val gymHelperUseCase: GymHelperUseCase,
     private val validator: Validator,
+    private val randomTenRecipesIncludePotatoUseCase: RandomTenRecipesIncludePotatoUseCase,
+    private val seafoodWithHighProteinUseCase: SeafoodWithHighProteinUseCase,
     private val recipeTimeGuessGame: RecipeTimeGuessGame
 ) {
     private val colors = Colors()
@@ -47,6 +49,7 @@ class FoodChangeMoodUi(
                 7 -> launchKetoDietUseCase()
                 9 -> launchGymHelperUi()
                 12 -> launchRandomTenPotatoUseCase()
+                14 -> launchSeafoodWithHighProteinUseCase()
                 0 -> {
                     println("Goodbye :)")
                     isRunning = false
@@ -71,6 +74,7 @@ class FoodChangeMoodUi(
         println("7- Keto Diet Food Suggestion ")
         println("9- Gym Helper")
         println("12- I love potato ")
+        println("14- Seafood with High Protein ")
         println("0- Enter 0 to exit the app")
     }
 
@@ -191,6 +195,18 @@ class FoodChangeMoodUi(
         potatoMeals.forEach {
             println("$it")
         }
+    }
+
+    private fun launchSeafoodWithHighProteinUseCase() {
+        println("Loading...")
+        seafoodWithHighProteinUseCase.getSeafoodWithProteinRecipes()
+            .forEachIndexed { index, recipe ->
+                println(
+                    "${index + 1}. " +
+                    "Recipe Name: \n\t${recipe.name} " +
+                    "\n\tProtein Amount: \n\t${recipe.nutrition?.protein}"
+                )
+            }
     }
 
     private fun presentIraqMeals() {
