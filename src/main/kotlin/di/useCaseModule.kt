@@ -22,7 +22,7 @@ val useCaseModule = module {
     single { ItalianGroupMealsUseCase(get()) }
     single { KetoDiet(get()) }
     single { GlobalFoodCultureUseCase(get()) }
-    single { GlobalFoodCultureUI(get()) }
+    single { GlobalFoodCultureUI(get(),get()) }
     single { SearchRecipeByDateUseCase(get()) }
     single { SeafoodWithHighProteinUseCase(get()) }
 }

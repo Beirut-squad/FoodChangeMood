@@ -15,4 +15,9 @@ class Validator {
         return amount?.let { amount.isNotBlank() && (amount.toFloatOrNull() != null) && (amount.toFloat() > 0) }
             ?: false
     }
+
+    fun vaildateIsAlphabetic(input: String): Boolean {
+        return input.isNotEmpty() && input.all { it.isLetter()  }
+    }
 }
+
