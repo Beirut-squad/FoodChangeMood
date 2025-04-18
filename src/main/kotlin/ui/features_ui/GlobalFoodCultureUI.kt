@@ -5,14 +5,17 @@ import org.example.logic.Validator
 import org.example.model.Recipe
 import org.example.ui.RecipeFormatter
 
+import org.example.utils.Colors
+
 class GlobalFoodCultureUI(
     private val globalFoodCultureUseCase: GlobalFoodCultureUseCase,
-    private val validator: Validator
+    private val validator: Validator,
+    private val colors: Colors
 ) {
     fun show() {
         var shouldContinue = true
         while (shouldContinue) {
-            print("Enter a country to explore its meals (or 0 to exit): ")
+            print(colors.cyan("Enter a country to explore its meals (or 0 to exit): "))
             val input = readlnOrNull()?.trim()
             shouldContinue = processInput(input)
         }
@@ -34,13 +37,13 @@ class GlobalFoodCultureUI(
     }
 
     private fun showCountryNameWithoutLetters(){
-        println("Please enter a country name using letters only.")
+        println(colors.red("Please enter a country name using letters only."))
     }
 
 
 
     private fun showInputError() {
-        println("Please enter a valid country name. ")
+        println(colors.red("Please enter a valid country name. "))
     }
 
     private fun handleCountryInput(country: String): Boolean {
@@ -55,12 +58,12 @@ class GlobalFoodCultureUI(
     }
 
     private fun showNoRecipesFound(country: String) {
-        println("No meals found for '$country'")
-        println("Try another country.")
+        println(colors.red("No meals found for '$country'"))
+        println(colors.yellow("Try another country."))
     }
 
     private fun showRecipes(country: String, recipes: List<Recipe>) {
-        println("${recipes.size} ${if (recipes.size == 1) "meal" else "meals"} found for '$country':\n")
+        println(colors.green("${recipes.size} ${if (recipes.size == 1) "meal" else "meals"} found for '$country':\n"))
         recipes.forEach {
             println(RecipeFormatter.format(it))
         }

@@ -19,9 +19,9 @@ class FoodChangeMoodUi(
     private val italianGroupMealsUi: ItalianGroupMealsUi,
     private val recipesTimeGuessGameUi: RecipesTimeGuessGameUi,
     private val ingredientsGuessingGameUi: IngredientsGuessingGameUi,
-    private val globalFoodCultureUI: GlobalFoodCultureUI
+    private val globalFoodCultureUI: GlobalFoodCultureUI,
+    private val colors: Colors
 ) {
-    private val colors = Colors()
 
     fun start() {
         showWelcomeMessage()
@@ -88,6 +88,6 @@ class FoodChangeMoodUi(
     }
 
     private fun printOption(text: String) {
-        println(colors.blue(text))
+        println(colors.purple(text))
     }
 }

@@ -1,32 +1,33 @@
 package org.example.ui.features_ui
 
-import utils.checkDateFormat
 import org.example.error.NoRecipesFoundForTheGivenDateException
 import org.example.error.RecipeNotFoundException
 import org.example.logic.use_case.SearchRecipeByDateUseCase
 import org.example.model.Recipe
+import org.example.utils.Colors
+import utils.checkDateFormat
 import java.text.ParseException
 import java.time.format.DateTimeParseException
 
 class SearchRecipeByDateUi(
     private val searchRecipeByDateUseCase: SearchRecipeByDateUseCase,
-
-    ) {
-    var isRunning = true
-     fun show() {
-        println("Enter the date for which you want to view recipes: example (2006-10-07)")
+    private val colors: Colors
+) {
+    private var isRunning = true
+    fun show() {
+        println(colors.cyan("Enter the date for which you want to view recipes: example (2006-10-07)"))
         try {
             readlnOrNull()?.let { inputDate ->
                 inputDate.checkDateFormat()
                 searchRecipeByDateUseCase.searchRecipeByDate(inputDate).forEach { idAndName ->
-                    println("ID = ${idAndName.first} Recipe Name: ${idAndName.second}")
+                    println(colors.green("ID = ${idAndName.first} Recipe Name: ${idAndName.second}"))
                 }
                 askUserIfHeWantDetailsOfRecipe()
-            } ?: println("Please enter a valid date")
+            } ?: println(colors.red("Please enter a valid date"))
         } catch (parseException: ParseException) {
-            println("Incorrect date format ,Please enter a valid date")
+            println(colors.red("Incorrect date format ,Please enter a valid date"))
         } catch (dateTimeException: DateTimeParseException) {
-            println("Incorrect date format ,Please enter a valid date")
+            println(colors.red("Incorrect date format ,Please enter a valid date"))
         } catch (noRecipesFoundForTheGivenDateException: NoRecipesFoundForTheGivenDateException) {
             println(noRecipesFoundForTheGivenDateException.message)
         }
@@ -35,7 +36,7 @@ class SearchRecipeByDateUi(
 
     private fun askUserIfHeWantDetailsOfRecipe() {
         isRunning = false
-        println("Do you want to get details of a specific recipe? (Y/N)")
+        println(colors.yellow("Do you want to get details of a specific recipe? (Y/N)"))
         readlnOrNull()?.lowercase().let { answer ->
             when (answer) {
                 "y" -> {
@@ -47,7 +48,7 @@ class SearchRecipeByDateUi(
                 }
 
                 else -> {
-                    println("Invalid choice")
+                    println(colors.red("Invalid choice"))
                     askUserIfHeWantDetailsOfRecipe()
                 }
             }
@@ -56,11 +57,11 @@ class SearchRecipeByDateUi(
 
     private fun searchRecipeByID() {
         try {
-            println("Enter the ID of the recipe whose details you want to see:")
+            println(colors.yellow("Enter the ID of the recipe whose details you want to see:"))
             readlnOrNull()?.let { enteredID ->
                 val idAsNumber = enteredID.toIntOrNull() ?: 0
                 if (idAsNumber == 0) {
-                    println("Enter valid id !")
+                    println(colors.red("Enter valid id !"))
                     askToBackToMainMenu()
                 } else {
                     val recipe = searchRecipeByDateUseCase.viewDetailsOfRecipeByID(enteredID)
@@ -68,7 +69,7 @@ class SearchRecipeByDateUi(
                     isRunning = true
                 }
             } ?: {
-                println("Enter valid id !")
+                println(colors.red("Enter valid id !"))
                 askToBackToMainMenu()
             }
         } catch (e: RecipeNotFoundException) {
@@ -79,7 +80,7 @@ class SearchRecipeByDateUi(
     }
 
     private fun askToBackToMainMenu() {
-        println("Are you need to back to main menu ? (Y/N)")
+        println(colors.yellow("Are you need to back to main menu ? (Y/N)"))
         readlnOrNull()?.lowercase().let { answer ->
             when (answer) {
                 "y" -> {
@@ -91,7 +92,7 @@ class SearchRecipeByDateUi(
                 }
 
                 else -> {
-                    println("Invalid choice")
+                    println(colors.red("Invalid choice"))
                 }
             }
         }
@@ -99,21 +100,23 @@ class SearchRecipeByDateUi(
 
     private fun printRecipe(recipe: Recipe) {
         println(
-            "Recipe Details: ------------------------------------------------\nName: ${recipe.name}\n" +
-                    "Minutes: ${recipe.minutes}\nContributor Id: ${recipe.contributorId}\n" +
-                    "Submitted Date: ${recipe.submittedDate}\nTags:\n${recipe.tags}\n" +
-                    "Nutrition:\nCalories = ${recipe.nutrition?.calories}\t" +
-                    "Total Fat = ${recipe.nutrition?.totalFat}\t" +
-                    "Sugar = ${recipe.nutrition?.sugar}\t" +
-                    "Sodium = ${recipe.nutrition?.sodium}\t" +
-                    "Protein = ${recipe.nutrition?.protein}\t" +
-                    "Saturated Fat = ${recipe.nutrition?.saturatedFat}\t" +
-                    "Carbohydrates = ${recipe.nutrition?.carbohydrates}\n" +
-                    "Number Of Steps: ${recipe.numberOfSteps}\n" +
-                    "Steps:\n${recipe.steps}\n" +
-                    "Description: ${recipe.description}\n" +
-                    "Ingredients:\n${recipe.ingredients}\n" +
-                    "Number Of Ingredients: ${recipe.numberOfIngredients}"
+            colors.green(
+                "Recipe Details: ------------------------------------------------\nName: ${recipe.name}\n" +
+                        "Minutes: ${recipe.minutes}\nContributor Id: ${recipe.contributorId}\n" +
+                        "Submitted Date: ${recipe.submittedDate}\nTags:\n${recipe.tags}\n" +
+                        "Nutrition:\nCalories = ${recipe.nutrition?.calories}\t" +
+                        "Total Fat = ${recipe.nutrition?.totalFat}\t" +
+                        "Sugar = ${recipe.nutrition?.sugar}\t" +
+                        "Sodium = ${recipe.nutrition?.sodium}\t" +
+                        "Protein = ${recipe.nutrition?.protein}\t" +
+                        "Saturated Fat = ${recipe.nutrition?.saturatedFat}\t" +
+                        "Carbohydrates = ${recipe.nutrition?.carbohydrates}\n" +
+                        "Number Of Steps: ${recipe.numberOfSteps}\n" +
+                        "Steps:\n${recipe.steps}\n" +
+                        "Description: ${recipe.description}\n" +
+                        "Ingredients:\n${recipe.ingredients}\n" +
+                        "Number Of Ingredients: ${recipe.numberOfIngredients}"
+            )
         )
     }
 
