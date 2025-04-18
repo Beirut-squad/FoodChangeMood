@@ -7,12 +7,12 @@ import org.example.logic.use_case.GymHelperUseCase
 import org.example.model.Recipe
 import org.example.logic.EasyFoodSuggestionUseCase
 import org.example.logic.RandomTenRecipesIncludePotatoUseCase
-import org.example.logic.SeafoodWithHighProteinUseCase
 import org.example.logic.IraqiMealsUseCase
 import org.example.model.Nutrition
 import Colors
 import org.example.logic.GameFeedback
 import org.example.logic.RecipeTimeGuessGame
+
 
 
 class FoodChangeMoodUi(
@@ -22,8 +22,9 @@ class FoodChangeMoodUi(
     private val ketoDiet: KetoDiet,
     private val gymHelperUseCase: GymHelperUseCase,
     private val validator: Validator,
-    private val randomTenRecipesIncludePotatoUseCase: RandomTenRecipesIncludePotatoUseCase,
     private val seafoodWithHighProteinUseCase: SeafoodWithHighProteinUseCase,
+    private val randomTenRecipesIncludePotatoUseCase: RandomTenRecipesIncludePotatoUseCase,
+    private val italianGroupMealsUseCase: ItalianGroupMealsUseCase,
     private val recipeTimeGuessGame: RecipeTimeGuessGame
 ) {
     private val colors = Colors()
@@ -46,6 +47,7 @@ class FoodChangeMoodUi(
                 7 -> launchKetoDietUseCase()
                 9 -> launchGymHelperUi()
                 12 -> launchRandomTenPotatoUseCase()
+                15 -> launchItalianGroupMeals()
                 14 -> launchSeafoodWithHighProteinUseCase()
                 0 -> {
                     println("Goodbye :)")
@@ -71,6 +73,7 @@ class FoodChangeMoodUi(
         println("9- Gym Helper")
         println("12- I love potato ")
         println("14- Seafood with High Protein ")
+        println("15- Italian Group Meals ")
         println("0- Enter 0 to exit the app")
     }
 
@@ -78,15 +81,14 @@ class FoodChangeMoodUi(
         easyFoodSuggestionUseCase
             .getTenEasyFoodSuggestions()
             .forEachIndexed { index, recipe ->
-                println("${index + 1}. ${recipe.name} - ${recipe.minutes} min - ${recipe.ingredients?.size} ingredients - ${recipe.steps?.size} steps")
+            println("${index + 1}. ${recipe.name} - ${recipe.minutes} min - ${recipe.ingredients?.size} ingredients - ${recipe.steps?.size} steps")
 
-            }
+        }
     }
 
     private fun getUserInput(): Int? {
         return readlnOrNull()?.toIntOrNull()
     }
-
     fun launchGymHelperUi() {
         println("Gym helper: Get meals that match the protein and calories amounts you choose or close to them.")
         while (true) {
@@ -97,7 +99,7 @@ class FoodChangeMoodUi(
             val calories = readlnOrNull()
 
             if (validator.validateGymHelperInput(calories, protein)) {
-                val recipes = gymHelperUseCase.getRecipesMatchOrApproximateAmountOfCaloriesAndProtein(
+                val recipes =  gymHelperUseCase.getRecipesMatchOrApproximateAmountOfCaloriesAndProtein(
                     calories = calories?.toFloat() ?: 0f,
                     protein = protein?.toFloat() ?: 0f
                 )
@@ -148,15 +150,14 @@ class FoodChangeMoodUi(
             val suggestion = sweetWithNoEggs.findSweetsFreeEggs()
             printSweetWithNoEggs()
             val choice = readln().toIntOrNull()
-            when (choice) {
+            when(choice) {
                 1 -> suggestion?.let { println("$it") }
                 0 -> break
                 else -> printSweetWithNoEggs()
+                }
             }
         }
-    }
-
-    private fun printSweetWithNoEggs() {
+    private fun printSweetWithNoEggs(){
         val suggestion = sweetWithNoEggs.findSweetsFreeEggs()
         println("Suggested Sweet: ${suggestion?.name}")
         println("Description: ${suggestion?.description}")
@@ -165,8 +166,9 @@ class FoodChangeMoodUi(
         println("If you want to go out press 0. ")
     }
 
-    private fun launchRandomTenPotatoUseCase() {
-        val potatoMeals = randomTenRecipesIncludePotatoUseCase.findPotatoMeals()
+    private fun launchRandomTenPotatoUseCase()
+    {
+        val potatoMeals= randomTenRecipesIncludePotatoUseCase.findPotatoMeals()
         potatoMeals.forEach {
             println("$it")
         }
@@ -198,29 +200,30 @@ class FoodChangeMoodUi(
     }
 
 
-    private fun launchKetoDietUseCase() {
+
+
+    private fun launchKetoDietUseCase(){
         println("Welcome to Keto Meal Suggester ")
-        while (true) {
+        while (true){
             println("1. Suggest a Keto Recipe \n2. Go Back ")
             val input: String? = readlnOrNull()
-            when (input) {
+            when(input){
                 "1" -> {
                     suggestRecipeForUser()
                     continue
                 }
-
                 "2" -> break
                 else -> println("enter a valid number")
             }
         }
     }
 
-    private fun suggestRecipeForUser() {
+    private fun suggestRecipeForUser(){
         val recipe = ketoDiet.suggestKetoRecipe()
         println("Meal name: ${recipe.name}")
         println("Do you want to proceed with Recipe details ? (Y,n) ")
         val input: String? = readlnOrNull()
-        if (input == "Y") {
+        if (input == "Y"){
             printRecipeDetails(recipe)
         }
     }
@@ -283,6 +286,7 @@ class FoodChangeMoodUi(
     }
 
 
+
     private fun launchGuessPrepTimeGame() {
         val recipe = recipeTimeGuessGame.startNewGame()
         println(colors.blue("Guess the preparation time for: ${recipe.name}"))
@@ -335,6 +339,15 @@ class FoodChangeMoodUi(
             }
         }
     }
+    private fun launchItalianGroupMeals(){
+        italianGroupMealsUseCase
+            .getItalianGroupMeals()
+            .forEachIndexed { index, recipe ->
+                println("${index + 1}. ${recipe.name} ")
+
+            }
+    }
+
 }
 
 
