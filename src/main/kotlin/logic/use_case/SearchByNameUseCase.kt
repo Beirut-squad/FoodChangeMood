@@ -32,10 +32,8 @@ class SearchByNameUseCase(
         return bestMatch?.lowercase()?.let { recipesByName[it] }
 
     }
-}
 
-
-    fun levenshteinDistance(foodNameToSearch: String, name: String): Int {
+    private fun levenshteinDistance(foodNameToSearch: String, name: String): Int {
         when {
             foodNameToSearch == name -> return 0
             foodNameToSearch.isEmpty() -> return name.length
@@ -64,4 +62,5 @@ class SearchByNameUseCase(
         return distanceDifference[lengthFoodNameToSearch][lengthName]
 
     }
+}
 

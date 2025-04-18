@@ -1,10 +1,10 @@
-package org.example.logic
+package org.example.logic.use_case
 
-import org.example.model.Nutrition
+import org.example.logic.RecipesRepository
 import org.example.model.Recipe
 import org.example.model.getKetoScore
 
-class KetoDiet(private val recipesRepository: RecipesRepository) {
+class KetoDietUseCase(private val recipesRepository: RecipesRepository) {
 
     private val recipes = recipesRepository.getAllRecipes()
 

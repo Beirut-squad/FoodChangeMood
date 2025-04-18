@@ -1,7 +1,7 @@
-package org.example.ui
+package org.example.ui.features_ui
 
 import Colors
-import org.example.logic.IngredientGuessingGameUseCase
+import org.example.logic.use_case.IngredientGuessingGameUseCase
 import org.example.model.Recipe
 
 class IngredientsGuessingGameUi(
@@ -10,7 +10,7 @@ class IngredientsGuessingGameUi(
 
     private val colors = Colors()
 
-    fun launchIngredientGuessingGame() {
+    fun show() {
         initializeIngredientGame()
         while (isIngredientGameActive()) {
             playIngredientRound()

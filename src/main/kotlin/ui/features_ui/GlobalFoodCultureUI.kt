@@ -1,6 +1,6 @@
-package org.example.ui
+package org.example.ui.features_ui
 
-import org.example.logic.GlobalFoodCultureUseCase
+import org.example.logic.use_case.GlobalFoodCultureUseCase
 import org.example.logic.Validator
 import org.example.model.Recipe
 
@@ -8,7 +8,7 @@ class GlobalFoodCultureUI(
     private val globalFoodCultureUseCase: GlobalFoodCultureUseCase,
     private val validator: Validator
 ) {
-    fun displayCountryFoodCulture() {
+    fun show() {
         var shouldContinue = true
         while (shouldContinue) {
             print("Enter a country to explore its meals (or 0 to exit): ")

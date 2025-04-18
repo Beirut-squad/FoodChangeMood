@@ -1,4 +1,4 @@
-package org.example.ui
+package org.example.ui.features_ui
 
 import org.example.error.ThereIsNoNameException
 import org.example.logic.use_case.SearchByNameUseCase
@@ -6,7 +6,7 @@ import org.example.model.Recipe
 import java.util.*
 
 class SearchByNameUI (private val searchByNameUseCase: SearchByNameUseCase){
-    private fun  searchByName(){
+     fun  show(){
             val nameToSearch = Scanner(System.`in`)
             println("Enter the name of the dish or part of it to search for:")
             val userInput = nameToSearch.nextLine()

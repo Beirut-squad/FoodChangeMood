@@ -6,7 +6,7 @@ class TrieNode {
 }
 
 
-class Trie() {
+class Trie {
     private val root = TrieNode()
 
     //insert name in trie
