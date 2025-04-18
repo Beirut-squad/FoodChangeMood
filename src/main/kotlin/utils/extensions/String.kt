@@ -1,4 +1,4 @@
-package org.example.Utils.Extensions
+package org.example.utils.extensions
 
 import java.text.SimpleDateFormat
 import java.util.*

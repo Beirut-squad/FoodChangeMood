@@ -1,8 +1,8 @@
 package org.example.ui.features_ui
 
-import Colors
 import org.example.logic.use_case.GameFeedbackUseCase
 import org.example.logic.use_case.RecipeTimeGuessGameUseCase
+import org.example.utils.Colors
 
 class RecipesTimeGuessGameUi(
     private val recipeTimeGuessGameUseCase: RecipeTimeGuessGameUseCase
