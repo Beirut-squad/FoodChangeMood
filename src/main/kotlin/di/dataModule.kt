@@ -24,6 +24,7 @@ val dataModule = module {
         RecipesRepositoryCsvImpl(get(), get())
     }
 
+    single { FoodChangeMoodUi(get(),get()) }
 
     single { FoodChangeMoodUi(get(), get(), get(), get(), get(), get(), get(), get()) }
 

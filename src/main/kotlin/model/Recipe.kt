@@ -1,13 +1,13 @@
 package org.example.model
 
-import java.util.Date
+import java.time.LocalDate
 
 data class Recipe (
     val name: String?,
     val id: String?,
     val minutes: Int?,
     val contributorId: String?,
-    val submittedDate: Date?,
+    val submittedDate: LocalDate?,
     val tags: List<String>?,
     val nutrition: Nutrition?,
     val numberOfSteps: Int?,
