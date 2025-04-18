@@ -1,5 +1,7 @@
 package org.example.di
 
+import org.example.logic.HealthyRecipesUseCase
+import org.koin.core.module.Module
 import org.example.logic.EasyFoodSuggestionUseCase
 import org.example.logic.IraqiMealsUseCase
 import org.example.logic.Validator
@@ -13,6 +15,13 @@ import org.koin.dsl.module
 
 val useCaseModule = module {
     single { EasyFoodSuggestionUseCase(get()) }
+    single{ HealthyRecipesUseCase(get()) }
+    single {
+        Validator()
+    }
+    single {
+        GymHelperUseCase(get())
+    }
     single { SweetWithNoEggsUseCase(get()) }
     single { Validator() }
     single { GymHelperUseCase(get())}
