@@ -1,30 +1,11 @@
 package org.example.ui
 
-import org.example.logic.KetoDiet
-import org.example.logic.Validator
-import org.example.logic.*
-import org.example.logic.use_case.GymHelperUseCase
-import org.example.model.Recipe
-import Utils.checkDateFormat
-import org.example.error.NoRecipesFoundForTheGivenDateException
-import org.example.error.RecipeNotFoundException
-import org.example.logic.EasyFoodSuggestionUseCase
-import org.example.logic.HealthyRecipesUseCase
-import org.example.logic.RandomTenRecipesIncludePotatoUseCase
-import org.example.logic.ThinProblemUseCase
-import org.example.logic.IraqiMealsUseCase
-import org.example.model.Nutrition
+
 import Colors
-import org.example.logic.GameFeedback
-import org.example.logic.RecipeTimeGuessGame
-
-import org.example.logic.SearchRecipeByDateUseCase
-import java.text.ParseException
-import java.time.format.DateTimeParseException
-
 
 class FoodChangeMoodUi(
     private val iraqiMealsUi: IraqiMealsUi,
+    private val searchByNameUI: SearchByNameUI,
     private val easyFoodSuggestionUI: EasyFoodSuggestionUI,
     private val searchRecipeByDateUi: SearchRecipeByDateUi,
     private val sweetWithoutEggsUi: SweetWithoutEggsUi,
@@ -39,7 +20,6 @@ class FoodChangeMoodUi(
 ) {
     private val colors = Colors()
 
-    var isRunning = true
     fun start() {
         showWelcomeMessage()
         presentAvailableFeatures()
@@ -52,6 +32,7 @@ class FoodChangeMoodUi(
             val input = getUserInput()
             when (input) {
                 1 -> healthyFoodRecipesUi.show()
+                2 -> searchByNameUI.show()
                 3 -> iraqiMealsUi.show()
                 4 -> easyFoodSuggestionUI.show()
                 8 -> searchRecipeByDateUi.show()
@@ -80,6 +61,7 @@ class FoodChangeMoodUi(
     private fun showOptions() {
         println("\n=== Please enter the number of the service you want: ")
         println("1- Get Quick and Healthy Meals")
+        println("2- Smart Meal Search (By name) ")
         println("3- Iraq Food")
         println("4- Easy Food Suggestion ")
         println("5- Time Guess Game")
