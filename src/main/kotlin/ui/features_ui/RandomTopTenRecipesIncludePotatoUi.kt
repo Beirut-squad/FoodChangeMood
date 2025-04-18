@@ -12,7 +12,7 @@ class RandomTopTenRecipesIncludePotatoUi(
     {
         val potatoMeals= randomTenRecipesIncludePotatoUseCase.findPotatoMeals()
         potatoMeals.forEach {
-            println(RecipeFormatter.format(colors.green(it)))
+            println(colors.green(RecipeFormatter.format(it)))
         }
     }
 

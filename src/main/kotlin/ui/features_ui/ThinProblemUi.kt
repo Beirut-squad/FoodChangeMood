@@ -14,7 +14,7 @@ class ThinProblemUi(
             printThinProblem()
             val choice = readln().toIntOrNull()
             if (choice == 1) {
-                suggestion?.let { println(RecipeFormatter.format(colors.green(it))) }
+                suggestion?.let { println(colors.green(RecipeFormatter.format(it))) }
             } else break
         }
     }
