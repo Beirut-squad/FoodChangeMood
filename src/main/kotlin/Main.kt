@@ -9,6 +9,8 @@ import org.koin.core.context.startKoin
 import org.koin.mp.KoinPlatform.getKoin
 
 fun main() {
+
+
     startKoin {
         modules(dataModule , useCaseModule, uiModule )
     }
@@ -20,4 +22,6 @@ fun main() {
     val ui : FoodChangeMoodUi = getKoin().get()
 
     ui.start()
+
+
 }
