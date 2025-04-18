@@ -1,6 +1,7 @@
 package org.example.ui.features_ui
 
 import org.example.logic.use_case.ThinProblemUseCase
+import org.example.ui.RecipeFormatter
 import org.example.utils.Colors
 
 class ThinProblemUi(
@@ -13,7 +14,7 @@ class ThinProblemUi(
             printThinProblem()
             val choice = readln().toIntOrNull()
             if (choice == 1) {
-                suggestion?.let { println(colors.green("\t\t $it")) }
+                suggestion?.let { println(colors.green(RecipeFormatter.format(it))) }
             } else break
         }
     }
