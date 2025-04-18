@@ -12,4 +12,7 @@ val uiModule = module {
     singleOf(::GymHelperUi)
     singleOf(::RandomTopTenRecipesIncludePotatoUi)
     singleOf(::RecipesTimeGuessGameUi)
+    singleOf(::ItalianGroupMealsUi)
+    singleOf(::SeafoodWithHighProteinUi)
+    singleOf(::SearchRecipeByDateUi)
 }
