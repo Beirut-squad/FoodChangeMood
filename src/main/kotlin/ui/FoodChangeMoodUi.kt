@@ -15,7 +15,6 @@ import org.example.logic.GameFeedback
 import org.example.logic.RecipeTimeGuessGame
 
 
-
 class FoodChangeMoodUi(
     private val iraqiMealsUseCase: IraqiMealsUseCase,
     private val easyFoodSuggestionUseCase: EasyFoodSuggestionUseCase,
@@ -79,14 +78,15 @@ class FoodChangeMoodUi(
         easyFoodSuggestionUseCase
             .getTenEasyFoodSuggestions()
             .forEachIndexed { index, recipe ->
-            println("${index + 1}. ${recipe.name} - ${recipe.minutes} min - ${recipe.ingredients?.size} ingredients - ${recipe.steps?.size} steps")
+                println("${index + 1}. ${recipe.name} - ${recipe.minutes} min - ${recipe.ingredients?.size} ingredients - ${recipe.steps?.size} steps")
 
-        }
+            }
     }
 
     private fun getUserInput(): Int? {
         return readlnOrNull()?.toIntOrNull()
     }
+
     fun launchGymHelperUi() {
         println("Gym helper: Get meals that match the protein and calories amounts you choose or close to them.")
         while (true) {
@@ -97,7 +97,7 @@ class FoodChangeMoodUi(
             val calories = readlnOrNull()
 
             if (validator.validateGymHelperInput(calories, protein)) {
-                val recipes =  gymHelperUseCase.getRecipesMatchOrApproximateAmountOfCaloriesAndProtein(
+                val recipes = gymHelperUseCase.getRecipesMatchOrApproximateAmountOfCaloriesAndProtein(
                     calories = calories?.toFloat() ?: 0f,
                     protein = protein?.toFloat() ?: 0f
                 )
@@ -148,14 +148,15 @@ class FoodChangeMoodUi(
             val suggestion = sweetWithNoEggs.findSweetsFreeEggs()
             printSweetWithNoEggs()
             val choice = readln().toIntOrNull()
-            when(choice) {
+            when (choice) {
                 1 -> suggestion?.let { println("$it") }
                 0 -> break
                 else -> printSweetWithNoEggs()
-                }
             }
         }
-    private fun printSweetWithNoEggs(){
+    }
+
+    private fun printSweetWithNoEggs() {
         val suggestion = sweetWithNoEggs.findSweetsFreeEggs()
         println("Suggested Sweet: ${suggestion?.name}")
         println("Description: ${suggestion?.description}")
@@ -164,9 +165,8 @@ class FoodChangeMoodUi(
         println("If you want to go out press 0. ")
     }
 
-    private fun launchRandomTenPotatoUseCase()
-    {
-        val potatoMeals= randomTenRecipesIncludePotatoUseCase.findPotatoMeals()
+    private fun launchRandomTenPotatoUseCase() {
+        val potatoMeals = randomTenRecipesIncludePotatoUseCase.findPotatoMeals()
         potatoMeals.forEach {
             println("$it")
         }
@@ -176,7 +176,11 @@ class FoodChangeMoodUi(
         println("Loading...")
         seafoodWithHighProteinUseCase.getSeafoodWithProteinRecipes()
             .forEachIndexed { index, recipe ->
-                println("${index + 1}. Recipe Name: \n\t${recipe.name} \n\tProtein Amount: \n\t${recipe.nutrition?.protein}")
+                println(
+                    "${index + 1}. " +
+                    "Recipe Name: \n\t${recipe.name} " +
+                    "\n\tProtein Amount: \n\t${recipe.nutrition?.protein}"
+                )
             }
     }
 
@@ -194,30 +198,29 @@ class FoodChangeMoodUi(
     }
 
 
-
-
-    private fun launchKetoDietUseCase(){
+    private fun launchKetoDietUseCase() {
         println("Welcome to Keto Meal Suggester ")
-        while (true){
+        while (true) {
             println("1. Suggest a Keto Recipe \n2. Go Back ")
             val input: String? = readlnOrNull()
-            when(input){
+            when (input) {
                 "1" -> {
                     suggestRecipeForUser()
                     continue
                 }
+
                 "2" -> break
                 else -> println("enter a valid number")
             }
         }
     }
 
-    private fun suggestRecipeForUser(){
+    private fun suggestRecipeForUser() {
         val recipe = ketoDiet.suggestKetoRecipe()
         println("Meal name: ${recipe.name}")
         println("Do you want to proceed with Recipe details ? (Y,n) ")
         val input: String? = readlnOrNull()
-        if (input == "Y"){
+        if (input == "Y") {
             printRecipeDetails(recipe)
         }
     }
@@ -280,7 +283,6 @@ class FoodChangeMoodUi(
     }
 
 
-
     private fun launchGuessPrepTimeGame() {
         val recipe = recipeTimeGuessGame.startNewGame()
         println(colors.blue("Guess the preparation time for: ${recipe.name}"))
@@ -309,17 +311,28 @@ class FoodChangeMoodUi(
     private fun handleGameFeedback(result: GameFeedback) {
         when (result) {
             is GameFeedback.CorrectGuess -> {
-                println(colors.green("Correct! The preparation time is ${result.actualTime} minutes.")) }
+                println(colors.green("Correct! The preparation time is ${result.actualTime} minutes."))
+            }
+
             is GameFeedback.NoAttemptsLeft -> {
-                println(colors.red("No attempts left. The correct time was ${result.actualTime} minutes.")) }
+                println(colors.red("No attempts left. The correct time was ${result.actualTime} minutes."))
+            }
+
             is GameFeedback.GuessIsVeryClose -> {
-                println(colors.yellow("Very close! Try again. Attempts left: ${result.remainingAttempts}")) }
+                println(colors.yellow("Very close! Try again. Attempts left: ${result.remainingAttempts}"))
+            }
+
             is GameFeedback.GuessIsWayOff -> {
-                println(colors.purple("Way off! Try again. Attempts left: ${result.remainingAttempts}")) }
+                println(colors.purple("Way off! Try again. Attempts left: ${result.remainingAttempts}"))
+            }
+
             is GameFeedback.GuessIsNotQuiteRight -> {
-                println(colors.cyan("Not quite. Try again. Attempts left: ${result.remainingAttempts}")) }
+                println(colors.cyan("Not quite. Try again. Attempts left: ${result.remainingAttempts}"))
+            }
+
             is GameFeedback.RecipeTimeNotAvailable -> {
-                println(colors.red("Error: ${result.errorMessage}")) }
+                println(colors.red("Error: ${result.errorMessage}"))
+            }
         }
     }
 }
