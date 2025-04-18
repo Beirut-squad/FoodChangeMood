@@ -10,6 +10,7 @@ import org.example.error.NoRecipesFoundForTheGivenDateException
 import org.example.error.RecipeNotFoundException
 import org.example.logic.EasyFoodSuggestionUseCase
 import org.example.logic.RandomTenRecipesIncludePotatoUseCase
+import org.example.logic.SeafoodWithHighProteinUseCase
 import org.example.logic.IraqiMealsUseCase
 import org.example.model.Nutrition
 import Colors
@@ -30,6 +31,7 @@ class FoodChangeMoodUi(
     private val ketoDiet: KetoDiet,
     private val gymHelperUseCase: GymHelperUseCase,
     private val validator: Validator,
+    private val seafoodWithHighProteinUseCase: SeafoodWithHighProteinUseCase,
     private val recipeTimeGuessGame: RecipeTimeGuessGame
 ) {
     private val colors = Colors()
@@ -53,6 +55,7 @@ class FoodChangeMoodUi(
                 7 -> launchKetoDietUseCase()
                 9 -> launchGymHelperUi()
                 12 -> launchRandomTenPotatoUseCase()
+                14 -> launchSeafoodWithHighProteinUseCase()
                 0 -> {
                     println("Goodbye :)")
                     isRunning = false
@@ -77,10 +80,10 @@ class FoodChangeMoodUi(
         println("8- Search Recipe by add date")
         println("9- Gym Helper")
         println("12- I love potato ")
+        println("14- Seafood with High Protein ")
         println("0- Enter 0 to exit the app")
     }
 
-    private fun launchExampleUseCase() {}
     private fun launchEasyFoodSuggestionUseCase() {
         easyFoodSuggestionUseCase
             .getTenEasyFoodSuggestions()
@@ -284,6 +287,18 @@ class FoodChangeMoodUi(
     }
 
 
+    private fun launchSeafoodWithHighProteinUseCase() {
+        println("Loading...")
+        seafoodWithHighProteinUseCase.getSeafoodWithProteinRecipes()
+            .forEachIndexed { index, recipe ->
+                println(
+                    "${index + 1}. " +
+                    "Recipe Name: \n\t${recipe.name} " +
+                    "\n\tProtein Amount: \n\t${recipe.nutrition?.protein}"
+                )
+            }
+    }
+
     private fun presentIraqMeals() {
         println(
             """
@@ -298,29 +313,30 @@ class FoodChangeMoodUi(
     }
 
 
-    private fun launchKetoDietUseCase() {
+
+
+    private fun launchKetoDietUseCase(){
         println("Welcome to Keto Meal Suggester ")
-        while (true) {
+        while (true){
             println("1. Suggest a Keto Recipe \n2. Go Back ")
             val input: String? = readlnOrNull()
-            when (input) {
+            when(input){
                 "1" -> {
                     suggestRecipeForUser()
                     continue
                 }
-
                 "2" -> break
                 else -> println("enter a valid number")
             }
         }
     }
 
-    private fun suggestRecipeForUser() {
+    private fun suggestRecipeForUser(){
         val recipe = ketoDiet.suggestKetoRecipe()
         println("Meal name: ${recipe.name}")
         println("Do you want to proceed with Recipe details ? (Y,n) ")
         val input: String? = readlnOrNull()
-        if (input == "Y") {
+        if (input == "Y"){
             printRecipeDetails(recipe)
         }
     }
@@ -383,6 +399,7 @@ class FoodChangeMoodUi(
     }
 
 
+
     private fun launchGuessPrepTimeGame() {
         val recipe = recipeTimeGuessGame.startNewGame()
         println(colors.blue("Guess the preparation time for: ${recipe.name}"))
@@ -411,31 +428,20 @@ class FoodChangeMoodUi(
     private fun handleGameFeedback(result: GameFeedback) {
         when (result) {
             is GameFeedback.CorrectGuess -> {
-                println(colors.green("Correct! The preparation time is ${result.actualTime} minutes."))
-            }
-
+                println(colors.green("Correct! The preparation time is ${result.actualTime} minutes.")) }
             is GameFeedback.NoAttemptsLeft -> {
-                println(colors.red("No attempts left. The correct time was ${result.actualTime} minutes."))
-            }
-
+                println(colors.red("No attempts left. The correct time was ${result.actualTime} minutes.")) }
             is GameFeedback.GuessIsVeryClose -> {
-                println(colors.yellow("Very close! Try again. Attempts left: ${result.remainingAttempts}"))
-            }
-
+                println(colors.yellow("Very close! Try again. Attempts left: ${result.remainingAttempts}")) }
             is GameFeedback.GuessIsWayOff -> {
-                println(colors.purple("Way off! Try again. Attempts left: ${result.remainingAttempts}"))
-            }
-
+                println(colors.purple("Way off! Try again. Attempts left: ${result.remainingAttempts}")) }
             is GameFeedback.GuessIsNotQuiteRight -> {
-                println(colors.cyan("Not quite. Try again. Attempts left: ${result.remainingAttempts}"))
-            }
-
+                println(colors.cyan("Not quite. Try again. Attempts left: ${result.remainingAttempts}")) }
             is GameFeedback.RecipeTimeNotAvailable -> {
-                println(colors.red("Error: ${result.errorMessage}"))
-            }
+                println(colors.red("Error: ${result.errorMessage}")) }
         }
     }
-
-
 }
+
+
 
