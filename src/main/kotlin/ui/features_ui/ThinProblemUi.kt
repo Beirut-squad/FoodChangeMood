@@ -1,6 +1,7 @@
 package org.example.ui.features_ui
 
 import org.example.logic.use_case.ThinProblemUseCase
+import org.example.ui.RecipeFormatter
 
 class ThinProblemUi(
     private val thinProblem: ThinProblemUseCase,
@@ -13,7 +14,7 @@ class ThinProblemUi(
             printThinProblem()
             val choice = readln().toIntOrNull()
             if (choice == 1) {
-                suggestion?.let { println("\t\t $it") }
+                suggestion?.let { println(RecipeFormatter.format(it)) }
             } else break
         }
     }

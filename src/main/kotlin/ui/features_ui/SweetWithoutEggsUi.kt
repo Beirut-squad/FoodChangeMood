@@ -1,6 +1,7 @@
 package org.example.ui.features_ui
 
 import org.example.logic.use_case.SweetWithNoEggsUseCase
+import org.example.ui.RecipeFormatter
 
 class SweetWithoutEggsUi(
     private val sweetWithNoEggs: SweetWithNoEggsUseCase
@@ -11,7 +12,7 @@ class SweetWithoutEggsUi(
             printSweetWithNoEggs()
             val choice = readln().toIntOrNull()
             when(choice) {
-                1 -> suggestion?.let { println("$it") }
+                1 -> suggestion?.let { println(RecipeFormatter.format(it)) }
                 0 -> break
                 else -> printSweetWithNoEggs()
             }
