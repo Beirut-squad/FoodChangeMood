@@ -22,7 +22,6 @@ class FoodChangeMoodUi(
     private val ketoDiet: KetoDiet,
     private val gymHelperUseCase: GymHelperUseCase,
     private val validator: Validator,
-    private val randomTenRecipesIncludePotatoUseCase: RandomTenRecipesIncludePotatoUseCase,
     private val seafoodWithHighProteinUseCase: SeafoodWithHighProteinUseCase,
     private val randomTenRecipesIncludePotatoUseCase: RandomTenRecipesIncludePotatoUseCase,
     private val italianGroupMealsUseCase: ItalianGroupMealsUseCase,
