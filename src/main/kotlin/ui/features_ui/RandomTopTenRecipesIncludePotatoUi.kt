@@ -1,6 +1,7 @@
 package org.example.ui.features_ui
 
 import org.example.logic.use_case.RandomTenRecipesIncludePotatoUseCase
+import org.example.ui.RecipeFormatter
 import org.example.utils.Colors
 
 class RandomTopTenRecipesIncludePotatoUi(
@@ -11,7 +12,7 @@ class RandomTopTenRecipesIncludePotatoUi(
     {
         val potatoMeals= randomTenRecipesIncludePotatoUseCase.findPotatoMeals()
         potatoMeals.forEach {
-            println(colors.green("$it"))
+            println(colors.green(RecipeFormatter.format(it)))
         }
     }
 

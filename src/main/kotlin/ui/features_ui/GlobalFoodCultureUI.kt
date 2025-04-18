@@ -3,6 +3,8 @@ package org.example.ui.features_ui
 import org.example.logic.use_case.GlobalFoodCultureUseCase
 import org.example.logic.Validator
 import org.example.model.Recipe
+import org.example.ui.RecipeFormatter
+
 import org.example.utils.Colors
 
 class GlobalFoodCultureUI(
@@ -63,7 +65,7 @@ class GlobalFoodCultureUI(
     private fun showRecipes(country: String, recipes: List<Recipe>) {
         println(colors.green("${recipes.size} ${if (recipes.size == 1) "meal" else "meals"} found for '$country':\n"))
         recipes.forEach {
-            println(it)
+            println(RecipeFormatter.format(it))
         }
     }
 
