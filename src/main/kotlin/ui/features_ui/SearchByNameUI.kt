@@ -1,4 +1,4 @@
-package org.example.ui
+package org.example.ui.features_ui
 
 import org.example.error.ThereIsNoNameException
 import org.example.logic.use_case.SearchByNameUseCase

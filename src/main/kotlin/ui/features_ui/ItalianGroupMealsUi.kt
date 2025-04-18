@@ -1,6 +1,6 @@
-package org.example.ui
+package org.example.ui.features_ui
 
-import org.example.logic.ItalianGroupMealsUseCase
+import org.example.logic.use_case.ItalianGroupMealsUseCase
 
 class ItalianGroupMealsUi (
     private val italianGroupMealsUseCase: ItalianGroupMealsUseCase,

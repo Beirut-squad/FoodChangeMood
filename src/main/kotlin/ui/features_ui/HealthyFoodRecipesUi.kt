@@ -1,7 +1,8 @@
-package org.example.ui
+package org.example.ui.features_ui
 
-import org.example.logic.HealthyRecipesUseCase
+import org.example.logic.use_case.HealthyRecipesUseCase
 import org.example.logic.Validator
+import org.example.ui.RecipeFormatter
 
 class HealthyFoodRecipesUi (
     private val validator: Validator,

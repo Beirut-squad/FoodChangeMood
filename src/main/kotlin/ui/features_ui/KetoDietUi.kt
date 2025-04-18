@@ -1,11 +1,11 @@
-package org.example.ui
+package org.example.ui.features_ui
 
-import org.example.logic.KetoDiet
+import org.example.logic.use_case.KetoDietUseCase
 import org.example.model.Nutrition
 import org.example.model.Recipe
 
 class KetoDietUi(
-    private val ketoDiet: KetoDiet,
+    private val ketoDiet: KetoDietUseCase,
 ) {
      fun show(){
         println("Welcome to Keto Meal Suggester ")

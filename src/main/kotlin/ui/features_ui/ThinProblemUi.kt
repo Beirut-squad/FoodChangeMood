@@ -1,6 +1,6 @@
-package org.example.ui
+package org.example.ui.features_ui
 
-import org.example.logic.ThinProblemUseCase
+import org.example.logic.use_case.ThinProblemUseCase
 
 class ThinProblemUi(
     private val thinProblem: ThinProblemUseCase,

@@ -1,6 +1,6 @@
-package org.example.ui
+package org.example.ui.features_ui
 
-import org.example.logic.SeafoodWithHighProteinUseCase
+import org.example.logic.use_case.SeafoodWithHighProteinUseCase
 
 class SeafoodWithHighProteinUi (
     private val seafoodWithHighProteinUseCase: SeafoodWithHighProteinUseCase,

@@ -1,6 +1,6 @@
-package org.example.ui
+package org.example.ui.features_ui
 
-import org.example.logic.SweetWithNoEggsUseCase
+import org.example.logic.use_case.SweetWithNoEggsUseCase
 
 class SweetWithoutEggsUi(
     private val sweetWithNoEggs: SweetWithNoEggsUseCase

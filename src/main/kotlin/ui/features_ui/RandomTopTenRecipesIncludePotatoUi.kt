@@ -1,6 +1,6 @@
-package org.example.ui
+package org.example.ui.features_ui
 
-import org.example.logic.RandomTenRecipesIncludePotatoUseCase
+import org.example.logic.use_case.RandomTenRecipesIncludePotatoUseCase
 
 class RandomTopTenRecipesIncludePotatoUi(
     private val randomTenRecipesIncludePotatoUseCase: RandomTenRecipesIncludePotatoUseCase

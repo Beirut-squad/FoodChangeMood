@@ -1,9 +1,9 @@
-package org.example.ui
+package org.example.ui.features_ui
 
 import Utils.checkDateFormat
 import org.example.error.NoRecipesFoundForTheGivenDateException
 import org.example.error.RecipeNotFoundException
-import org.example.logic.SearchRecipeByDateUseCase
+import org.example.logic.use_case.SearchRecipeByDateUseCase
 import org.example.model.Recipe
 import java.text.ParseException
 import java.time.format.DateTimeParseException

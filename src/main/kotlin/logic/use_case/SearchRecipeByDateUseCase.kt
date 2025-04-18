@@ -1,9 +1,10 @@
-package org.example.logic
+package org.example.logic.use_case
 
 import org.example.error.NoRecipesFoundForTheGivenDateException
 import org.example.error.RecipeNotFoundException
 import org.example.model.Recipe
 import Utils.toDate
+import org.example.logic.RecipesRepository
 
 
 class SearchRecipeByDateUseCase (

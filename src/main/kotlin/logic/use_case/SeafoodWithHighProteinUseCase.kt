@@ -1,5 +1,6 @@
-package org.example.logic
+package org.example.logic.use_case
 
+import org.example.logic.RecipesRepository
 import org.example.model.Recipe
 
 class SeafoodWithHighProteinUseCase(

@@ -1,16 +1,16 @@
-package org.example.ui
+package org.example.ui.features_ui
 
 import Colors
-import org.example.logic.GameFeedback
-import org.example.logic.RecipeTimeGuessGame
+import org.example.logic.use_case.GameFeedbackUseCase
+import org.example.logic.use_case.RecipeTimeGuessGameUseCase
 
 class RecipesTimeGuessGameUi(
-    private val recipeTimeGuessGame: RecipeTimeGuessGame
+    private val recipeTimeGuessGameUseCase: RecipeTimeGuessGameUseCase
 ) {
     private val colors = Colors()
 
     fun show() {
-        val recipe = recipeTimeGuessGame.startNewGame()
+        val recipe = recipeTimeGuessGameUseCase.startNewGame()
         println(colors.blue("Guess the preparation time for: ${recipe.name}"))
         var attemptsLeft = 3
         while (attemptsLeft > 0) {
@@ -27,7 +27,7 @@ class RecipesTimeGuessGameUi(
             println(colors.red("Invalid input. Please enter a valid number of minutes."))
             Pair(attemptsLeft, false)
         } else {
-            val result = recipeTimeGuessGame.makeGuess(userGuessMinutes, attemptsLeft)
+            val result = recipeTimeGuessGameUseCase.makeGuess(userGuessMinutes, attemptsLeft)
             handleGameFeedback(result)
             val shouldEnd =checkGameEndCondition(result)
             Pair(attemptsLeft - 1, shouldEnd)
@@ -35,23 +35,23 @@ class RecipesTimeGuessGameUi(
     }
 
 
-    private fun checkGameEndCondition(result: GameFeedback): Boolean {
-        return result is GameFeedback.CorrectGuess || result is GameFeedback.NoAttemptsLeft
+    private fun checkGameEndCondition(result: GameFeedbackUseCase): Boolean {
+        return result is GameFeedbackUseCase.CorrectGuess || result is GameFeedbackUseCase.NoAttemptsLeft
     }
 
-    private fun handleGameFeedback(result: GameFeedback) {
+    private fun handleGameFeedback(result: GameFeedbackUseCase) {
         when (result) {
-            is GameFeedback.CorrectGuess -> {
+            is GameFeedbackUseCase.CorrectGuess -> {
                 println(colors.green("Correct! The preparation time is ${result.actualTime} minutes.")) }
-            is GameFeedback.NoAttemptsLeft -> {
+            is GameFeedbackUseCase.NoAttemptsLeft -> {
                 println(colors.red("No attempts left. The correct time was ${result.actualTime} minutes.")) }
-            is GameFeedback.GuessIsVeryClose -> {
+            is GameFeedbackUseCase.GuessIsVeryClose -> {
                 println(colors.yellow("Very close! Try again. Attempts left: ${result.remainingAttempts}")) }
-            is GameFeedback.GuessIsWayOff -> {
+            is GameFeedbackUseCase.GuessIsWayOff -> {
                 println(colors.purple("Way off! Try again. Attempts left: ${result.remainingAttempts}")) }
-            is GameFeedback.GuessIsNotQuiteRight -> {
+            is GameFeedbackUseCase.GuessIsNotQuiteRight -> {
                 println(colors.cyan("Not quite. Try again. Attempts left: ${result.remainingAttempts}")) }
-            is GameFeedback.RecipeTimeNotAvailable -> {
+            is GameFeedbackUseCase.RecipeTimeNotAvailable -> {
                 println(colors.red("Error: ${result.errorMessage}")) }
         }
     }

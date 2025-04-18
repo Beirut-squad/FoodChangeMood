@@ -1,6 +1,6 @@
-package org.example.ui
+package org.example.ui.features_ui
 
-import org.example.logic.EasyFoodSuggestionUseCase
+import org.example.logic.use_case.EasyFoodSuggestionUseCase
 
 class EasyFoodSuggestionUI(
     private val easyFoodSuggestionUseCase: EasyFoodSuggestionUseCase

@@ -2,6 +2,7 @@ package org.example.ui
 
 
 import Colors
+import org.example.ui.features_ui.*
 
 class FoodChangeMoodUi(
     private val iraqiMealsUi: IraqiMealsUi,
@@ -17,6 +18,8 @@ class FoodChangeMoodUi(
     private val randomTopTenRecipesIncludePotatoUi: RandomTopTenRecipesIncludePotatoUi,
     private val italianGroupMealsUi: ItalianGroupMealsUi,
     private val recipesTimeGuessGameUi: RecipesTimeGuessGameUi,
+    private val ingredientsGuessingGameUi: IngredientsGuessingGameUi,
+    private val globalFoodCultureUI: GlobalFoodCultureUI
 ) {
     private val colors = Colors()
 
@@ -40,22 +43,24 @@ class FoodChangeMoodUi(
                 6 -> sweetWithoutEggsUi.show()
                 7 -> ketoDietUi.show()
                 9 -> gymHelperUi.show()
+                10 -> globalFoodCultureUI.show()
+                11 -> ingredientsGuessingGameUi.show()
                 12 -> randomTopTenRecipesIncludePotatoUi.show()
                 13 -> thinProblemUi.show()
                 14 -> seafoodWithHighProteinUi.show()
                 15 -> italianGroupMealsUi.show()
                 0 -> {
-                    println("Goodbye :)")
+                    println(colors.yellow("Goodbye :)"))
                     isRunning = false
                 }
 
-                else -> println("Invalid input, try again")
+                else -> println(colors.red("Invalid input, try again"))
             }
         }
     }
 
     private fun showWelcomeMessage() {
-        println("Welcome to Food Change Mood App")
+        println(colors.cyan("Welcome to Food Change Mood App"))
     }
 
     private fun showOptions() {
@@ -69,6 +74,8 @@ class FoodChangeMoodUi(
         println("7- Keto Diet Food Suggestion ")
         println("8- Search Recipe by add date")
         println("9- Gym Helper")
+        println("10- Global Food Culture")
+        println("11- Ingredients Guessing Game")
         println("12- I love potato ")
         println("13- Thin problem Suggestion ")
         println("14- Seafood with High Protein ")
@@ -76,15 +83,9 @@ class FoodChangeMoodUi(
         println("0- Enter 0 to exit the app")
     }
 
-
     private fun getUserInput(): Int? {
         return readlnOrNull()?.toIntOrNull()
     }
-
-
-
-
-
 }
 
 
