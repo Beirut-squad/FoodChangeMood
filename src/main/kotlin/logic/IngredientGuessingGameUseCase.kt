@@ -12,10 +12,12 @@ class IngredientGuessingGameUseCase(
     private lateinit var currentRecipe: Recipe
     private lateinit var currentCorrectGuess: String
     private var currentIngredients: List<String> = emptyList()
+    private var isGameLost: Boolean = false
 
     fun startGame() {
         score = 0
         currentLevel = 0
+        isGameLost = false
     }
 
     fun submitAnswer(answer: String): Boolean {
@@ -28,6 +30,7 @@ class IngredientGuessingGameUseCase(
 
     fun getNextRound(): List<String>? {
         if (currentLevel >= MAX_LEVEL) {
+            isGameLost = true
             return null
         }
         currentLevel++
@@ -79,8 +82,22 @@ class IngredientGuessingGameUseCase(
         return score
     }
 
+    fun isGameOver(): Boolean = checkLoss() || currentLevel >= MAX_LEVEL
+
+    fun getCurrentRecipe(): Recipe = currentRecipe
+
+    fun getCurrentCorrectGuess(): String = currentCorrectGuess
+
+    fun endGame() { currentLevel = MAX_LEVEL }
+
+    private fun checkLoss(): Boolean {
+        return isGameLost
+    }
+
+
     companion object {
         private const val SCORE_INCREMENT = 1000
         private const val MAX_LEVEL = 15
+        const val MAX_INGREDIENT_GAME_SCORE = 15000
     }
 }

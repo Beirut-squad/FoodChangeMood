@@ -7,6 +7,7 @@ import org.example.logic.*
 import org.example.logic.use_case.GymHelperUseCase
 import org.example.logic.RandomTenRecipesIncludePotatoUseCase
 import org.example.logic.SeafoodWithHighProteinUseCase
+import org.koin.core.module.dsl.singleOf
 import org.koin.dsl.module
 
 val useCaseModule = module {
@@ -19,4 +20,5 @@ val useCaseModule = module {
     single { RecipeTimeGuessGame(get()) }
     single { KetoDiet(get()) }
     single { SeafoodWithHighProteinUseCase(get()) }
+    singleOf(::IngredientGuessingGameUseCase)
 }
