@@ -8,7 +8,7 @@ import java.util.*
 class SearchByNameUI (private val searchByNameUseCase: SearchByNameUseCase){
      fun  show(){
             val nameToSearch = Scanner(System.`in`)
-            println("Enter the name of the dish or part of it to search for:")
+            println("Enter the name  it to search for:")
             val userInput = nameToSearch.nextLine()
 
             try {
