@@ -25,7 +25,6 @@ import java.time.format.DateTimeParseException
 class FoodChangeMoodUi(
     private val iraqiMealsUseCase: IraqiMealsUseCase,
     private val easyFoodSuggestionUseCase: EasyFoodSuggestionUseCase,
-    private val randomTenRecipesIncludePotatoUseCase: RandomTenRecipesIncludePotatoUseCase,
     private val searchRecipeByDateUseCase: SearchRecipeByDateUseCase,
     private val sweetWithNoEggs: SweetWithNoEggsUseCase,
     private val ketoDiet: KetoDiet,
@@ -452,6 +451,8 @@ class FoodChangeMoodUi(
 
             }
     }
+
+
 
 }
 
