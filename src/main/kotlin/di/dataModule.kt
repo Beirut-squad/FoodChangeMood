@@ -4,7 +4,10 @@ import org.example.data.CsvParser
 import org.example.data.CsvReader
 import org.example.data.FileNames.FOOD_CSV_FILE
 import org.example.data.RecipesRepositoryCsvImpl
+import org.example.logic.EasyFoodSuggestionUseCase
 import org.example.logic.RecipesRepository
+import org.example.ui.FoodChangeMoodUi
+import org.koin.core.scope.get
 import org.koin.dsl.module
 import java.io.File
 
@@ -22,5 +25,7 @@ val dataModule = module {
     single<RecipesRepository> {
         RecipesRepositoryCsvImpl(get(), get())
     }
+
+
 
 }
