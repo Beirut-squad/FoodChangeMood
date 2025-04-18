@@ -5,16 +5,15 @@ import org.example.logic.use_case.RecipeTimeGuessGameUseCase
 import org.example.utils.Colors
 
 class RecipesTimeGuessGameUi(
-    private val recipeTimeGuessGameUseCase: RecipeTimeGuessGameUseCase
+    private val recipeTimeGuessGameUseCase: RecipeTimeGuessGameUseCase,
+    private val colors: Colors
 ) {
-    private val colors = Colors()
-
     fun show() {
         val recipe = recipeTimeGuessGameUseCase.startNewGame()
         println(colors.blue("Guess the preparation time for: ${recipe.name}"))
         var attemptsLeft = 3
         while (attemptsLeft > 0) {
-            print("Enter your guess number of minutes: ")
+            print(colors.yellow("Enter your guess number of minutes: "))
             val userGuessMinutes = readlnOrNull()?.toIntOrNull()
             val (newAttemptsLeft, shouldEndGame)  = processGuessInput(userGuessMinutes,attemptsLeft)
             attemptsLeft = newAttemptsLeft

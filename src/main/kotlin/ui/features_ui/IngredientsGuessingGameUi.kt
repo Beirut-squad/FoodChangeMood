@@ -5,11 +5,10 @@ import org.example.model.Recipe
 import org.example.utils.Colors
 
 class IngredientsGuessingGameUi(
-    private val ingredientGuessingGameUseCase: IngredientGuessingGameUseCase
+    private val ingredientGuessingGameUseCase: IngredientGuessingGameUseCase,
+    private val colors: Colors
 ) {
-
-    private val colors = Colors()
-
+    
     fun show() {
         initializeIngredientGame()
         while (isIngredientGameActive()) {

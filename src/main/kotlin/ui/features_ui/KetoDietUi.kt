@@ -3,14 +3,16 @@ package org.example.ui.features_ui
 import org.example.logic.use_case.KetoDietUseCase
 import org.example.model.Nutrition
 import org.example.model.Recipe
+import org.example.utils.Colors
 
 class KetoDietUi(
     private val ketoDiet: KetoDietUseCase,
+    private val colors: Colors
 ) {
      fun show(){
-        println("Welcome to Keto Meal Suggester ")
+        println(colors.cyan("Welcome to Keto Meal Suggester "))
         while (true){
-            println("1. Suggest a Keto Recipe \n2. Go Back ")
+            println(colors.yellow("1. Suggest a Keto Recipe \n2. Go Back "))
             val input: String? = readlnOrNull()
             when(input){
                 "1" -> {
@@ -18,15 +20,15 @@ class KetoDietUi(
                     continue
                 }
                 "2" -> break
-                else -> println("enter a valid number")
+                else -> println(colors.red("enter a valid number"))
             }
         }
     }
 
     private fun suggestRecipeForUser(){
         val recipe = ketoDiet.suggestKetoRecipe()
-        println("Meal name: ${recipe.name}")
-        println("Do you want to proceed with Recipe details ? (Y,n) ")
+        println(colors.green("Meal name: ${recipe.name}"))
+        println(colors.yellow("Do you want to proceed with Recipe details ? (Y,n) "))
         val input: String? = readlnOrNull()
         if (input == "Y"){
             printRecipeDetails(recipe)
@@ -34,7 +36,7 @@ class KetoDietUi(
     }
 
     private fun printRecipeDetails(recipe: Recipe) {
-        println("=== Recipe Details ===")
+        println(colors.blue("=== Recipe Details ==="))
         printBasicInfo(recipe)
         printTags(recipe.tags)
         printNutritionInfo(recipe.nutrition)
@@ -44,49 +46,49 @@ class KetoDietUi(
     }
 
     private fun printBasicInfo(recipe: Recipe) {
-        println("Name: ${recipe.name ?: "N/A"}")
-        println("ID: ${recipe.id ?: "N/A"}")
-        println("Preparation Time: ${recipe.minutes ?: "N/A"} minutes")
-        println("Contributor ID: ${recipe.contributorId ?: "N/A"}")
-        println("Submitted Date: ${recipe.submittedDate ?: "N/A"}\n")
+        println(colors.green("Name: ${recipe.name ?: "N/A"}"))
+        println(colors.green("ID: ${recipe.id ?: "N/A"}"))
+        println(colors.green("Preparation Time: ${recipe.minutes ?: "N/A"} minutes"))
+        println(colors.green("Contributor ID: ${recipe.contributorId ?: "N/A"}"))
+        println(colors.green("Submitted Date: ${recipe.submittedDate ?: "N/A"}\n"))
     }
 
     private fun printTags(tags: List<String>?) {
-        println("Tags: ${tags?.joinToString(", ") ?: "None"}\n")
+        println(colors.green("Tags: ${tags?.joinToString(", ") ?: "None"}\n"))
     }
 
     private fun printNutritionInfo(nutrition: Nutrition?) {
-        println("--- Nutrition Information ---")
+        println(colors.green("--- Nutrition Information ---"))
         nutrition?.let {
-            println("Calories: ${it.calories ?: "N/A"}")
-            println("Total Fat: ${it.totalFat ?: "N/A"} g")
-            println("Sugar: ${it.sugar ?: "N/A"} g")
-            println("Sodium: ${it.sodium ?: "N/A"} mg")
-            println("Protein: ${it.protein ?: "N/A"} g")
-            println("Saturated Fat: ${it.saturatedFat ?: "N/A"} g")
-            println("Carbohydrates: ${it.carbohydrates ?: "N/A"} g")
-        } ?: println("Nutrition Info: N/A\n")
+            println(colors.green("Calories: ${it.calories ?: "N/A"}"))
+            println(colors.green("Total Fat: ${it.totalFat ?: "N/A"} g"))
+            println(colors.green("Sugar: ${it.sugar ?: "N/A"} g"))
+            println(colors.green("Sodium: ${it.sodium ?: "N/A"} mg"))
+            println(colors.green("Protein: ${it.protein ?: "N/A"} g"))
+            println(colors.green("Saturated Fat: ${it.saturatedFat ?: "N/A"} g"))
+            println(colors.green("Carbohydrates: ${it.carbohydrates ?: "N/A"} g"))
+        } ?: println(colors.red("Nutrition Info: N/A\n"))
     }
 
     private fun printSteps(steps: List<String>?, numberOfSteps: Int?) {
-        println("Number of Steps: ${numberOfSteps ?: "N/A"}")
-        println("--- Steps ---")
+        println(colors.green("Number of Steps: ${numberOfSteps ?: "N/A"}"))
+        println(colors.blue("--- Steps ---"))
         steps?.forEachIndexed { index, step ->
-            println("${index + 1}. $step")
-        } ?: println("None")
+            println(colors.green("${index + 1}. $step"))
+        } ?: println(colors.red("None"))
         println()
     }
 
     private fun printDescription(description: String?) {
-        println("Description: ${description ?: "N/A"}\n")
+        println(colors.green("Description: ${description ?: "N/A"}\n"))
     }
 
     private fun printIngredients(ingredients: List<String>?, numberOfIngredients: Int?) {
-        println("--- Ingredients ---")
-        println("Number of Ingredients: ${numberOfIngredients ?: "N/A"}")
+        println(colors.blue("--- Ingredients ---"))
+        println(colors.green("Number of Ingredients: ${numberOfIngredients ?: "N/A"}"))
         ingredients?.forEachIndexed { index, ingredient ->
             println("${index + 1}. $ingredient")
-        } ?: println("None")
+        } ?: println(colors.red("None"))
         println()
     }
 
