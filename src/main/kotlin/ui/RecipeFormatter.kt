@@ -12,7 +12,6 @@ object RecipeFormatter {
             appendLine(formatList(recipe.ingredients))
             appendLine("Steps: ")
             appendLine(formatSteps(recipe.steps))
-
             appendLine("============================================================================")
         }
     }
