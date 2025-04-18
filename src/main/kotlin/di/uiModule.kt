@@ -1,5 +1,6 @@
-package org.example.ui
+package org.example.di
 
+import org.example.ui.*
 import org.koin.core.module.dsl.singleOf
 import org.koin.dsl.module
 
