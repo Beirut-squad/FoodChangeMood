@@ -3,17 +3,20 @@ package org.example.ui.features_ui
 import org.example.logic.Validator
 import org.example.logic.use_case.GymHelperUseCase
 import org.example.model.Recipe
+import org.example.utils.Colors
 
 class GymHelperUi (
     private val gymHelperUseCase: GymHelperUseCase,
-    private val validator: Validator,){
+    private val validator: Validator,
+    private val colors: Colors
+){
     fun show() {
-        println("Gym helper: Get meals that match the protein and calories amounts you choose or close to them.")
+        println(colors.cyan("Gym helper: Get meals that match the protein and calories amounts you choose or close to them."))
         while (true) {
-            print("Enter the amount of protein: ")
+            print(colors.blue("Enter the amount of protein: "))
             val protein = readlnOrNull()
 
-            print("Enter the amount of calories: ")
+            print(colors.blue("Enter the amount of calories: "))
             val calories = readlnOrNull()
 
             if (validator.validateGymHelperInput(calories, protein)) {
@@ -24,7 +27,7 @@ class GymHelperUi (
                 displayRecipesForGymHelper(recipes)
                 break
             } else {
-                println("Invalid input.")
+                println(colors.red("Invalid input."))
             }
         }
 
@@ -39,9 +42,9 @@ class GymHelperUi (
     }
 
     private fun displaySingleRecipeForGymHelper(recipe: Recipe, index: Int) {
-        println("Meal $index: ${recipe.name}")
+        println(colors.green("Meal $index: ${recipe.name}"))
 
-        println("Calories: ${recipe.nutrition?.calories ?: 0.0}, Protein: ${recipe.nutrition?.protein ?: 0.0}")
+        println(colors.green("Calories: ${recipe.nutrition?.calories ?: 0.0}, Protein: ${recipe.nutrition?.protein ?: 0.0}"))
 
         recipe.ingredients?.let { displayIngredients(recipe.ingredients) }
 
@@ -49,16 +52,16 @@ class GymHelperUi (
     }
 
     private fun displayIngredients(ingredients: List<String>) {
-        print("Ingredients: ")
+        print(colors.green("Ingredients: "))
         ingredients.forEach {
-            print("$it, ")
+            print(colors.green("$it, "))
         }
     }
 
     private fun displaySteps(steps: List<String>) {
-        println("How to Make: ")
+        println(colors.green("How to Make: "))
         steps.forEachIndexed { stepIndex, step ->
-            print("Step ${stepIndex + 1}: ")
+            print(colors.green("Step ${stepIndex + 1}: "))
             println(step)
         }
     }

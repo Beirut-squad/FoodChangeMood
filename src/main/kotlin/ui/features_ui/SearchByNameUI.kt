@@ -3,28 +3,33 @@ package org.example.ui.features_ui
 import org.example.error.ThereIsNoNameException
 import org.example.logic.use_case.SearchByNameUseCase
 import org.example.model.Recipe
+import org.example.utils.Colors
 import java.util.*
 
 class SearchByNameUI (private val searchByNameUseCase: SearchByNameUseCase){
      fun  show(){
             val nameToSearch = Scanner(System.`in`)
-            println("Enter the name  it to search for:")
+            println("Enter the name of the dish or part of it to search for:")
             val userInput = nameToSearch.nextLine()
 
+            try {
                 //search in input by fun searchByNameUseCase
                 val recipe: Recipe? = searchByNameUseCase.searchRecipeByName(userInput)
                 if (recipe != null) { // found recipe
                     println("\n-------------------------------\n")
                     println("Found the recipe: ${recipe.name}")
                     println("-------------------------------\n")
-                    printRecipe(recipe) } // print repice's contants
-                else {
+                    printRecipe(recipe)  // print repice's contants
+                } else {
                     println("\nSorry, we couldn't find a recipe that matches the name you entered.")
+                }
 
+            } catch (e: ThereIsNoNameException) {
+                println("\nAn error occurred while searching: ${e.message}")
             }
         }
 
-         fun printRecipe(recipe: Recipe) {
+    private fun printRecipe(recipe: Recipe) {
         println(
             "Recipe Details: ------------------------------------------------\nName: ${recipe.name}\n" +
                     "Minutes: ${recipe.minutes}\nContributor Id: ${recipe.contributorId}\n" +
