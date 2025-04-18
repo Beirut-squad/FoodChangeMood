@@ -10,6 +10,7 @@ import org.example.error.NoRecipesFoundForTheGivenDateException
 import org.example.error.RecipeNotFoundException
 import org.example.logic.EasyFoodSuggestionUseCase
 import org.example.logic.RandomTenRecipesIncludePotatoUseCase
+import org.example.logic.ThinProblemUseCase
 import org.example.logic.IraqiMealsUseCase
 import org.example.model.Nutrition
 import Colors
@@ -26,13 +27,13 @@ class FoodChangeMoodUi(
     private val iraqiMealsUseCase: IraqiMealsUseCase,
     private val easyFoodSuggestionUseCase: EasyFoodSuggestionUseCase,
     private val randomTenRecipesIncludePotatoUseCase: RandomTenRecipesIncludePotatoUseCase,
+    private val thinProblem: ThinProblemUseCase,
     private val searchRecipeByDateUseCase: SearchRecipeByDateUseCase,
     private val sweetWithNoEggs: SweetWithNoEggsUseCase,
     private val ketoDiet: KetoDiet,
     private val gymHelperUseCase: GymHelperUseCase,
     private val validator: Validator,
     private val seafoodWithHighProteinUseCase: SeafoodWithHighProteinUseCase,
-    private val randomTenRecipesIncludePotatoUseCase: RandomTenRecipesIncludePotatoUseCase,
     private val italianGroupMealsUseCase: ItalianGroupMealsUseCase,
     private val recipeTimeGuessGame: RecipeTimeGuessGame
 ) {
@@ -45,6 +46,7 @@ class FoodChangeMoodUi(
     }
 
     private fun presentAvailableFeatures() {
+        var isRunning = true
         while (isRunning) {
             showOptions()
             val input = getUserInput()
@@ -57,8 +59,9 @@ class FoodChangeMoodUi(
                 7 -> launchKetoDietUseCase()
                 9 -> launchGymHelperUi()
                 12 -> launchRandomTenPotatoUseCase()
-                15 -> launchItalianGroupMeals()
+                13 -> launchThinProblemUseCase()
                 14 -> launchSeafoodWithHighProteinUseCase()
+                15 -> launchItalianGroupMeals()
                 0 -> {
                     println("Goodbye :)")
                     isRunning = false
@@ -83,11 +86,13 @@ class FoodChangeMoodUi(
         println("8- Search Recipe by add date")
         println("9- Gym Helper")
         println("12- I love potato ")
+        println("13- Thin problem Suggestion ")
         println("14- Seafood with High Protein ")
         println("15- Italian Group Meals ")
         println("0- Enter 0 to exit the app")
     }
 
+    private fun launchExampleUseCase() {}
     private fun launchEasyFoodSuggestionUseCase() {
         easyFoodSuggestionUseCase
             .getTenEasyFoodSuggestions()
@@ -99,7 +104,7 @@ class FoodChangeMoodUi(
 
     private fun getUserInput(): Int? {
         return readlnOrNull()?.toIntOrNull()
-    }
+    }    
     fun launchGymHelperUi() {
         println("Gym helper: Get meals that match the protein and calories amounts you choose or close to them.")
         while (true) {
@@ -181,9 +186,31 @@ class FoodChangeMoodUi(
     {
         val potatoMeals= randomTenRecipesIncludePotatoUseCase.findPotatoMeals()
         potatoMeals.forEach {
-            println("$it")
+            println("\t\t $it")
         }
     }
+    private fun launchThinProblemUseCase() {
+
+        while (true) {
+            val suggestion = thinProblem.findThinProblem()
+            printThinProblem()
+            val choice = readln().toIntOrNull()
+            if (choice == 1) {
+                suggestion?.let { println("\t\t $it") }
+            } else break
+        }
+    }
+
+    private fun printThinProblem(){
+        val suggestion = thinProblem.findThinProblem()
+        println("Suggested Meal: ${suggestion?.name}")
+        println("Description: ${suggestion?.description}")
+        println("Calories: ${suggestion?.nutrition?.calories}")
+        println("Like it? Enter 1")
+        println("Want another? Enter anything else:")
+    }
+}
+
 
     private fun launchSearchRecipeByDateUseCase() {
         println("Enter the date for which you want to view recipes: example (2006-10-07)")
