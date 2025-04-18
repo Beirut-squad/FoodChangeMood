@@ -2,6 +2,7 @@ package org.example.di
 
 import org.example.ui.*
 import org.example.ui.features_ui.*
+import org.example.utils.Colors
 import org.koin.core.module.dsl.singleOf
 import org.koin.dsl.module
 
@@ -22,4 +23,5 @@ val uiModule = module {
     singleOf(::GlobalFoodCultureUI)
     singleOf(::IngredientsGuessingGameUi)
     singleOf(::SearchByNameUI)
+    singleOf(::Colors)
 }
