@@ -5,4 +5,5 @@ import org.koin.dsl.module
 
 val uiModule = module {
     singleOf(::FoodChangeMoodUi)
+    singleOf(::IngredientsGuessingGameUi)
 }
