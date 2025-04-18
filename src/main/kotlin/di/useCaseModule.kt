@@ -8,6 +8,8 @@ import org.example.logic.Validator
 import org.example.logic.*
 import org.example.logic.use_case.GymHelperUseCase
 import org.example.logic.RandomTenRecipesIncludePotatoUseCase
+import org.example.logic.ThinProblemUseCase
+import org.example.logic.SearchRecipeByDateUseCase
 import org.example.logic.SeafoodWithHighProteinUseCase
 import org.koin.dsl.module
 
@@ -26,6 +28,10 @@ val useCaseModule = module {
     single { RandomTenRecipesIncludePotatoUseCase(get()) }
     single { IraqiMealsUseCase(get()) }
     single { RecipeTimeGuessGame(get()) }
+    single { ItalianGroupMealsUseCase(get()) }
     single { KetoDiet(get()) }
+    single { SearchRecipeByDateUseCase(get()) }
     single { SeafoodWithHighProteinUseCase(get()) }
+    single { ThinProblemUseCase(get()) }
+
 }

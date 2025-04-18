@@ -1,6 +1,7 @@
 package org.example.data
 
-import org.example.Utils.Extensions.toDateOrNull
+
+import Utils.toDate
 import org.example.model.Recipe
 import org.example.model.toNutrition
 
@@ -18,7 +19,7 @@ class CsvParser {
             id = csvLine.getOrNull(RecipesColumnIndex.ID),
             minutes = csvLine.getOrNull(RecipesColumnIndex.MINUTES)?.toIntOrNull(),
             contributorId = csvLine.getOrNull(RecipesColumnIndex.CONTRIBUTOR_ID),
-            submittedDate = csvLine.getOrNull(RecipesColumnIndex.DATE)?.toDateOrNull(),
+            submittedDate = csvLine.getOrNull(RecipesColumnIndex.DATE)?.let { it.toDate() },
             tags = csvLine.getOrNull(RecipesColumnIndex.TAGS)?.let { splitList(it) },
             nutrition = csvLine.getOrNull(RecipesColumnIndex.NUTRITION)?.let { splitList(it).toNutrition() },
             numberOfSteps = csvLine.getOrNull(RecipesColumnIndex.NUMBER_OF_STEPS)?.toIntOrNull(),

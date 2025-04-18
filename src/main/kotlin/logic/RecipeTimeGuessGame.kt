@@ -14,15 +14,18 @@ class RecipeTimeGuessGame(private val repository: RecipesRepository) {
         return currentRecipe
     }
 
-    fun makeGuess(guess: Int, attemptsLeft: Int): GameFeedback {
+    fun makeGuess(userGuessMinutes: Int, attemptsLeft: Int): GameFeedback {
         val actualMinutes = currentRecipe.minutes
             ?: return GameFeedback.RecipeTimeNotAvailable("Recipe preparation time not available.")
-
         val remainingAttempts = attemptsLeft - 1
-        return if (guess == actualMinutes) {
-            createCorrectGuessFeedback(actualMinutes)
-        } else {
-            evaluateWrongGuess(guess, actualMinutes, remainingAttempts)
+        return evaluateGuess(userGuessMinutes,actualMinutes,remainingAttempts)
+    }
+
+
+    private fun evaluateGuess(userGuessMinutes: Int, actualMinutes: Int, remainingAttempts: Int): GameFeedback {
+        return when {
+            userGuessMinutes == actualMinutes -> createCorrectGuessFeedback(actualMinutes)
+            else -> evaluateWrongGuess(userGuessMinutes, actualMinutes, remainingAttempts)
         }
     }
 
@@ -31,17 +34,16 @@ class RecipeTimeGuessGame(private val repository: RecipesRepository) {
     }
 
     private fun evaluateWrongGuess(guess: Int, actual: Int, remainingAttempts: Int): GameFeedback {
-        if (remainingAttempts == 0) {
-            return GameFeedback.NoAttemptsLeft(actual)
-        }
-
         val timeDifference = abs(guess - actual)
         return when {
+            remainingAttempts == 0 -> GameFeedback.NoAttemptsLeft(actual)
             timeDifference <= VERY_CLOSE_DIFFERENCE_THRESHOLD -> GameFeedback.GuessIsVeryClose(remainingAttempts)
             timeDifference >= WAY_OFF_DIFFERENCE_THRESHOLD -> GameFeedback.GuessIsWayOff(remainingAttempts)
             else -> GameFeedback.GuessIsNotQuiteRight(remainingAttempts)
         }
     }
+
+
     companion object {
         private const val VERY_CLOSE_DIFFERENCE_THRESHOLD = 15
         private const val WAY_OFF_DIFFERENCE_THRESHOLD = 30
