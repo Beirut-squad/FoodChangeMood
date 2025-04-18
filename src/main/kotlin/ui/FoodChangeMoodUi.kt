@@ -10,6 +10,7 @@ import org.example.logic.RandomTenRecipesIncludePotatoUseCase
 import org.example.logic.IraqiMealsUseCase
 import org.example.model.Nutrition
 import Colors
+import org.example.data.RecipesRepositoryCsvImpl
 import org.example.logic.GameFeedback
 import org.example.logic.RecipeTimeGuessGame
 
@@ -23,7 +24,8 @@ class FoodChangeMoodUi(
     private val ketoDiet: KetoDiet,
     private val gymHelperUseCase: GymHelperUseCase,
     private val validator: Validator,
-    private val recipeTimeGuessGame: RecipeTimeGuessGame
+    private val recipeTimeGuessGame: RecipeTimeGuessGame,
+    private val globalFoodCultureUI: GlobalFoodCultureUI,
 ) {
     private val colors = Colors()
 
@@ -44,6 +46,7 @@ class FoodChangeMoodUi(
                 6 -> launchSweetWithoutEggsUseCase()
                 7 -> launchKetoDietUseCase()
                 9 -> launchGymHelperUi()
+                10 -> globalFoodCultureUI.displayCountryFoodCulture()
                 12 -> launchRandomTenPotatoUseCase()
                 0 -> {
                     println("Goodbye :)")
@@ -67,6 +70,7 @@ class FoodChangeMoodUi(
         println("6- Sweets with no eggs")
         println("7- Keto Diet Food Suggestion ")
         println("9- Gym Helper")
+        println("10- Explore Global Food Culture")
         println("12- I love potato ")
         println("0- Enter 0 to exit the app")
     }
