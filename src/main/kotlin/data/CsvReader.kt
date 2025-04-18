@@ -40,4 +40,5 @@ class CsvReader(private val csvInputFile: File) {
 
         return rows
     }
+
 }
