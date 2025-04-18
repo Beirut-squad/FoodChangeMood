@@ -4,35 +4,39 @@ import Colors
 import org.example.logic.GameFeedback
 import org.example.logic.RecipeTimeGuessGame
 
-class RecipesTimeGuessGameUi (
+class RecipesTimeGuessGameUi(
     private val recipeTimeGuessGame: RecipeTimeGuessGame
-
-){
+) {
     private val colors = Colors()
 
-     fun show() {
+    fun show() {
         val recipe = recipeTimeGuessGame.startNewGame()
         println(colors.blue("Guess the preparation time for: ${recipe.name}"))
-
         var attemptsLeft = 3
         while (attemptsLeft > 0) {
             print("Enter your guess number of minutes: ")
-            val guess = readlnOrNull()?.toIntOrNull()
-            if (guess == null) {
-                println(colors.red("Invalid input. Please enter a valid number of minutes."))
-            } else {
-                val result = recipeTimeGuessGame.makeGuess(guess, attemptsLeft)
-                handleGameFeedback(result)
-                if (result is GameFeedback.CorrectGuess || result is GameFeedback.NoAttemptsLeft) {
-                    return
-                }
-                attemptsLeft--
-            }
+            val userGuessMinutes = readlnOrNull()?.toIntOrNull()
+            val (newAttemptsLeft, shouldEndGame)  = processGuessInput(userGuessMinutes,attemptsLeft)
+            attemptsLeft = newAttemptsLeft
+            if (shouldEndGame) break
         }
+    }
 
-        if (attemptsLeft == 0) {
-            println(colors.red("No attempts left. The game is over."))
+    private fun processGuessInput(userGuessMinutes: Int?, attemptsLeft: Int): Pair<Int, Boolean> {
+        return if (userGuessMinutes == null) {
+            println(colors.red("Invalid input. Please enter a valid number of minutes."))
+            Pair(attemptsLeft, false)
+        } else {
+            val result = recipeTimeGuessGame.makeGuess(userGuessMinutes, attemptsLeft)
+            handleGameFeedback(result)
+            val shouldEnd =checkGameEndCondition(result)
+            Pair(attemptsLeft - 1, shouldEnd)
         }
+    }
+
+
+    private fun checkGameEndCondition(result: GameFeedback): Boolean {
+        return result is GameFeedback.CorrectGuess || result is GameFeedback.NoAttemptsLeft
     }
 
     private fun handleGameFeedback(result: GameFeedback) {
@@ -51,4 +55,6 @@ class RecipesTimeGuessGameUi (
                 println(colors.red("Error: ${result.errorMessage}")) }
         }
     }
+
+
 }
