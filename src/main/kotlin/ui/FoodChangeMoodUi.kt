@@ -23,6 +23,8 @@ class FoodChangeMoodUi(
     private val gymHelperUseCase: GymHelperUseCase,
     private val validator: Validator,
     private val randomTenRecipesIncludePotatoUseCase: RandomTenRecipesIncludePotatoUseCase,
+    private val seafoodWithHighProteinUseCase: SeafoodWithHighProteinUseCase,
+    private val randomTenRecipesIncludePotatoUseCase: RandomTenRecipesIncludePotatoUseCase,
     private val italianGroupMealsUseCase: ItalianGroupMealsUseCase,
     private val recipeTimeGuessGame: RecipeTimeGuessGame
 ) {
@@ -47,6 +49,7 @@ class FoodChangeMoodUi(
                 9 -> launchGymHelperUi()
                 12 -> launchRandomTenPotatoUseCase()
                 15 -> launchItalianGroupMeals()
+                14 -> launchSeafoodWithHighProteinUseCase()
                 0 -> {
                     println("Goodbye :)")
                     isRunning = false
@@ -70,6 +73,7 @@ class FoodChangeMoodUi(
         println("7- Keto Diet Food Suggestion ")
         println("9- Gym Helper")
         println("12- I love potato ")
+        println("14- Seafood with High Protein ")
         println("15- Italian Group Meals ")
         println("0- Enter 0 to exit the app")
     }
@@ -169,6 +173,18 @@ class FoodChangeMoodUi(
         potatoMeals.forEach {
             println("$it")
         }
+    }
+
+    private fun launchSeafoodWithHighProteinUseCase() {
+        println("Loading...")
+        seafoodWithHighProteinUseCase.getSeafoodWithProteinRecipes()
+            .forEachIndexed { index, recipe ->
+                println(
+                    "${index + 1}. " +
+                    "Recipe Name: \n\t${recipe.name} " +
+                    "\n\tProtein Amount: \n\t${recipe.nutrition?.protein}"
+                )
+            }
     }
 
     private fun presentIraqMeals() {
@@ -300,17 +316,28 @@ class FoodChangeMoodUi(
     private fun handleGameFeedback(result: GameFeedback) {
         when (result) {
             is GameFeedback.CorrectGuess -> {
-                println(colors.green("Correct! The preparation time is ${result.actualTime} minutes.")) }
+                println(colors.green("Correct! The preparation time is ${result.actualTime} minutes."))
+            }
+
             is GameFeedback.NoAttemptsLeft -> {
-                println(colors.red("No attempts left. The correct time was ${result.actualTime} minutes.")) }
+                println(colors.red("No attempts left. The correct time was ${result.actualTime} minutes."))
+            }
+
             is GameFeedback.GuessIsVeryClose -> {
-                println(colors.yellow("Very close! Try again. Attempts left: ${result.remainingAttempts}")) }
+                println(colors.yellow("Very close! Try again. Attempts left: ${result.remainingAttempts}"))
+            }
+
             is GameFeedback.GuessIsWayOff -> {
-                println(colors.purple("Way off! Try again. Attempts left: ${result.remainingAttempts}")) }
+                println(colors.purple("Way off! Try again. Attempts left: ${result.remainingAttempts}"))
+            }
+
             is GameFeedback.GuessIsNotQuiteRight -> {
-                println(colors.cyan("Not quite. Try again. Attempts left: ${result.remainingAttempts}")) }
+                println(colors.cyan("Not quite. Try again. Attempts left: ${result.remainingAttempts}"))
+            }
+
             is GameFeedback.RecipeTimeNotAvailable -> {
-                println(colors.red("Error: ${result.errorMessage}")) }
+                println(colors.red("Error: ${result.errorMessage}"))
+            }
         }
     }
     private fun launchItalianGroupMeals(){
