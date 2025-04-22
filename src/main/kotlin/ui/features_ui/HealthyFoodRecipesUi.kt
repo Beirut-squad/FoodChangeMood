@@ -12,22 +12,26 @@ class HealthyFoodRecipesUi(
 
 ) {
     fun show() {
-        println(colors.cyan("Enter the number of meals you want"))
+        outputPrinter(colors.cyan("Enter the number of meals you want"))
         val count = getUserInput()
 
         if (count == null || !validator.validateRecipesCountInput(count)) {
-            println(colors.red("Invalid Input, Enter a Positive Number"))
+            outputPrinter(colors.red("Invalid Input, Enter a Positive Number"))
         } else
             displayRecipeInfo(count)
     }
 
+    fun outputPrinter(message: String){
+        println(message)
+    }
+
     private fun displayRecipeInfo(count: Int) {
-        println(colors.blue("Loading..."))
+        outputPrinter(colors.blue("Loading..."))
         val healthyRecipes = healthyRecipesUseCase.getHealthyRecipes(count)
         if (healthyRecipes.isEmpty()) {
-            println(colors.red("No Recipes Available"))
+            outputPrinter(colors.red("No Recipes Available"))
         } else healthyRecipes.forEach {
-            println(RecipeFormatter.format(it))
+            outputPrinter(RecipeFormatter.format(it))
         }
     }
 
