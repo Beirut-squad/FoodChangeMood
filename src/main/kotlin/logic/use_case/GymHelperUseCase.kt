@@ -1,5 +1,6 @@
 package org.example.logic.use_case
 
+import org.example.error.RecipeNotFoundException
 import org.example.logic.RecipesRepository
 import org.example.model.Recipe
 
@@ -11,7 +12,7 @@ class GymHelperUseCase(
         calories: Float,
         protein: Float
     ): List<Recipe> {
-        return recipesRepository.getAllRecipes()
+        val result =  recipesRepository.getAllRecipes()
             .filter { recipe ->
                 isCaloriesAmountInApproximateRange(
                     demandedCalories = calories,
@@ -24,6 +25,7 @@ class GymHelperUseCase(
                     mealProtein = recipe.nutrition?.protein ?: 0f
                 )
             }
+        return result.ifEmpty { throw RecipeNotFoundException ("WE have an exception") }
     }
 
     private fun isCaloriesAmountInApproximateRange(
