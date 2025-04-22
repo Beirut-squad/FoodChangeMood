@@ -12,6 +12,9 @@ class GymHelperUseCase(
         calories: Float,
         protein: Float
     ): List<Recipe> {
+        if (calories < 0 || protein < 0) {
+            throw RecipeNotFoundException("Calories or Protein can't be negative")
+        }
         val result = recipesRepository.getAllRecipes()
             .filter { recipe ->
                 val mealCalories = recipe.nutrition?.calories ?: throw RecipeNotFoundException("Calories is null")
