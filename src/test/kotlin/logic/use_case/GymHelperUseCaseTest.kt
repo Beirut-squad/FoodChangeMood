@@ -22,23 +22,23 @@ class GymHelperUseCaseTest {
     }
 
     @Test
-    fun `should return recipe that contains approximate values when calories and protein are both float `() {
+    fun `should return recipe that contains approximate values when calories and protein are both positive float `() {
         //Give
         every { repository.getAllRecipes() } returns listOf(
             createGymHelper(5f, 9f),
             createGymHelper(100f, 10f),
-            createGymHelper(null, 200f)
+            createGymHelper(60f, 200f)
         )
         val calories = 9f
         val protein = 10f
         //When
         val result =
-            gymHelperUseCase
-                .getRecipesMatchOrApproximateAmountOfCaloriesAndProtein(calories, protein)
+            gymHelperUseCase.getRecipesMatchOrApproximateAmountOfCaloriesAndProtein(calories, protein)
         //Then
         assertThat(result)
             .containsExactly(
-                createGymHelper(5f, 9f))
+                createGymHelper(5f, 9f)
+            )
     }
 
     @Test
@@ -54,6 +54,25 @@ class GymHelperUseCaseTest {
         //When && Then
         assertThrows<RecipeNotFoundException> {
             gymHelperUseCase
-            .getRecipesMatchOrApproximateAmountOfCaloriesAndProtein(calories, protein) }
+                .getRecipesMatchOrApproximateAmountOfCaloriesAndProtein(calories, protein)
+        }
     }
+
+    @Test
+    fun `should return an exception when only protein is null`() {
+        //Give
+        every { repository.getAllRecipes() } returns listOf(
+            createGymHelper(9f, null)
+        )
+        val calories = 9f
+        val protein = 10f
+        //When && Then
+        assertThrows<RecipeNotFoundException> {
+            gymHelperUseCase
+                .getRecipesMatchOrApproximateAmountOfCaloriesAndProtein(calories, protein)
+        }
+    }
+
+
+
 }
