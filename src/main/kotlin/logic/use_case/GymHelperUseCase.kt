@@ -12,20 +12,15 @@ class GymHelperUseCase(
         calories: Float,
         protein: Float
     ): List<Recipe> {
-        val result =  recipesRepository.getAllRecipes()
+        val result = recipesRepository.getAllRecipes()
             .filter { recipe ->
-                isCaloriesAmountInApproximateRange(
-                    demandedCalories = calories,
-                    mealCalories = recipe.nutrition?.calories ?: 0f
-                )
+                val mealCalories = recipe.nutrition?.calories ?: throw RecipeNotFoundException("Calories is null")
+                val mealProtein = recipe.nutrition.protein ?: throw RecipeNotFoundException("Protein is null")
+
+                isCaloriesAmountInApproximateRange(calories, mealCalories) &&
+                        isProteinAmountInApproximateRange(protein, mealProtein)
             }
-            .filter { recipe ->
-                isProteinAmountInApproximateRange(
-                    demandedProtein = protein,
-                    mealProtein = recipe.nutrition?.protein ?: 0f
-                )
-            }
-        return result.ifEmpty { throw RecipeNotFoundException ("WE have an exception") }
+        return result.ifEmpty { throw RecipeNotFoundException("We have invalid data") }
     }
 
     private fun isCaloriesAmountInApproximateRange(
