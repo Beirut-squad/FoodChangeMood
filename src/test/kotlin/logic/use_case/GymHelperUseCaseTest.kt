@@ -114,4 +114,17 @@ class GymHelperUseCaseTest {
         }
     }
 
+    @Test
+    fun `should return an exception when protein in are negative value`() {
+        //Give
+        every { repository.getAllRecipes() } returns emptyList()
+        val calories = 9f
+        val protein = -10f
+        //When && Then
+        assertThrows<RecipeNotFoundException> {
+            gymHelperUseCase
+                .getRecipesMatchOrApproximateAmountOfCaloriesAndProtein(calories, protein)
+        }
+    }
+
 }
