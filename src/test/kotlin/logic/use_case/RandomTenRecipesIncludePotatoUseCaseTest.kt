@@ -16,7 +16,8 @@ class RandomTenRecipesIncludePotatoUseCaseTest {
 
  @BeforeEach
  fun setup() {
-  randomTenRecipesIncludePotatoUseCase = RandomTenRecipesIncludePotatoUseCase(recipesRepository)
+
+      randomTenRecipesIncludePotatoUseCase = RandomTenRecipesIncludePotatoUseCase(recipesRepository)
  }
 
  @Test
