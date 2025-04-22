@@ -25,7 +25,7 @@ class HealthyFoodRecipesUi(
         println(message)
     }
 
-    private fun displayRecipeInfo(count: Int) {
+    fun displayRecipeInfo(count: Int) {
         outputPrinter(colors.blue("Loading..."))
         val healthyRecipes = healthyRecipesUseCase.getHealthyRecipes(count)
         if (healthyRecipes.isEmpty()) {
