@@ -34,9 +34,12 @@ class EasyFoodSuggestionUseCaseTest {
             createEasyRecipeHelper("Long Recipe", 35, listOf("a", "b"), listOf("Step 1")),
         )
         every { recipesRepository.getAllRecipes() } returns recipes
+
         // when
         val result = easyFoodSuggestionUseCase.getTenEasyFoodSuggestions()
+
         // then
+        assertThat(result.map { it.name }).containsExactly("Quick Recipe", "Another Quick Recipe")
         assertThat(result).containsExactly(
             createEasyRecipeHelper("Quick Recipe", 10, listOf("a"), listOf("Step 1")),
             createEasyRecipeHelper("Another Quick Recipe", 20, listOf("a", "b"), listOf("Step 1")),
@@ -51,8 +54,10 @@ class EasyFoodSuggestionUseCaseTest {
             createEasyRecipeHelper("Many Ingredients", 10, listOf("a", "b", "c", "d", "e", "f"), listOf("Step 1")),
         )
         every { recipesRepository.getAllRecipes() } returns recipes
+
         // when
         val result = easyFoodSuggestionUseCase.getTenEasyFoodSuggestions()
+
         // then
         assertThat(result).containsExactly(
             createEasyRecipeHelper("Few Ingredients", 10, listOf("a", "b"), listOf("Step 1")),
@@ -81,27 +86,37 @@ class EasyFoodSuggestionUseCaseTest {
     fun `should return recipes less than 30 minutes, less than 5 ingredients, less than 6 steps`() {
         // given
         val recipes = listOf(
-            createEasyRecipeHelper("Valid Recipe 1", 10, listOf("a", "b"), listOf("1", "2")),
+            createEasyRecipeHelper(
+                "Valid Recipe 1", 10, listOf("a", "b"), listOf("1", "2")
+            ),
             createEasyRecipeHelper(
                 "Valid Recipe 2", 30, listOf("a", "b", "c", "d", "e"), listOf("1", "2", "3", "4", "5", "6")
             ),
-            createEasyRecipeHelper("Invalid Time", 31, listOf("a", "b"), listOf("1", "2")),
-            createEasyRecipeHelper("Invalid Ingredients", 10, listOf("a", "b", "c", "d", "e", "f"), listOf("1", "2")),
-            createEasyRecipeHelper("Invalid Steps", 10, listOf("a", "b"), listOf("1", "2", "3", "4", "5", "6", "7")),
+            createEasyRecipeHelper(
+                "Invalid Time", 31, listOf("a", "b"), listOf("1", "2")
+            ),
+            createEasyRecipeHelper(
+                "Invalid Ingredients", 10, listOf("a", "b", "c", "d", "e", "f"), listOf("1", "2")
+            ),
+            createEasyRecipeHelper(
+                "Invalid Steps", 10, listOf("a", "b"), listOf("1", "2", "3", "4", "5", "6", "7")
+            ),
             createEasyRecipeHelper(
                 "Invalid Recipe", 40, listOf("a", "b", "c", "d", "e"), listOf("1", "2", "3", "4", "5", "6", "7")
             ),
         )
-
         every { recipesRepository.getAllRecipes() } returns recipes
 
+        // when
         val result = easyFoodSuggestionUseCase.getTenEasyFoodSuggestions()
 
+        // then
         assertThat(result.map { it.name }).containsExactly("Valid Recipe 1", "Valid Recipe 2")
     }
 
     @Test
     fun `should throw RecipeNotFoundException when no recipes with the specified criteria`() {
+        // given
         val invalidRecipes = listOf(
             createEasyRecipeHelper(
                 "Invalid Recipe", 40, listOf("a", "b", "c", "d", "e", "f"), listOf("1", "2", "3", "4", "5", "6", "7")
@@ -109,6 +124,7 @@ class EasyFoodSuggestionUseCaseTest {
         )
         every { recipesRepository.getAllRecipes() } returns invalidRecipes
 
+        // when & then
         assertThrows<RecipeNotFoundException> {
             easyFoodSuggestionUseCase.getTenEasyFoodSuggestions()
         }
@@ -116,9 +132,11 @@ class EasyFoodSuggestionUseCaseTest {
 
     @Test
     fun `should throw RecipeNotFoundException when the list to be searched on is empty`() {
+        // given
         val emptyList = emptyList<Recipe>()
         every { recipesRepository.getAllRecipes() } returns emptyList
 
+        // when & then
         assertThrows<RecipeNotFoundException> {
             easyFoodSuggestionUseCase.getTenEasyFoodSuggestions()
         }
@@ -138,6 +156,7 @@ class EasyFoodSuggestionUseCaseTest {
 
         // when
         val result = easyFoodSuggestionUseCase.getTenEasyFoodSuggestions()
+
         // then
         assertThat(result).containsExactly(
             createEasyRecipeHelper("Recipe 4", 10, listOf("a", "b"), listOf("1", "2"))
@@ -151,7 +170,7 @@ class EasyFoodSuggestionUseCaseTest {
 
         every { recipesRepository.getAllRecipes() } returns recipesWithNullValues
 
-        // then & when
+        // when & then
         assertThrows<RecipeNotFoundException> {
             easyFoodSuggestionUseCase.getTenEasyFoodSuggestions()
         }
@@ -159,33 +178,41 @@ class EasyFoodSuggestionUseCaseTest {
 
     @Test
     fun `should return exactly 10 element list when there are more than 10 elements in the list`() {
-        val recipes = (1..20).map {
+        // given
+        val recipes = (1..RECIPE_COLLECTION_SIZE).map {
             createEasyRecipeHelper(
                 name = "Recipe $it", minutes = 10, ingredients = listOf("ingredient"), steps = listOf("step")
             )
         }
         every { recipesRepository.getAllRecipes() } returns recipes
 
+        // when
         val result = easyFoodSuggestionUseCase.getTenEasyFoodSuggestions()
 
+        // then
         assertThat(result.size).isEqualTo(MAX_RECIPE_COUNT)
     }
 
     @Test
     fun `should successfully shuffle recipes list`() {
-        val recipes = (1..50).map {
+        // given
+        val recipes = (1..RECIPE_COLLECTION_SIZE).map {
             createEasyRecipeHelper(
                 name = "Recipe $it", minutes = 10, ingredients = listOf("ingredient"), steps = listOf("step")
             )
         }
         every { recipesRepository.getAllRecipes() } returns recipes
 
+        // when
         val firstRecipe = easyFoodSuggestionUseCase.getTenEasyFoodSuggestions().map { it.name }
         val secondRecipe = easyFoodSuggestionUseCase.getTenEasyFoodSuggestions().map { it.name }
+
+        // then
         assertThat(firstRecipe).isNotEqualTo(secondRecipe)
     }
 
     companion object {
         private const val MAX_RECIPE_COUNT = 10
+        private const val RECIPE_COLLECTION_SIZE = 50
     }
 }
