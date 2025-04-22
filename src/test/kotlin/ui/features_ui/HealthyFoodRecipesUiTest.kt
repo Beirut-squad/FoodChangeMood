@@ -74,6 +74,17 @@ class HealthyFoodRecipesUiTest {
         verify { healthyFoodRecipesUi.displayRecipeInfo(any()) }
     }
 
+    @Test
+    fun `should show loading message when displayRecipeInfo is called`(){
+
+
+        // When
+        healthyFoodRecipesUi.displayRecipeInfo(5)
+
+        // Then
+        verify { healthyFoodRecipesUi.outputPrinter(colors.blue("Loading...")) }
+    }
+
 
 
 }
