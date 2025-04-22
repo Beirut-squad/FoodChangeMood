@@ -73,6 +73,33 @@ class GymHelperUseCaseTest {
         }
     }
 
+    @Test
+    fun `should return an exception when only calories is null`() {
+        //Give
+        every { repository.getAllRecipes() } returns listOf(
+            createGymHelper(null, 10f)
+        )
+        val calories = 9f
+        val protein = 10f
+        //When && Then
+        assertThrows<RecipeNotFoundException> {
+            gymHelperUseCase
+                .getRecipesMatchOrApproximateAmountOfCaloriesAndProtein(calories, protein)
+        }
 
+    }
+
+    @Test
+    fun `should return an exception when search by calories and protein in an empty list`() {
+        //Give
+        every { repository.getAllRecipes() } returns emptyList()
+        val calories = 9f
+        val protein = 10f
+        //When && Then
+        assertThrows<RecipeNotFoundException> {
+            gymHelperUseCase
+                .getRecipesMatchOrApproximateAmountOfCaloriesAndProtein(calories, protein)
+        }
+    }
 
 }
