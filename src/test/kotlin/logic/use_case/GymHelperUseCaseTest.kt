@@ -127,4 +127,44 @@ class GymHelperUseCaseTest {
         }
     }
 
+    @Test
+    fun `should return an exception when calories is zero`() {
+        //Give
+        every { repository.getAllRecipes() } returns emptyList()
+        val calories = 0f
+        val protein = 10f
+        //When && Then
+        assertThrows<RecipeNotFoundException> {
+            gymHelperUseCase
+                .getRecipesMatchOrApproximateAmountOfCaloriesAndProtein(calories, protein)
+        }
+    }
+
+    @Test
+    fun `should return an exception when protein is zero`() {
+        //Give
+        every { repository.getAllRecipes() } returns emptyList()
+        val calories = 9f
+        val protein = 0f
+        //When && Then
+        assertThrows<RecipeNotFoundException> {
+            gymHelperUseCase
+                .getRecipesMatchOrApproximateAmountOfCaloriesAndProtein(calories, protein)
+        }
+    }
+
+    @Test
+    fun `should return an exception when both protein and calories are zeroes`() {
+        //Give
+        every { repository.getAllRecipes() } returns emptyList()
+        val calories = 0f
+        val protein = 0f
+        //When && Then
+        assertThrows<RecipeNotFoundException> {
+            gymHelperUseCase
+                .getRecipesMatchOrApproximateAmountOfCaloriesAndProtein(calories, protein)
+        }
+    }
+
+
 }
