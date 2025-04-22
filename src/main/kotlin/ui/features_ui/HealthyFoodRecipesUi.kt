@@ -35,7 +35,7 @@ class HealthyFoodRecipesUi(
         }
     }
 
-    private fun getUserInput(): Int? {
+     fun getUserInput(): Int? {
         return readlnOrNull()?.toIntOrNull()
     }
 
