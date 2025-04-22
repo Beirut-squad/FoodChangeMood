@@ -166,5 +166,89 @@ class GymHelperUseCaseTest {
         }
     }
 
+    @Test
+    fun `should return an exception when protein is negative value`() {
+        // Given
+        every { repository.getAllRecipes() } returns emptyList()
+        val calories = 10f
+        val protein = -40f
+
+        // When && Then
+        assertThrows<RecipeNotFoundException> {
+            gymHelperUseCase
+                .getRecipesMatchOrApproximateAmountOfCaloriesAndProtein(calories, protein)
+        }
+    }
+
+    @Test
+    fun `should return an exception when calories is negative value`() {
+        // Given
+        every { repository.getAllRecipes() } returns emptyList()
+        val calories = -20f
+        val protein = 40f
+
+        // When && Then
+        assertThrows<RecipeNotFoundException> {
+            gymHelperUseCase
+                .getRecipesMatchOrApproximateAmountOfCaloriesAndProtein(calories, protein)
+        }
+    }
+
+    @Test
+    fun `should return an exception when calories and protein are negative value`() {
+        // Given
+        every { repository.getAllRecipes() } returns emptyList()
+        val calories = -20f
+        val protein = -40f
+
+        // When && Then
+        assertThrows<RecipeNotFoundException> {
+            gymHelperUseCase
+                .getRecipesMatchOrApproximateAmountOfCaloriesAndProtein(calories, protein)
+        }
+    }
+
+    @Test
+    fun `should return an exception when calories less than zero`() {
+        // Given
+        every { repository.getAllRecipes() } returns emptyList()
+        val calories = 0.20f
+        val protein = -40f
+
+        // When && Then
+        assertThrows<RecipeNotFoundException> {
+            gymHelperUseCase
+                .getRecipesMatchOrApproximateAmountOfCaloriesAndProtein(calories, protein)
+        }
+    }
+
+    @Test
+    fun `should return an exception when protein less than zero`() {
+        // Given
+        every { repository.getAllRecipes() } returns emptyList()
+        val calories = 20f
+        val protein = 0.40f
+
+        // When && Then
+        assertThrows<RecipeNotFoundException> {
+            gymHelperUseCase
+                .getRecipesMatchOrApproximateAmountOfCaloriesAndProtein(calories, protein)
+        }
+    }
+
+    @Test
+    fun `should return an exception when both calories and protein are less than zero`() {
+        // Given
+        every { repository.getAllRecipes() } returns emptyList()
+        val calories = 0.20f
+        val protein = -40f
+
+        // When && Then
+        assertThrows<RecipeNotFoundException> {
+            gymHelperUseCase
+                .getRecipesMatchOrApproximateAmountOfCaloriesAndProtein(calories, protein)
+        }
+    }
+
 
 }
