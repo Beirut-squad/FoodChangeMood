@@ -4,10 +4,12 @@ package logic.use_case
 import com.google.common.truth.Truth.assertThat
 import io.mockk.every
 import io.mockk.mockk
+import org.example.error.RecipeNotFoundException
 import org.example.logic.RecipesRepository
 import org.example.logic.use_case.GymHelperUseCase
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.assertThrows
 
 class GymHelperUseCaseTest {
     private lateinit var repository: RecipesRepository
@@ -39,6 +41,19 @@ class GymHelperUseCaseTest {
                 createGymHelper(5f, 9f))
     }
 
-
-
+    @Test
+    fun `should return an exception when calories and protein are null`() {
+        //Give
+        every { repository.getAllRecipes() } returns listOf(
+            createGymHelper(null, null),
+            createGymHelper(null, null),
+            createGymHelper(null, null)
+        )
+        val calories = 9f
+        val protein = 10f
+        //When && Then
+        assertThrows<RecipeNotFoundException> {
+            gymHelperUseCase
+            .getRecipesMatchOrApproximateAmountOfCaloriesAndProtein(calories, protein) }
+    }
 }
