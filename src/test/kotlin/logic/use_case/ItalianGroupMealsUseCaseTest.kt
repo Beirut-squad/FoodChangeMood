@@ -3,11 +3,13 @@ package logic.use_case
 import com.google.common.truth.Truth.assertThat
 import io.mockk.every
 import io.mockk.mockk
+import org.example.error.RecipeNotFoundException
 import org.example.logic.RecipesRepository
 import org.example.logic.use_case.ItalianGroupMealsUseCase
 import org.example.model.Recipe
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.assertThrows
 
 class ItalianGroupMealsUseCaseTest {
 
@@ -41,19 +43,18 @@ class ItalianGroupMealsUseCaseTest {
     }
 
     @Test
-    fun `should return empty list when there are no recipes`() {
+    fun `should throw RecipeNotFoundException when there are no recipes`() {
         // Given
         every { recipesRepository.getAllRecipes() } returns emptyList()
 
-        // when
-        val result = italianGroupMealsUseCase.getItalianGroupMeals()
-
-        // Then
-        assertThat(result).isEmpty()
+        // when && Then
+        assertThrows<RecipeNotFoundException> {
+            italianGroupMealsUseCase.getItalianGroupMeals()
+        }
     }
 
     @Test
-    fun `should return empty list when no recipes have both italian and for-large-groups tags`() {
+    fun `should throw RecipeNotFoundException when no recipes have both italian and for-large-groups tags`() {
         // Given
         val recipes = listOf(
             Recipe(name = "gaza recipes", tags = listOf("for-large-groups", "iraqi", "gaza")),
@@ -62,11 +63,10 @@ class ItalianGroupMealsUseCaseTest {
         )
         every { recipesRepository.getAllRecipes() } returns recipes
 
-        // when
-        val result = italianGroupMealsUseCase.getItalianGroupMeals()
-
-        // Then
-        assertThat(result).isEmpty()
+        // when && Then
+        assertThrows<RecipeNotFoundException> {
+            italianGroupMealsUseCase.getItalianGroupMeals()
+        }
     }
 
     @Test
