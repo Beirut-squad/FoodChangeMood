@@ -5,24 +5,22 @@ import org.example.logic.use_case.GymHelperUseCase
 import org.example.model.Recipe
 import org.example.ui.Reader
 import org.example.ui.Viewer
-import org.example.utils.Colors
 
 class GymHelperUi (
     private val gymHelperUseCase: GymHelperUseCase,
     private val validator: Validator,
-    private val colors: Colors,
     private val viewer: Viewer,
     private val reader: Reader
 
     ){
     fun show() {
 
-        viewer.printOutputWithNewLine(colors.cyan("Gym helper: Get meals that match the protein and calories amounts you choose or close to them."))
+        viewer.printTitle("Gym helper: Get meals that match the protein and calories amounts you choose or close to them.")
         while (true) {
-            viewer.printOutput(colors.blue("Enter the amount of protein: "))
+            viewer.printLoader("Enter the amount of protein: ",false)
             val protein = reader.readInput()
 
-            viewer.printOutput(colors.blue("Enter the amount of calories: "))
+            viewer.printLoader("Enter the amount of calories: ",false)
             val calories = reader.readInput()
 
             if (validator.validateGymHelperInput(calories, protein)) {
@@ -33,7 +31,7 @@ class GymHelperUi (
                 displayRecipesForGymHelper(recipes)
                 break
             } else {
-                viewer.printOutputWithNewLine(colors.red("Invalid input."))
+                viewer.printError("Invalid input.")
             }
         }
 
@@ -43,14 +41,14 @@ class GymHelperUi (
     private fun displayRecipesForGymHelper(recipes: List<Recipe>) {
         recipes.forEachIndexed { index, recipe ->
             displaySingleRecipeForGymHelper(recipe, index + 1)
-            viewer.printOutputWithNewLine("")
+            viewer.printPlainText("")
         }
     }
 
     private fun displaySingleRecipeForGymHelper(recipe: Recipe, index: Int) {
-        viewer.printOutputWithNewLine(colors.green("Meal $index: ${recipe.name}"))
+        viewer.printCorrectOutput("Meal $index: ${recipe.name}")
 
-        viewer.printOutputWithNewLine(colors.green("Calories: ${recipe.nutrition?.calories ?: 0.0}, Protein: ${recipe.nutrition?.protein ?: 0.0}"))
+        viewer.printCorrectOutput("Calories: ${recipe.nutrition?.calories ?: 0.0}, Protein: ${recipe.nutrition?.protein ?: 0.0}")
 
         recipe.ingredients?.let { displayIngredients(recipe.ingredients) }
 
@@ -58,17 +56,17 @@ class GymHelperUi (
     }
 
     private fun displayIngredients(ingredients: List<String>) {
-        viewer.printOutput(colors.green("Ingredients: "))
+        viewer.printCorrectOutput("Ingredients: ",false)
         ingredients.forEach {
-            viewer.printOutput(colors.green("$it, "))
+            viewer.printCorrectOutput("$it, ",false)
         }
     }
 
     private fun displaySteps(steps: List<String>) {
-        viewer.printOutputWithNewLine(colors.green("How to Make: "))
+        viewer.printCorrectOutput("How to Make: ")
         steps.forEachIndexed { stepIndex, step ->
-            viewer.printOutput(colors.green("Step ${stepIndex + 1}: "))
-            viewer.printOutputWithNewLine(step)
+            viewer.printCorrectOutput("Step ${stepIndex + 1}: ",false)
+            viewer.printPlainText(step)
         }
     }
 
