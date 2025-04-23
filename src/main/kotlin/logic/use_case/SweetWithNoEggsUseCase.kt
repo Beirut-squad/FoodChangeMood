@@ -1,5 +1,6 @@
 package org.example.logic.use_case
 
+import org.example.error.RecipeNotFoundException
 import org.example.logic.RecipesRepository
 import org.example.model.Recipe
 import org.example.model.isComplete
@@ -13,9 +14,9 @@ class SweetWithNoEggsUseCase (
             .filter { it.isComplete() }
             .filter { recipe ->
                 !recipe.name!!.contains("egg", ignoreCase = true) &&
-                        !recipe.description?.contains("egg", ignoreCase = true)!! &&
+                        !recipe.description!!.contains("egg", ignoreCase = true) &&
                         (recipe.name.contains("sweet", ignoreCase = true) ||
                                 recipe.description.contains("sweet", ignoreCase = true))
-            }.shuffled().firstOrNull()
+            }.shuffled().firstOrNull() ?: throw RecipeNotFoundException("there is no Sweets with egg-less")
     }
 }
