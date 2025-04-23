@@ -11,7 +11,7 @@ import org.koin.dsl.module
 
 val uiModule = module {
 
-    // Inject Trie with names from the repo
+    //  Trie with names from the repo
     single {
         val repo = get<RecipesRepository>()
         val trie = Trie()
