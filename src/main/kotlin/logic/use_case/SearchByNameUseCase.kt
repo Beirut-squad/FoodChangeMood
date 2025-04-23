@@ -12,12 +12,7 @@ class SearchByNameUseCase(
         //  Normalize input: remove spaces and lowercase
         val normalizedQuery = foodNameToSearch.trim().lowercase()
 
-        var candidateNames = trie.getWordsWithPrefix(normalizedQuery.take(2)).take(500)
-
-        // Step 2: Fallback - get all words if not enough candidates
-        if (candidateNames.isEmpty()) {
-            candidateNames = trie.getAllWords()
-        }
+        var candidateNames = trie.getAllWords()
 
         // Early return if no candidates
             if (candidateNames.isEmpty()) return null
