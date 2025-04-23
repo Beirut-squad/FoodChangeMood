@@ -9,24 +9,34 @@ class SearchByNameUseCase(
     private val trie: Trie
 ) {      //to search on name
     fun searchRecipeByName(foodNameToSearch: String): Recipe? {
-        //  Normalize input: remove spaces and lowercase
         val normalizedQuery = foodNameToSearch.trim().lowercase()
 
-        var candidateNames = trie.getAllWords()
+        // collecting all the words in the trie
+        val allTrieWords = trie.getAllWords()
 
-        // Early return if no candidates
-            if (candidateNames.isEmpty()) return null
+        // Filter the ones that contain the entered word
+        val matchingWords = allTrieWords.filter { it.contains(normalizedQuery) }
 
-            // Find best match
-            val bestMatch = candidateNames.minByOrNull {
-                levenshteinDistance(normalizedQuery, it.lowercase())
-            }?.lowercase()?.trim() ?: return null
+        // find words that contain the entered word
+        if (matchingWords.isNotEmpty()) {
+            val bestMatch = matchingWords.minByOrNull {
+                levenshteinDistance(normalizedQuery, it)
+            } ?: return null
 
-            // Loop through recipes just once to find the match (no Map or duplication)
-            return recipesRepository.getAllRecipes().firstOrNull { recipe ->
-                recipe.name?.lowercase()?.trim() == bestMatch
+            // link the name to the recipe
+            return recipesRepository.getAllRecipes().firstOrNull {
+                it.name?.lowercase()?.contains(bestMatch) == true
             }
         }
+
+        // fallback If there is no match even within the words ,  use Levenshtein for all recipes.
+        return recipesRepository.getAllRecipes().minByOrNull { recipe ->
+            val name = recipe.name ?:throw ThereIsNoNameException("This recipe has no name.")
+            levenshteinDistance(normalizedQuery, name.lowercase())
+        }
+    }
+
+
 
 
     private fun levenshteinDistance(foodNameToSearch: String, name: String): Int {
