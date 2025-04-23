@@ -6,14 +6,12 @@ import org.example.logic.use_case.GymHelperUseCase
 import org.example.ui.Reader
 import org.example.ui.Viewer
 import org.example.ui.features_ui.GymHelperUi
-import org.example.utils.Colors
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.BeforeEach
 
 class GymHelperUiTest {
  private val gymHelperUseCase: GymHelperUseCase = mockk()
  private val validator: Validator = mockk(relaxed = true)
- private val colors: Colors = mockk(relaxed = true)
  private val viewer: Viewer = mockk(relaxed = true)
  private val reader: Reader = mockk(relaxed = true)
  private lateinit var gymHelperUi: GymHelperUi
@@ -23,7 +21,6 @@ class GymHelperUiTest {
      gymHelperUi = GymHelperUi(
       gymHelperUseCase = gymHelperUseCase,
       validator = validator,
-      colors = colors,
       viewer = viewer,
       reader = reader
 
@@ -44,9 +41,7 @@ class GymHelperUiTest {
 
   // Then
   verify {
-   viewer.printOutputWithNewLine(
-    colors.cyan("Gym helper: Get meals that match the protein and calories amounts you choose or close to them.")
-   )
+   viewer.printTitle("Gym helper: Get meals that match the protein and calories amounts you choose or close to them.")
   }
  }
 
@@ -63,8 +58,8 @@ class GymHelperUiTest {
 
   // Then
   verify {
-   viewer.printOutput(colors.blue("Enter the amount of protein: "))
-   viewer.printOutput(colors.blue("Enter the amount of calories: "))
+   viewer.printLoader("Enter the amount of protein: ",false)
+   viewer.printLoader("Enter the amount of calories: ",false)
   }
 
   verify {
@@ -87,7 +82,7 @@ class GymHelperUiTest {
 
   // Then
   verify {
-   viewer.printOutputWithNewLine(colors.red("Invalid input."))
+   viewer.printError("Invalid input.")
   }
  }
 
@@ -124,6 +119,35 @@ class GymHelperUiTest {
   }
  }
 
+ @Test
+ fun `should print 0_0 when nutrition fields are null`() {
+  val recipe = createRecipeForGymHelper(
+   name = "Incomplete Meal",
+   nutrition = createNutritionForGymHelper(null, null, 0f, 0f),
+   ingredients = emptyList(),
+   steps = emptyList()
+  )
+
+  every { reader.readInput() } returnsMany listOf("100", "2000")
+  every { validator.validateGymHelperInput("2000", "100") } returns true
+  every {
+   gymHelperUseCase.getRecipesMatchOrApproximateAmountOfCaloriesAndProtein(2000f, 100f)
+  } returns listOf(recipe)
+
+  every { viewer.printCorrectOutput(any()) } just Runs
+  every { viewer.printPlainText(any()) } just Runs
+  every { viewer.printLoader(any(), any()) } just Runs
+  every { viewer.printTitle(any()) } just Runs
+  every { viewer.printError(any()) } just Runs
+
+  // When
+  gymHelperUi.show()
+
+  // Then
+  verify {
+   viewer.printCorrectOutput("Calories: 0.0, Protein: 0.0")
+  }
+ }
 
  @Test
  fun `should use nullable values from nutrition correctly`() {
@@ -138,14 +162,13 @@ class GymHelperUiTest {
   every { reader.readInput() } returnsMany listOf("100", "2000")
   every { validator.validateGymHelperInput(any(), any()) } returns true
   every { gymHelperUseCase.getRecipesMatchOrApproximateAmountOfCaloriesAndProtein(any(), any()) } returns listOf(recipe)
-  every { colors.green(any()) } answers { firstArg() }
 
   // When
   gymHelperUi.show()
 
   // Then
   verify {
-   viewer.printOutputWithNewLine("Calories: 0.0, Protein: 0.0")
+   viewer.printCorrectOutput("Calories: 0.0, Protein: 0.0")
   }
  }
 
@@ -168,7 +191,7 @@ class GymHelperUiTest {
 
   // Then
   verify {
-   viewer.printOutputWithNewLine( colors.green("Calories: 300.0, Protein: 25.0"))
+   viewer.printCorrectOutput("Calories: 300.0, Protein: 25.0")
   }
  }
 
@@ -189,49 +212,56 @@ class GymHelperUiTest {
     steps = listOf("Cook chicken", "Mix vegetables", "Add chicken to salad", "Serve")
    )
   )
+
   every { reader.readInput() } returnsMany listOf("100", "2000")
   every { validator.validateGymHelperInput("2000", "100") } returns true
-  every { gymHelperUseCase.getRecipesMatchOrApproximateAmountOfCaloriesAndProtein(2000f, 100f) } returns recipes
-  every { colors.green(any()) } answers { firstArg() }
+  every {
+   gymHelperUseCase.getRecipesMatchOrApproximateAmountOfCaloriesAndProtein(2000f, 100f)
+  } returns recipes
+
 
   // When
   gymHelperUi.show()
 
   // Then
   verify {
+   viewer.printTitle("Gym helper: Get meals that match the protein and calories amounts you choose or close to them.")
+   viewer.printLoader("Enter the amount of protein: ", false)
+   viewer.printLoader("Enter the amount of calories: ", false)
 
-   viewer.printOutputWithNewLine("Meal 1: Protein Shake")
-   viewer.printOutputWithNewLine("Calories: 300.0, Protein: 25.0")
-   viewer.printOutput("Ingredients: ")
-   viewer.printOutput("Milk, ")
-   viewer.printOutput("Protein powder, ")
-   viewer.printOutput("Banana, ")
-   viewer.printOutputWithNewLine("How to Make: ")
-   viewer.printOutput("Step 1: ")
-   viewer.printOutputWithNewLine("Mix everything in a blender")
-   viewer.printOutput("Step 2: ")
-   viewer.printOutputWithNewLine("Serve cold")
-   viewer.printOutputWithNewLine("")
+   viewer.printCorrectOutput("Meal 1: Protein Shake")
+   viewer.printCorrectOutput("Calories: 300.0, Protein: 25.0")
+   viewer.printCorrectOutput("Ingredients: ", false)
+   viewer.printCorrectOutput("Milk, ", false)
+   viewer.printCorrectOutput("Protein powder, ", false)
+   viewer.printCorrectOutput("Banana, ", false)
+   viewer.printCorrectOutput("How to Make: ")
+   viewer.printCorrectOutput("Step 1: ", false)
+   viewer.printPlainText("Mix everything in a blender")
+   viewer.printCorrectOutput("Step 2: ", false)
+   viewer.printPlainText("Serve cold")
+   viewer.printPlainText("")
 
-   viewer.printOutputWithNewLine("Meal 2: Chicken Salad")
-   viewer.printOutputWithNewLine("Calories: 450.0, Protein: 35.0")
-   viewer.printOutput("Ingredients: ")
-   viewer.printOutput("Chicken breast, ")
-   viewer.printOutput("Lettuce, ")
-   viewer.printOutput("Tomatoes, ")
-   viewer.printOutput("Cucumber, ")
-   viewer.printOutputWithNewLine("How to Make: ")
-   viewer.printOutput("Step 1: ")
-   viewer.printOutputWithNewLine("Cook chicken")
-   viewer.printOutput("Step 2: ")
-   viewer.printOutputWithNewLine("Mix vegetables")
-   viewer.printOutput("Step 3: ")
-   viewer.printOutputWithNewLine("Add chicken to salad")
-   viewer.printOutput("Step 4: ")
-   viewer.printOutputWithNewLine("Serve")
-   viewer.printOutputWithNewLine("")
+   viewer.printCorrectOutput("Meal 2: Chicken Salad")
+   viewer.printCorrectOutput("Calories: 450.0, Protein: 35.0")
+   viewer.printCorrectOutput("Ingredients: ", false)
+   viewer.printCorrectOutput("Chicken breast, ", false)
+   viewer.printCorrectOutput("Lettuce, ", false)
+   viewer.printCorrectOutput("Tomatoes, ", false)
+   viewer.printCorrectOutput("Cucumber, ", false)
+   viewer.printCorrectOutput("How to Make: ")
+   viewer.printCorrectOutput("Step 1: ", false)
+   viewer.printPlainText("Cook chicken")
+   viewer.printCorrectOutput("Step 2: ", false)
+   viewer.printPlainText("Mix vegetables")
+   viewer.printCorrectOutput("Step 3: ", false)
+   viewer.printPlainText("Add chicken to salad")
+   viewer.printCorrectOutput("Step 4: ", false)
+   viewer.printPlainText("Serve")
+   viewer.printPlainText("")
   }
- }
+
+}
 
 
  @Test
@@ -248,7 +278,7 @@ class GymHelperUiTest {
 
   // Then
   verify {
-   viewer.printOutputWithNewLine(colors.red("Invalid input."))
+   viewer.printError("Invalid input.")
   }
 
  }
@@ -268,27 +298,22 @@ class GymHelperUiTest {
   every { reader.readInput() } returnsMany listOf("100", "2000")
   every { validator.validateGymHelperInput("2000", "100") } returns true
   every { gymHelperUseCase.getRecipesMatchOrApproximateAmountOfCaloriesAndProtein(2000f, 100f) } returns recipes
-  every { colors.green(any()) } answers { firstArg() }
 
   // When
   gymHelperUi.show()
 
   // Then
   verify {
-   viewer.printOutputWithNewLine("Meal 1: Basic Recipe")
-   viewer.printOutputWithNewLine("Calories: 0.0, Protein: 0.0")
-   viewer.printOutputWithNewLine("")
+   viewer.printCorrectOutput("Meal 1: Basic Recipe")
+   viewer.printCorrectOutput("Calories: 0.0, Protein: 0.0")
+   viewer.printPlainText("")
   }
 
   verify(exactly = 0) {
-   viewer.printOutput("Ingredients: ")
-   viewer.printOutputWithNewLine("How to Make: ")
+   viewer.printCorrectOutput("Ingredients: ",false)
+   viewer.printCorrectOutput("How to Make: ")
   }
  }
-
-
-
-
 
 
 
@@ -307,21 +332,21 @@ class GymHelperUiTest {
   // Then
   verify {
 
-   viewer.printOutput(colors.blue("Enter the amount of protein: "))
+   viewer.printLoader("Enter the amount of protein: ",false)
    reader.readInput()
-   viewer.printOutput(colors.blue("Enter the amount of calories: "))
+   viewer.printLoader("Enter the amount of calories: ",false)
    reader.readInput()
-   viewer.printOutputWithNewLine(colors.red("Invalid input."))
+   viewer.printError("Invalid input.")
 
-   viewer.printOutput(colors.blue("Enter the amount of protein: "))
+   viewer.printLoader("Enter the amount of protein: ",false)
    reader.readInput()
-   viewer.printOutput(colors.blue("Enter the amount of calories: "))
+   viewer.printLoader("Enter the amount of protein: ",false)
    reader.readInput()
-   viewer.printOutputWithNewLine(colors.red("Invalid input."))
+   viewer.printError("Invalid input.")
 
-   viewer.printOutput(colors.blue("Enter the amount of protein: "))
+   viewer.printLoader("Enter the amount of protein: ",false)
    reader.readInput()
-   viewer.printOutput(colors.blue("Enter the amount of calories: "))
+   viewer.printLoader("Enter the amount of protein: ",false)
    reader.readInput()
   }
  }

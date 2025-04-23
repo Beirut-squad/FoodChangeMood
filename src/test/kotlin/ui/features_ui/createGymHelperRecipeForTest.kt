@@ -26,8 +26,8 @@ fun createRecipeForGymHelper(
 }
 
 fun createNutritionForGymHelper(
-    calories: Float,
-    protein: Float,
+    calories: Float?,
+    protein: Float?,
     totalFat: Float = 0f,
     sugar: Float = 0f,
     sodium: Float = 0f,
