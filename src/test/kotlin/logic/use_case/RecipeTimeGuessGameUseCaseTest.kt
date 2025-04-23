@@ -28,7 +28,7 @@ class RecipeTimeGuessGameUseCaseTest {
             makeRecipeHelper("Cool meal", 45),
             makeRecipeHelper("Not cool meal", null),
             makeRecipeHelper("Hey meal", 44),
-            makeRecipeHelper(null, 66)
+            makeRecipeHelper("The meal", 66)
         )
         every { recipesRepository.getAllRecipes() } returns listOfRecipes
 
