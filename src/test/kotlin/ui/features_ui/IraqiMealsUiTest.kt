@@ -12,7 +12,6 @@ import org.junit.jupiter.api.Test
 
 class IraqiMealsUiTest {
     private val iraqiMealsUseCase: IraqiMealsUseCase = mockk(relaxed = true)
-    private val colors: Colors = mockk(relaxed = true)
     private val viewer: Viewer = mockk(relaxed = true)
     private lateinit var iraqiMealsUi: IraqiMealsUi
 
@@ -20,7 +19,6 @@ class IraqiMealsUiTest {
     fun setup() {
         iraqiMealsUi = IraqiMealsUi(
             iraqiMealsUseCase = iraqiMealsUseCase,
-            colors = colors,
             viewer = viewer
         )
     }
@@ -43,13 +41,15 @@ class IraqiMealsUiTest {
         iraqiMealsUi.show()
 
         // Then
-        verify(exactly = 1) { viewer.printOutputWithNewLine(colors.cyan(
-            """
+        verify(exactly = 1) {
+            viewer.printTitle(
+                """
             ==================================
             |      Traditional Iraqi Meals    |
             ==================================
            """.trimIndent()
-        )) }
+            )
+        }
     }
 
     @Test
@@ -65,7 +65,8 @@ class IraqiMealsUiTest {
         iraqiMealsUi.show()
 
         // Then
-        verify(exactly = 4) { viewer.printOutputWithNewLine(any()) }
+        verify(exactly = 1) { viewer.printTitle(any()) }
+        verify(exactly = 3) { viewer.printCorrectOutput(any()) }
     }
 
     @Test
@@ -80,11 +81,15 @@ class IraqiMealsUiTest {
         iraqiMealsUi.show()
 
         // Then
-        verify { viewer.printOutputWithNewLine(colors.green(
-            "1. Chicken - 5 min - [a, b] ingredients "
-        )) }
-        verify { viewer.printOutputWithNewLine(colors.green(
-            "2. Meat - 50 min - [c] ingredients "
-        )) }
+        verify {
+            viewer.printCorrectOutput(
+                "1. Chicken - 5 min - [a, b] ingredients "
+            )
+        }
+        verify {
+            viewer.printCorrectOutput(
+                "2. Meat - 50 min - [c] ingredients "
+            )
+        }
     }
 }

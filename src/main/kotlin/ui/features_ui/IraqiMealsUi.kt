@@ -6,21 +6,18 @@ import org.example.utils.Colors
 
 class IraqiMealsUi(
     private val iraqiMealsUseCase: IraqiMealsUseCase,
-    private val colors: Colors,
     private val viewer: Viewer
 ) {
     fun show() {
-        viewer.printOutputWithNewLine(
-            colors.cyan(
-                """
+        viewer.printTitle(
+            """
             ==================================
             |      Traditional Iraqi Meals    |
             ==================================
            """.trimIndent()
-            )
         )
         iraqiMealsUseCase.getIraqiMeals().forEachIndexed { index, recipe ->
-            viewer.printOutputWithNewLine(colors.green("${index + 1}. ${recipe.name} - ${recipe.minutes} min - ${recipe.ingredients} ingredients "))
+            viewer.printCorrectOutput("${index + 1}. ${recipe.name} - ${recipe.minutes} min - ${recipe.ingredients} ingredients ")
         }
     }
 }
