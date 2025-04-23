@@ -16,6 +16,7 @@ class GymHelperUi (
 
     ){
     fun show() {
+
         viewer.printOutputWithNewLine(colors.cyan("Gym helper: Get meals that match the protein and calories amounts you choose or close to them."))
         while (true) {
             viewer.printOutput(colors.blue("Enter the amount of protein: "))
