@@ -25,8 +25,7 @@ class RecipeTimeGuessGameUseCase(private val repository: RecipesRepository) {
     }
 
     fun makeGuess(userGuessMinutes: Int, attemptsLeft: Int): RecipeTimeGameResult {
-        val actualMinutes = currentRecipe.minutes
-            ?: return RecipeTimeGameResult.RecipeTimeNotAvailable("Recipe preparation time not available.")
+        val actualMinutes = currentRecipe.minutes!!
         val remainingAttempts = attemptsLeft - 1
         return evaluateGuess(userGuessMinutes,actualMinutes,remainingAttempts)
     }
