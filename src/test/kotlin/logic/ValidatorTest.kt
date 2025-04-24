@@ -95,4 +95,27 @@ class ValidatorTest {
         //Then
         assertTrue { result }
     }
+
+    @Test
+    fun `should return false when input is number equals zero `() {
+        //Given
+        val input = 0
+        //When
+        val result = validator.validateRecipesCountInput(input)
+        //Then
+        assertFalse { result }
+    }
+
+    @Test
+    fun `should return false when input is number is negative `() {
+        //Given
+        val input = -12
+        //When
+        val result = validator.validateRecipesCountInput(input)
+        //Then
+        assertFalse { result }
+    }
+
+
+
 }
