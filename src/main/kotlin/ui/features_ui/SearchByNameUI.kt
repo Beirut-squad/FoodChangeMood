@@ -3,52 +3,58 @@ package org.example.ui.features_ui
 import org.example.error.ThereIsNoNameException
 import org.example.logic.use_case.SearchByNameUseCase
 import org.example.model.Recipe
+import org.example.ui.Reader
+import org.example.ui.RecipeFormatter
+import org.example.ui.Viewer
 import org.example.utils.Colors
+import org.example.utils.Strings
 import java.util.*
 
 class SearchByNameUI(
     private val searchByNameUseCase: SearchByNameUseCase,
-    private val colors: Colors
+    private val viewer: Viewer,
+    private val reader: Reader,
 ) {
     fun show() {
-        val nameToSearch = Scanner(System.`in`)
-        println(colors.cyan("Enter the name of the dish or part of it to search for:"))
-        val userInput = nameToSearch.nextLine()
-
+        displaySearchHeader()
         try {
-            //search in input by fun searchByNameUseCase
-            val recipe: Recipe? = searchByNameUseCase.searchRecipeByName(userInput)
-            if (recipe != null) { // found recipe
-                println(colors.blue("\n-------------------------------\n"))
-                println(colors.green("Found the recipe: ${recipe.name}"))
-                println(colors.blue("-------------------------------\n"))
-                printRecipe(recipe)  // print repice's contants
-            } else {
-                println(colors.red("\nSorry, we couldn't find a recipe that matches the name you entered."))
-            }
-
+            val recipe: Recipe? = searchRecipe()
+            if (recipe != null) displayRecipe(recipe)
+            else displayNoRecipeFoundMessage()
         } catch (e: ThereIsNoNameException) {
-            println(colors.red("\nAn error occurred while searching: ${e.message}"))
+            handleSearchError(e)
         }
     }
 
-    private fun printRecipe(recipe: Recipe) {
-        println(
-            colors.green("Recipe Details: ------------------------------------------------\nName: ${recipe.name}\n" +
-                    "Minutes: ${recipe.minutes}\nContributor Id: ${recipe.contributorId}\n" +
-                    "Submitted Date: ${recipe.submittedDate}\nTags:\n${recipe.tags}\n" +
-                    "Nutrition:\nCalories = ${recipe.nutrition?.calories}\t" +
-                    "Total Fat = ${recipe.nutrition?.totalFat}\t" +
-                    "Sugar = ${recipe.nutrition?.sugar}\t" +
-                    "Sodium = ${recipe.nutrition?.sodium}\t" +
-                    "Protein = ${recipe.nutrition?.protein}\t" +
-                    "Saturated Fat = ${recipe.nutrition?.saturatedFat}\t" +
-                    "Carbohydrates = ${recipe.nutrition?.carbohydrates}\n" +
-                    "Number Of Steps: ${recipe.numberOfSteps}\n" +
-                    "Steps:\n${recipe.steps}\n" +
-                    "Description: ${recipe.description}\n" +
-                    "Ingredients:\n${recipe.ingredients}\n" +
-                    "Number Of Ingredients: ${recipe.numberOfIngredients}"
-        ))
+    private fun displaySearchHeader() {
+        viewer.printTitle(Strings.SEARCH_BY_NAME_TITLE.message)
+    }
+
+    private fun searchRecipe(): Recipe? {
+        val userInput = reader.readInput().toString()
+        return searchByNameUseCase.searchRecipeByName(userInput)
+    }
+
+    private fun displayRecipe(recipe: Recipe) {
+        displayFoundRecipe(recipe)
+        displayRecipeDetails(recipe)
+    }
+
+    private fun displayFoundRecipe(recipe: Recipe) {
+        viewer.printLoader("\n-------------------------------\n")
+        viewer.printCorrectOutput(Strings.FOUNT_RECIPE.formatMessage(recipe.name))
+        viewer.printLoader("-------------------------------\n")
+    }
+
+    private fun displayRecipeDetails(recipe: Recipe) {
+        viewer.printCorrectOutput(RecipeFormatter.format(recipe))
+    }
+
+    private fun displayNoRecipeFoundMessage() {
+        viewer.printError(Strings.SORRY_COULD_NOT_FIND_RECIPE_MATCHES_NAME.message)
+    }
+
+    private fun handleSearchError(error: ThereIsNoNameException) {
+        viewer.printError(Strings.ERROR_OCCURRED_WHILE_SEARCHING.formatMessage(error.message))
     }
 }
