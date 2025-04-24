@@ -11,9 +11,10 @@ class ThinProblemUseCase (
     fun findThinProblem(): Recipe? {
         val allRecipes = repository.getAllRecipes()
         return allRecipes.filter{it.isComplete()}
-            .filter { (it.nutrition?.calories!! > CALORIES_IN_MEAL) }
+            .filter { (it.nutrition?.calories != null && it.nutrition?.calories!! > CALORIES_IN_MEAL) }
             .shuffled().firstOrNull()
     }
+    //
     companion object{
         private const val CALORIES_IN_MEAL =700
     }

@@ -14,6 +14,7 @@ class CsvParser {
     }
 
     private fun parseCsvToRecipe(csvLine: List<String>): Recipe? {
+
         return Recipe(
             name = csvLine.getOrNull(RecipesColumnIndex.NAME),
             id = csvLine.getOrNull(RecipesColumnIndex.ID),
@@ -29,6 +30,7 @@ class CsvParser {
             numberOfIngredients = csvLine.getOrNull(RecipesColumnIndex.NUMBER_OF_INGREDIENTS)
                 ?.let { it.substring(0, it.length - 1) }?.toIntOrNull()
         )
+
     }
 
     private fun splitToStrings(line: String): List<String> {
