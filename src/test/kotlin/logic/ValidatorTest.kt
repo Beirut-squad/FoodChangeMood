@@ -30,5 +30,17 @@ class ValidatorTest {
         assertFalse { result }
     }
 
+    @Test
+    fun `should return false when gym helper use case calories input is not number `() {
+        //Given
+        val calories = "string"
+        val protein = "22.0"
+        //When
+        val result = validator.validateGymHelperInput(calories, protein)
+        //Then
+        assertFalse { result }
+
+    }
+
 
 }
