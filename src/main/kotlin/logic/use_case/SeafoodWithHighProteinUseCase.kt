@@ -20,7 +20,7 @@ class SeafoodWithHighProteinUseCase(
     }
 
     private fun isSeaFoodMeal(recipe: Recipe): Boolean {
-        val tags = recipe.tags ?: throw RecipeNotFoundException("No tags in")
+        val tags = recipe.tags ?: throw RecipeNotFoundException("we have no seafood recipes, please come back later.")
         return tags.any { tag ->
             tag.contains(SEAFOOD, ignoreCase = true)
         }
