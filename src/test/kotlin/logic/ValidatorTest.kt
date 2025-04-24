@@ -66,4 +66,14 @@ class ValidatorTest {
 
     }
 
+    @Test
+    fun `should return true when input is alphabetic `() {
+        //Given
+        val input = "Egypt"
+        //When
+        val result = validator.validateIsAlphabetic(input)
+        //Then
+        assertTrue { result }
+    }
+
 }
