@@ -6,6 +6,7 @@ import org.example.ui.Reader
 import org.example.ui.RecipeFormatter
 import org.example.ui.Viewer
 import org.example.utils.Colors
+import ui.Display
 
 class HealthyFoodRecipesUi(
     private val validator: Validator,
@@ -13,8 +14,9 @@ class HealthyFoodRecipesUi(
     private val viewer: Viewer,
     private val reader: Reader,
 
-) {
-    fun show() {
+): Display {
+
+    override fun show() {
         viewer.printTitle("Enter the number of meals you want")
         val count = reader.readInt()
 
