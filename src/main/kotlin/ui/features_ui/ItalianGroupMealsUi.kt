@@ -4,13 +4,14 @@ import org.example.error.RecipeNotFoundException
 import org.example.logic.use_case.ItalianGroupMealsUseCase
 import org.example.model.Recipe
 import org.example.ui.Viewer
+import ui.Display
 import kotlin.collections.forEachIndexed
 
 class ItalianGroupMealsUi(
     private val italianGroupMealsUseCase: ItalianGroupMealsUseCase,
     private val viewer: Viewer
-) {
-    fun show() {
+) : Display {
+    override fun show() {
         try {
             viewer.printLoader("Loading...")
             val meals = italianGroupMealsUseCase.getItalianGroupMeals()
