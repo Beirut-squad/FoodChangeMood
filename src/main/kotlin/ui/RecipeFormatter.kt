@@ -20,15 +20,16 @@ object RecipeFormatter {
 
     private fun printNutrition(recipe: Recipe): String {
         return buildString {
-            appendLine("\tCalories:  ${recipe.nutrition!!.calories}")
-            appendLine("\tTotal fat:  ${recipe.nutrition.totalFat}")
-            appendLine("\tSugar:  ${recipe.nutrition.sugar}")
-            appendLine("\tSodium:  ${recipe.nutrition.sodium}")
-            appendLine("\tProtein:  ${recipe.nutrition.protein}")
-            appendLine("\tSaturatedFat:  ${recipe.nutrition.saturatedFat}")
-            appendLine("\tCarbohydrates:  ${recipe.nutrition.carbohydrates}")
+            appendLine("\tCalories:  ${recipe.nutrition?.calories}")
+            appendLine("\tTotal fat:  ${recipe.nutrition?.totalFat}")
+            appendLine("\tSugar:  ${recipe.nutrition?.sugar}")
+            appendLine("\tSodium:  ${recipe.nutrition?.sodium}")
+            appendLine("\tProtein:  ${recipe.nutrition?.protein}")
+            appendLine("\tSaturatedFat:  ${recipe.nutrition?.saturatedFat}")
+            appendLine("\tCarbohydrates:  ${recipe.nutrition?.carbohydrates}")
         }
     }
+
     private fun formatIngredients(items: List<String>?): String {
         return if (items.isNullOrEmpty()) " - No ingredients listed."
         else items.joinToString(separator = "\n") { "\t- ${it.replace("'", "")}" }
