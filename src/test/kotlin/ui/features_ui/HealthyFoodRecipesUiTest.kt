@@ -5,6 +5,7 @@ import org.example.logic.Validator
 import org.example.logic.use_case.HealthyRecipesUseCase
 import org.example.model.Recipe
 import org.example.ui.RecipeFormatter
+import org.example.ui.Viewer
 import org.example.ui.features_ui.HealthyFoodRecipesUi
 import org.example.utils.Colors
 import org.junit.jupiter.api.Assertions.*
@@ -19,12 +20,16 @@ class HealthyFoodRecipesUiTest {
     private lateinit var healthyRecipesUseCase: HealthyRecipesUseCase
     private lateinit var colors: Colors
     private lateinit var healthyFoodRecipesUi: HealthyFoodRecipesUi
+    private lateinit var viewer: Viewer
+
     @BeforeEach
     fun setup() {
         validator = mockk(relaxed = true)
         healthyRecipesUseCase = mockk(relaxed = true)
         colors = mockk(relaxed = true)
-        healthyFoodRecipesUi = spyk(HealthyFoodRecipesUi(validator, healthyRecipesUseCase, colors))
+        viewer = mockk(relaxed = true)
+        healthyFoodRecipesUi = spyk(HealthyFoodRecipesUi(validator, healthyRecipesUseCase, colors , viewer))
+
     }
 
     @Test
@@ -33,7 +38,7 @@ class HealthyFoodRecipesUiTest {
         healthyFoodRecipesUi.show()
 
         // Then
-        verify { healthyFoodRecipesUi.outputPrinter(colors.cyan("Enter the number of meals you want"))}
+        verify { viewer.printTitle("Enter the number of meals you want")}
     }
 
 
@@ -46,7 +51,7 @@ class HealthyFoodRecipesUiTest {
         healthyFoodRecipesUi.show()
 
         // Then
-        verify { healthyFoodRecipesUi.outputPrinter(colors.red("Invalid Input, Enter a Positive Number")) }
+        verify { viewer.printError("Invalid Input, Enter a Positive Number") }
     }
 
     @Test
@@ -58,7 +63,7 @@ class HealthyFoodRecipesUiTest {
         healthyFoodRecipesUi.show()
 
         // Then
-        verify { healthyFoodRecipesUi.outputPrinter(colors.red("Invalid Input, Enter a Positive Number")) }
+        verify { viewer.printError("Invalid Input, Enter a Positive Number") }
     }
 
     @Test
@@ -80,7 +85,7 @@ class HealthyFoodRecipesUiTest {
         healthyFoodRecipesUi.displayRecipeInfo(5)
 
         // Then
-        verify { healthyFoodRecipesUi.outputPrinter(colors.blue("Loading...")) }
+        verify { viewer.printLoader("Loading...") }
     }
 
 
@@ -93,23 +98,8 @@ class HealthyFoodRecipesUiTest {
         healthyFoodRecipesUi.displayRecipeInfo(5)
 
         // Then
-        verify { healthyFoodRecipesUi.outputPrinter(colors.red("No Recipes Available")) }
+        verify { viewer.printError("No Recipes Available") }
     }
-
-//    @Disabled
-//    @Test
-//    fun `should show the recipes info when there is available recipes`(){
-//        // Given
-//        val fakeRecipesList = List(5) { mockk<Recipe>() }
-//        every { healthyRecipesUseCase.getHealthyRecipes(any())} returns fakeRecipesList
-//        every { recipeFormatter.format(any()) } returns "Formated recipe"
-//
-//        // When
-//        healthyFoodRecipesUi.displayRecipeInfo(5)
-//
-//        // Then
-//        verify(exactly = 5) { healthyFoodRecipesUi.outputPrinter(any()) }
-//    }
 
     @Test
     fun `should show the recipes info when there is available recipes`() {
@@ -124,9 +114,6 @@ class HealthyFoodRecipesUiTest {
         healthyFoodRecipesUi.displayRecipeInfo(5)
 
         // Then
-        verify(exactly = 5) { healthyFoodRecipesUi.outputPrinter("Fake Recipe Info") }
+        verify(exactly = 5) { viewer.printPlainText("Fake Recipe Info") }
     }
-
-
-
 }
