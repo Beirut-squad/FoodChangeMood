@@ -14,9 +14,8 @@ class KetoDietUi(
     private val reader: Reader
 ) : Display{
      override fun show(){
-         var i = 3
         viewer.printTitle("Welcome to Keto Meal Suggester ")
-        while (i-- != 0){
+        for (i in 0..MAX_ITERATIONS){
             viewer.printInfoLine("1. Suggest a Keto Recipe \n2. Go Back ")
             val input: String? = reader.readInput()
             when(input){
@@ -39,4 +38,10 @@ class KetoDietUi(
             viewer.printRecipeDetails(recipe)
         }
     }
+
+    companion object {
+        private const val MAX_ITERATIONS = 100
+    }
 }
+
+

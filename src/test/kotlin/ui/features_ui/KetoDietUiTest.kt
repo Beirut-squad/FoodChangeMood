@@ -13,7 +13,6 @@ import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 
 class KetoDietUiTest{
-
     private lateinit var ketoDietUseCase: KetoDietUseCase
     private lateinit var viewer: Viewer
     private lateinit var reader: Reader
@@ -105,16 +104,10 @@ class KetoDietUiTest{
         every { reader.readInput() } returnsMany listOf("1","n")
         val fakeRecipe = mockk<Recipe>(relaxed = true)
 
-
         // When
         ketoDietUi.show()
 
         // Then
         verify(exactly = 0) { viewer.printRecipeDetails(fakeRecipe) }
     }
-
-
-
-
-
 }
