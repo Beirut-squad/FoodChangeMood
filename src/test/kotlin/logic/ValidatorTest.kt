@@ -86,4 +86,13 @@ class ValidatorTest {
         assertFalse { result }
     }
 
+    @Test
+    fun `should return true when input is number and bigger than zero `() {
+        //Given
+        val input = 100
+        //When
+        val result = validator.validateRecipesCountInput(input)
+        //Then
+        assertTrue { result }
+    }
 }
