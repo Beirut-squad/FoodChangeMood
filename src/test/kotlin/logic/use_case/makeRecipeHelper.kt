@@ -1,5 +1,6 @@
 package logic.use_case
 
+import org.example.model.Nutrition
 import org.example.model.Recipe
 
 fun makeRecipeHelper(
@@ -21,3 +22,51 @@ fun makeRecipeHelper(
         numberOfIngredients = null
     )
 }
+
+fun createRecipe(name: String  , tags: List<String>? = null , description: String? = null , nutrition: Nutrition? = null):Recipe{
+    return Recipe(
+        name = name,
+        id = null,
+        minutes = null,
+        contributorId = null,
+        submittedDate = null,
+        tags = tags,
+        nutrition = nutrition,
+        numberOfSteps = null,
+        steps = null,
+        description = description,
+        ingredients = null,
+        numberOfIngredients = null
+    )
+
+}
+
+fun createNutrition(
+    calories: Float? = null,
+    totalFat: Float? = null,
+    sugar: Float? = null,
+    sodium: Float? = null,
+    protein: Float? = null,
+    saturatedFat: Float? = null,
+    carbohydrates: Float? = null,
+): Nutrition {
+    return Nutrition(
+        calories = calories,
+        totalFat = totalFat,
+        sugar = sugar,
+        sodium = sodium,
+        protein = protein,
+        saturatedFat = saturatedFat,
+        carbohydrates = carbohydrates
+    )
+}
+
+//data class Nutrition(
+//    val calories: Float?,
+//    val totalFat: Float?,
+//    val sugar: Float?,
+//    val sodium: Float?,
+//    val protein: Float?,
+//    val saturatedFat: Float?,
+//    val carbohydrates: Float?,
+//)
