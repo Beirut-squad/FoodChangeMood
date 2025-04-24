@@ -20,5 +20,15 @@ class ValidatorTest {
 
     }
 
+    @Test
+    fun `should return false when input is number and bigger than zero `() {
+        //Given
+        val input = 0
+        //When
+        val result = validator.validateRecipesCountInput(input)
+        //Then
+        assertFalse { result }
+    }
+
 
 }
