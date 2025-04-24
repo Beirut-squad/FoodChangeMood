@@ -73,4 +73,48 @@ class KetoDietUiTest{
         verify { viewer.printRecipeDetails(fakeRecipe) }
     }
 
+    @Test
+    fun `should ask user to enter a valid input when the user enters invalid input`(){
+        // Given
+        every { reader.readInput() } returns "5"
+
+        // When
+        ketoDietUi.show()
+
+        // Then
+        verify { viewer.printError("enter a valid number") }
+    }
+
+    @Test
+    fun `should break when the user wants to go back`(){
+        // Given
+        val fakeRecipe = mockk<Recipe>(relaxed = true)
+        every { reader.readInput() } returns "2"
+
+        // When
+        ketoDietUi.show()
+
+        // Then
+        verify(exactly = 0) { viewer.printCorrectOutput("Meal name: ${fakeRecipe.name}") }
+        verify(exactly = 0) { viewer.printInfoLine("Do you want to proceed with Recipe details ? (Y,n) ") }
+    }
+
+    @Test
+    fun `should not show recipe details when the user enters n`(){
+        // Given
+        every { reader.readInput() } returnsMany listOf("1","n")
+        val fakeRecipe = mockk<Recipe>(relaxed = true)
+
+
+        // When
+        ketoDietUi.show()
+
+        // Then
+        verify(exactly = 0) { viewer.printRecipeDetails(fakeRecipe) }
+    }
+
+
+
+
+
 }
