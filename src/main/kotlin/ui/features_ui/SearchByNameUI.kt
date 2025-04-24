@@ -21,7 +21,7 @@ class SearchByNameUI(
 
             if (recipes != null && recipes.isNotEmpty()) {
                 println(colors.blue("\n-------------------------------\n"))
-                println(colors.green("Found ${recipes.size} recipe(s):"))
+                println(colors.green("Found ${recipes.size} recipes:"))
                 println(colors.blue("-------------------------------\n"))
                 recipes.forEach { recipe ->
                     printRecipe(recipe)  // Print details of each recipe

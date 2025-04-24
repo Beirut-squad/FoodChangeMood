@@ -1,8 +1,8 @@
 package org.example.di
 
+import org.example.SearchByNameAlgo.Trie
 import org.example.logic.RecipesRepository
 import org.example.logic.use_case.SearchByNameUseCase
-import org.example.logic.use_case.Trie
 import org.example.ui.*
 import org.example.ui.features_ui.*
 import org.example.utils.Colors
