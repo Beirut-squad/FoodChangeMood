@@ -4,31 +4,36 @@ import org.example.error.NoRecipesFoundForTheGivenDateException
 import org.example.error.RecipeNotFoundException
 import org.example.logic.use_case.SearchRecipeByDateUseCase
 import org.example.model.Recipe
-import org.example.utils.Colors
+import org.example.ui.Reader
+import org.example.ui.Viewer
+import ui.Display
 import utils.checkDateFormat
+import utils.toDate
 import java.text.ParseException
 import java.time.format.DateTimeParseException
 
 class SearchRecipeByDateUi(
     private val searchRecipeByDateUseCase: SearchRecipeByDateUseCase,
-    private val colors: Colors
-) {
+    private val reader: Reader,
+    private val viewer: Viewer
+) : Display{
     private var isRunning = true
-    fun show() {
-        println(colors.cyan("Enter the date for which you want to view recipes: example (2006-10-07)"))
+    override fun show() {
+        viewer.printTitle("Enter the date for which you want to view recipes: example (2006-10-07)")
         try {
-            readlnOrNull()?.let { inputDate ->
+            reader.readInput()?.let { inputDate ->
                 inputDate.checkDateFormat()
+                inputDate.toDate()
                 searchRecipeByDateUseCase.searchRecipeByDate(inputDate).forEach { idAndName ->
-                    println(colors.green("ID = ${idAndName.first} Recipe Name: ${idAndName.second}"))
+                    viewer.printCorrectOutput("ID = ${idAndName.first} Recipe Name: ${idAndName.second}")
                 }
                 askUserIfHeWantDetailsOfRecipe()
-            } ?: println(colors.red("Please enter a valid date"))
-        } catch (parseException: ParseException) {
-            println(colors.red("Incorrect date format ,Please enter a valid date"))
-        } catch (dateTimeException: DateTimeParseException) {
-            println(colors.red("Incorrect date format ,Please enter a valid date"))
-        } catch (noRecipesFoundForTheGivenDateException: NoRecipesFoundForTheGivenDateException) {
+            } ?: viewer.printError("Please enter a valid date")
+        }catch (parseException: ParseException) {
+            viewer.printError("Incorrect date format ,Please enter a valid date")
+        }catch (dateTimeException: DateTimeParseException) {
+            viewer.printError("Incorrect date format ,Please enter a valid date")
+        }catch (noRecipesFoundForTheGivenDateException: NoRecipesFoundForTheGivenDateException) {
             println(noRecipesFoundForTheGivenDateException.message)
         }
     }
@@ -36,8 +41,8 @@ class SearchRecipeByDateUi(
 
     private fun askUserIfHeWantDetailsOfRecipe() {
         isRunning = false
-        println(colors.yellow("Do you want to get details of a specific recipe? (Y/N)"))
-        readlnOrNull()?.lowercase().let { answer ->
+        viewer.printInfoLine("Do you want to get details of a specific recipe? (Y/N)")
+        reader.readInput()?.lowercase().let { answer ->
             when (answer) {
                 "y" -> {
                     searchRecipeByID()
@@ -48,28 +53,29 @@ class SearchRecipeByDateUi(
                 }
 
                 else -> {
-                    println(colors.red("Invalid choice"))
+                    viewer.printError("Invalid choice")
                     askUserIfHeWantDetailsOfRecipe()
                 }
             }
         }
     }
 
+
     private fun searchRecipeByID() {
         try {
-            println(colors.yellow("Enter the ID of the recipe whose details you want to see:"))
-            readlnOrNull()?.let { enteredID ->
+            viewer.printInfoLine("Enter the ID of the recipe whose details you want to see:")
+            reader.readInput()?.let { enteredID ->
                 val idAsNumber = enteredID.toIntOrNull() ?: 0
                 if (idAsNumber == 0) {
-                    println(colors.red("Enter valid id !"))
+                    viewer.printError("Enter valid id !")
                     askToBackToMainMenu()
                 } else {
                     val recipe = searchRecipeByDateUseCase.viewDetailsOfRecipeByID(enteredID)
                     printRecipe(recipe)
                     isRunning = true
                 }
-            } ?: {
-                println(colors.red("Enter valid id !"))
+            } ?: run {
+                viewer.printError("Enter valid id !")
                 askToBackToMainMenu()
             }
         } catch (e: RecipeNotFoundException) {
@@ -80,8 +86,8 @@ class SearchRecipeByDateUi(
     }
 
     private fun askToBackToMainMenu() {
-        println(colors.yellow("Are you need to back to main menu ? (Y/N)"))
-        readlnOrNull()?.lowercase().let { answer ->
+        viewer.printInfoLine("Are you need to back to main menu ? (Y/N)")
+        reader.readInput()?.lowercase().let { answer ->
             when (answer) {
                 "y" -> {
                     isRunning = true
@@ -92,15 +98,14 @@ class SearchRecipeByDateUi(
                 }
 
                 else -> {
-                    println(colors.red("Invalid choice"))
+                    viewer.printError("Invalid choice")
                 }
             }
         }
     }
 
     private fun printRecipe(recipe: Recipe) {
-        println(
-            colors.green(
+        viewer.printCorrectOutput(
                 "Recipe Details: ------------------------------------------------\nName: ${recipe.name}\n" +
                         "Minutes: ${recipe.minutes}\nContributor Id: ${recipe.contributorId}\n" +
                         "Submitted Date: ${recipe.submittedDate}\nTags:\n${recipe.tags}\n" +
@@ -117,7 +122,6 @@ class SearchRecipeByDateUi(
                         "Ingredients:\n${recipe.ingredients}\n" +
                         "Number Of Ingredients: ${recipe.numberOfIngredients}"
             )
-        )
     }
 
 
