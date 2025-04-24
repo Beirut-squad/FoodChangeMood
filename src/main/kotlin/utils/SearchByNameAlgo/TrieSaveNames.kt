@@ -1,4 +1,4 @@
-package org.example.logic.use_case
+package org.example.utils.SearchByNameAlgo
 
 class TrieNode {
     val children: MutableMap<Char, TrieNode> = mutableMapOf()
