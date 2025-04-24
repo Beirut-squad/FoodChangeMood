@@ -7,7 +7,6 @@ import org.example.logic.RecipesRepository
 import org.example.logic.use_case.HealthyRecipesUseCase
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.BeforeEach
-import org.junit.jupiter.api.DisplayName
 import kotlin.test.Test
 
 class HealthyRecipesUseCaseTest {
@@ -23,7 +22,12 @@ class HealthyRecipesUseCaseTest {
     @Test
     fun `should return 1 recipe that can be prepared in 15 minutes or less when input count of recipes is 1`() {
         //Given
+        val expectedRecipe = createRecipeForHealthyRecipes(
+            "Foul", minutes = 5, totalFat = 50.0f,
+            saturatedFat = 8.0f, carbohydrates = 24.0f
+        )
         every { recipesRepository.getAllRecipes() } returns listOf(
+            expectedRecipe,
             createRecipeForHealthyRecipes(
                 "Pizza", minutes = 15, totalFat = 100.0f,
                 saturatedFat = 10.0f, carbohydrates = 30.0f
@@ -36,70 +40,52 @@ class HealthyRecipesUseCaseTest {
                 "Fish", minutes = 30, totalFat = 120.0f,
                 saturatedFat = 22.0f, carbohydrates = 20.0f
             ),
-            createRecipeForHealthyRecipes(
-                "Foul", minutes = 5, totalFat = 50.0f,
-                saturatedFat = 8.0f, carbohydrates = 24.0f
-            ),
         )
         // When
         val recipesCount = 1
         val result = healthyRecipesUseCase.getHealthyRecipes(recipesCount)
         //Then
-        assertThat(result).containsExactly(
-            createRecipeForHealthyRecipes(
-                "Foul", minutes = 5, totalFat = 50.0f,
-                saturatedFat = 8.0f, carbohydrates = 24.0f
-            )
-        )
+        assertThat(result).containsExactly(expectedRecipe)
     }
 
-    @DisplayName("should return 2 recipes that can be prepared in 15 minutes or less without null recipe values" +
-            "when list contains some nutrition null values")
     @Test
-    fun recipeWithOutNullValues() {
+    fun `should return 3 recipes that can be prepared in 15 minutes or less when list contains some nutrition null values`() {
         //Given
+        val expectedRecipeOne = createRecipeForHealthyRecipes(
+            "Pizza", minutes = 15, totalFat = 100.0f,
+            saturatedFat = 10.0f, carbohydrates = 30.0f
+        )
+        val expectedRecipeTwo = createRecipeForHealthyRecipes(
+            "Cake", minutes = 14, totalFat = null,
+            saturatedFat = null, carbohydrates = null
+        )
+        val expectedRecipeThree = createRecipeForHealthyRecipes(
+            "Foul", minutes = 5, totalFat = 50.0f,
+            saturatedFat = 8.0f, carbohydrates = 24.0f
+        )
         every { recipesRepository.getAllRecipes() } returns listOf(
-            createRecipeForHealthyRecipes(
-                "Pizza", minutes = 15, totalFat = 100.0f,
-                saturatedFat = 10.0f, carbohydrates = 30.0f
-            ),
-            createRecipeForHealthyRecipes(
-                "Cake", minutes = 14, totalFat = null,
-                saturatedFat = null, carbohydrates = 30.0f
-            ),
+            expectedRecipeOne, expectedRecipeTwo, expectedRecipeThree,
             createRecipeForHealthyRecipes(
                 "Fish", minutes = 30, totalFat = null,
                 saturatedFat = null, carbohydrates = null
-            ),
-            createRecipeForHealthyRecipes(
-                "Foul", minutes = 5, totalFat = 50.0f,
-                saturatedFat = 8.0f, carbohydrates = 24.0f
-            ),
+            )
         )
         // When
         val recipesCount = 4
         val result = healthyRecipesUseCase.getHealthyRecipes(recipesCount)
         //Then
-        assertThat(result).containsExactly(
-            createRecipeForHealthyRecipes(
-                "Foul", minutes = 5, totalFat = 50.0f,
-                saturatedFat = 8.0f, carbohydrates = 24.0f
-            ),
-            createRecipeForHealthyRecipes(
-                    "Pizza", minutes = 15, totalFat = 100.0f,
-            saturatedFat = 10.0f, carbohydrates = 30.0f
-            )
-        )
+        assertThat(result).containsExactly(expectedRecipeOne, expectedRecipeTwo, expectedRecipeThree)
     }
 
     @Test
-    fun `should return 2 recipes that can be prepared in 15 minutes or less when totalFat and name is null`() {
+    fun `should return 1 recipes that can be prepared in 15 minutes or less when totalFat and name is null`() {
         //Given
+        val expectedRecipe = createRecipeForHealthyRecipes(
+            "Pizza", minutes = 15, totalFat = 100.0f,
+            saturatedFat = 10.0f, carbohydrates = 30.0f
+        )
         every { recipesRepository.getAllRecipes() } returns listOf(
-            createRecipeForHealthyRecipes(
-                "Pizza", minutes = 15, totalFat = 100.0f,
-                saturatedFat = 10.0f, carbohydrates = 30.0f
-            ),
+            expectedRecipe,
             createRecipeForHealthyRecipes(
                 null, minutes = 40, totalFat = null,
                 saturatedFat = 14.0f, carbohydrates = 30.0f
@@ -117,32 +103,28 @@ class HealthyRecipesUseCaseTest {
         val recipesCount = 4
         val result = healthyRecipesUseCase.getHealthyRecipes(recipesCount)
         //Then
-        assertThat(result).containsExactly(
-            createRecipeForHealthyRecipes(
-                "Pizza", minutes = 15, totalFat = 100.0f,
-                saturatedFat = 10.0f, carbohydrates = 30.0f
-            )
-        )
+        assertThat(result).containsExactly(expectedRecipe)
     }
 
     @Test
-    fun `should return 1 recipes that can be prepared in 15 minutes or less when totalFat parameter is null`() {
+    fun `should return 2 recipes that can be prepared in 15 minutes or less when totalFat parameter is null`() {
         //Given
+        val expectedRecipeOne = createRecipeForHealthyRecipes(
+            "Pizza", minutes = 12, totalFat = null,
+            saturatedFat = 10.0f, carbohydrates = 30.0f
+        )
+        val expectedRecipeTwo = createRecipeForHealthyRecipes(
+            "Foul", minutes = 5, totalFat = 50.0f,
+            saturatedFat = 8.0f, carbohydrates = 24.0f
+        )
         every { recipesRepository.getAllRecipes() } returns listOf(
-            createRecipeForHealthyRecipes(
-                "Pizza", minutes = 12, totalFat = null,
-                saturatedFat = 10.0f, carbohydrates = 30.0f
-            ),
-            createRecipeForHealthyRecipes(
-                "Cake", minutes = 40, totalFat = null,
-                saturatedFat = 20.0f, carbohydrates = 30.0f
-            ),
+            expectedRecipeOne, expectedRecipeTwo,
             createRecipeForHealthyRecipes(
                 "Fish", minutes = 30, totalFat = 120.0f,
                 saturatedFat = 22.0f, carbohydrates = 20.0f
             ),
             createRecipeForHealthyRecipes(
-                "Foul", minutes = 5, totalFat = 50.0f,
+                "Cake", minutes = 40, totalFat = 50.0f,
                 saturatedFat = 8.0f, carbohydrates = 24.0f
             )
         )
@@ -150,22 +132,49 @@ class HealthyRecipesUseCaseTest {
         val recipesCount = 5
         val result = healthyRecipesUseCase.getHealthyRecipes(recipesCount)
         //Then
-        assertThat(result).containsExactly(
-            createRecipeForHealthyRecipes(
-                "Foul", minutes = 5, totalFat = 50.0f,
-                saturatedFat = 8.0f, carbohydrates = 24.0f
-            )
+        assertThat(result).containsExactly(expectedRecipeOne, expectedRecipeTwo)
+    }
+
+    @Test
+    fun `should return 1 recipes that can be prepared in 15 minutes or less when totalFat and minutes parameter is null`() {
+        //Given
+        val expectedRecipe = createRecipeForHealthyRecipes(
+            "Foul", minutes = 5, totalFat = 50.0f,
+            saturatedFat = 8.0f, carbohydrates = 24.0f
         )
+        every { recipesRepository.getAllRecipes() } returns listOf(
+            createRecipeForHealthyRecipes(
+                "Pizza", minutes = null, totalFat = null,
+                saturatedFat = 10.0f, carbohydrates = 30.0f
+            ),
+            createRecipeForHealthyRecipes(
+                "Cake", minutes = null, totalFat = null,
+                saturatedFat = 20.0f, carbohydrates = 30.0f
+            ),
+            createRecipeForHealthyRecipes(
+                "Fish", minutes = 30, totalFat = 120.0f,
+                saturatedFat = 22.0f, carbohydrates = 20.0f
+            ), expectedRecipe
+        )
+        // When
+        val recipesCount = 5
+        val result = healthyRecipesUseCase.getHealthyRecipes(recipesCount)
+        //Then
+        assertThat(result).containsExactly(expectedRecipe)
     }
 
     @Test
     fun `should return 1 recipes that can be prepared in 15 minutes or less when saturatedFat parameter is null`() {
         //Given
+        val expectedRecipeOne = createRecipeForHealthyRecipes(
+            "Foul", minutes = 5, totalFat = 50.0f,
+            saturatedFat = 8.0f, carbohydrates = 24.0f
+        )
+        val expectedRecipeTwo = createRecipeForHealthyRecipes(
+            "Pizza", minutes = 12, totalFat = 12.0f,
+            saturatedFat = null, carbohydrates = 30.0f
+        )
         every { recipesRepository.getAllRecipes() } returns listOf(
-            createRecipeForHealthyRecipes(
-                "Pizza", minutes = 12, totalFat = 12.0f,
-                saturatedFat = null, carbohydrates = 30.0f
-            ),
             createRecipeForHealthyRecipes(
                 "Cake", minutes = 40, totalFat = 25.0f,
                 saturatedFat = null, carbohydrates = 30.0f
@@ -174,31 +183,26 @@ class HealthyRecipesUseCaseTest {
                 "Fish", minutes = 30, totalFat = 120.0f,
                 saturatedFat = 22.0f, carbohydrates = 20.0f
             ),
-            createRecipeForHealthyRecipes(
-                "Foul", minutes = 5, totalFat = 50.0f,
-                saturatedFat = 8.0f, carbohydrates = 24.0f
-            )
+            expectedRecipeOne, expectedRecipeTwo
         )
         // When
         val recipesCount = 2
         val result = healthyRecipesUseCase.getHealthyRecipes(recipesCount)
         //Then
         assertThat(result).containsExactly(
-            createRecipeForHealthyRecipes(
-                "Foul", minutes = 5, totalFat = 50.0f,
-                saturatedFat = 8.0f, carbohydrates = 24.0f
-            )
+            expectedRecipeOne, expectedRecipeTwo
         )
     }
 
     @Test
     fun `should return 1 recipes that can be prepared in 15 minutes or less when saturatedFat and name is null`() {
         //Given
+        val expectedRecipe = createRecipeForHealthyRecipes(
+            "Pizza", minutes = 15, totalFat = 100.0f,
+            saturatedFat = 10.0f, carbohydrates = 30.0f
+        )
         every { recipesRepository.getAllRecipes() } returns listOf(
-            createRecipeForHealthyRecipes(
-                "Pizza", minutes = 15, totalFat = 100.0f,
-                saturatedFat = 10.0f, carbohydrates = 30.0f
-            ),
+            expectedRecipe,
             createRecipeForHealthyRecipes(
                 null, minutes = 40, totalFat = 15.0f,
                 saturatedFat = null, carbohydrates = 30.0f
@@ -217,22 +221,52 @@ class HealthyRecipesUseCaseTest {
         val result = healthyRecipesUseCase.getHealthyRecipes(recipesCount)
         //Then
         assertThat(result.size == 1)
-        assertThat(result).containsExactly(
-            createRecipeForHealthyRecipes(
-                "Pizza", minutes = 15, totalFat = 100.0f,
-                saturatedFat = 10.0f, carbohydrates = 30.0f
-            )
-        )
+        assertThat(result).containsExactly(expectedRecipe)
     }
 
     @Test
-    fun `should return 1 recipes that can be prepared in 15 minutes or less when carbohydrates parameter is null`() {
+    fun `should return 1 recipes that can be prepared in 15 minutes or less when saturatedFat and minutes is null`() {
         //Given
+        val expectedRecipe = createRecipeForHealthyRecipes(
+            "Pizza", minutes = 15, totalFat = 100.0f,
+            saturatedFat = 10.0f, carbohydrates = 30.0f
+        )
         every { recipesRepository.getAllRecipes() } returns listOf(
+            expectedRecipe,
             createRecipeForHealthyRecipes(
-                "Pizza", minutes = 12, totalFat = 12.0f,
-                saturatedFat = 22.0f, carbohydrates = null
+                "Cake", minutes = null, totalFat = 15.0f,
+                saturatedFat = null, carbohydrates = 30.0f
             ),
+            createRecipeForHealthyRecipes(
+                "Fish", minutes = 30, totalFat = 120.0f,
+                saturatedFat = 22.0f, carbohydrates = 20.0f
+            ),
+            createRecipeForHealthyRecipes(
+                "Foul", minutes = null, totalFat = 22.0f,
+                saturatedFat = null, carbohydrates = 24.0f
+            ),
+        )
+        // When
+        val recipesCount = 4
+        val result = healthyRecipesUseCase.getHealthyRecipes(recipesCount)
+        //Then
+        assertThat(result.size == 1)
+        assertThat(result).containsExactly(expectedRecipe)
+    }
+
+    @Test
+    fun `should return 2 recipes that can be prepared in 15 minutes or less when carbohydrates parameter is null`() {
+        //Given
+        val expectedRecipeOne = createRecipeForHealthyRecipes(
+            "Foul", minutes = 5, totalFat = 50.0f,
+            saturatedFat = 8.0f, carbohydrates = 24.0f
+        )
+        val expectedRecipeTwo = createRecipeForHealthyRecipes(
+            "Pizza", minutes = 12, totalFat = 12.0f,
+            saturatedFat = 22.0f, carbohydrates = null
+        )
+        every { recipesRepository.getAllRecipes() } returns listOf(
+            expectedRecipeOne,
             createRecipeForHealthyRecipes(
                 "Cake", minutes = 40, totalFat = 25.0f,
                 saturatedFat = 14.0f, carbohydrates = null
@@ -241,59 +275,51 @@ class HealthyRecipesUseCaseTest {
                 "Fish", minutes = 30, totalFat = 120.0f,
                 saturatedFat = 22.0f, carbohydrates = 20.0f
             ),
-            createRecipeForHealthyRecipes(
-                "Foul", minutes = 5, totalFat = 50.0f,
-                saturatedFat = 8.0f, carbohydrates = 24.0f
-            )
+            expectedRecipeTwo
         )
         // When
         val recipesCount = 2
         val result = healthyRecipesUseCase.getHealthyRecipes(recipesCount)
         //Then
-        assertThat(result).containsExactly(
-            createRecipeForHealthyRecipes(
-                "Foul", minutes = 5, totalFat = 50.0f,
-                saturatedFat = 8.0f, carbohydrates = 24.0f
-            )
-        )
+        assertThat(result).containsExactly(expectedRecipeOne, expectedRecipeTwo)
     }
 
     @Test
-    fun `should return 1 recipes that can be prepared in 15 minutes or less when totalFat and carbohydrates is null`() {
+    fun `should return 1 recipes that can be prepared in 15 minutes or less when carbohydrates and name parameter is null`() {
         //Given
+        val expectedRecipe = createRecipeForHealthyRecipes(
+            "Foul", minutes = 5, totalFat = 50.0f,
+            saturatedFat = 8.0f, carbohydrates = 24.0f
+        )
         every { recipesRepository.getAllRecipes() } returns listOf(
             createRecipeForHealthyRecipes(
-                "Pizza", minutes = 12, totalFat = null,
+                null, minutes = 12, totalFat = 12.0f,
                 saturatedFat = 22.0f, carbohydrates = null
             ),
             createRecipeForHealthyRecipes(
-                "Cake", minutes = 20, totalFat = null,
+                null, minutes = 40, totalFat = 25.0f,
                 saturatedFat = 14.0f, carbohydrates = null
             ),
             createRecipeForHealthyRecipes(
                 "Fish", minutes = 30, totalFat = 120.0f,
                 saturatedFat = 22.0f, carbohydrates = 20.0f
             ),
-            createRecipeForHealthyRecipes(
-                "Foul", minutes = 5, totalFat = 50.0f,
-                saturatedFat = 8.0f, carbohydrates = 24.0f
-            )
+            expectedRecipe
         )
         // When
         val recipesCount = 2
         val result = healthyRecipesUseCase.getHealthyRecipes(recipesCount)
         //Then
-        assertThat(result).containsExactly(
-            createRecipeForHealthyRecipes(
-                "Foul", minutes = 5, totalFat = 50.0f,
-                saturatedFat = 8.0f, carbohydrates = 24.0f
-            )
-        )
+        assertThat(result).containsExactly(expectedRecipe)
     }
 
     @Test
     fun `should return 1 recipes that can be prepared in 15 minutes or less when minutes, totalFat and carbohydrates is null`() {
         //Given
+        val expectedRecipe = createRecipeForHealthyRecipes(
+            "Foul", minutes = 5, totalFat = 50.0f,
+            saturatedFat = 8.0f, carbohydrates = 24.0f
+        )
         every { recipesRepository.getAllRecipes() } returns listOf(
             createRecipeForHealthyRecipes(
                 "Pizza", minutes = null, totalFat = null,
@@ -307,26 +333,22 @@ class HealthyRecipesUseCaseTest {
                 "Fish", minutes = 30, totalFat = 120.0f,
                 saturatedFat = 22.0f, carbohydrates = 20.0f
             ),
-            createRecipeForHealthyRecipes(
-                "Foul", minutes = 5, totalFat = 50.0f,
-                saturatedFat = 8.0f, carbohydrates = 24.0f
-            )
+            expectedRecipe
         )
         // When
         val recipesCount = 2
         val result = healthyRecipesUseCase.getHealthyRecipes(recipesCount)
         //Then
-        assertThat(result).containsExactly(
-            createRecipeForHealthyRecipes(
-                "Foul", minutes = 5, totalFat = 50.0f,
-                saturatedFat = 8.0f, carbohydrates = 24.0f
-            )
-        )
+        assertThat(result).containsExactly(expectedRecipe)
     }
 
     @Test
     fun `should return 1 recipes that can be prepared in 15 minutes or less when name and nutrition is null`() {
         //Given
+        val expectedRecipe = createRecipeForHealthyRecipes(
+            "Foul", minutes = 5, totalFat = 50.0f,
+            saturatedFat = 8.0f, carbohydrates = 24.0f
+        )
         every { recipesRepository.getAllRecipes() } returns listOf(
             createRecipeForHealthyRecipes(
                 null, minutes = 12, totalFat = null,
@@ -340,107 +362,89 @@ class HealthyRecipesUseCaseTest {
                 "Fish", minutes = 30, totalFat = 120.0f,
                 saturatedFat = 22.0f, carbohydrates = 20.0f
             ),
-            createRecipeForHealthyRecipes(
-                "Foul", minutes = 5, totalFat = 50.0f,
-                saturatedFat = 8.0f, carbohydrates = 24.0f
-            )
+            expectedRecipe
         )
         // When
         val recipesCount = 2
         val result = healthyRecipesUseCase.getHealthyRecipes(recipesCount)
         //Then
-        assertThat(result).containsExactly(
-            createRecipeForHealthyRecipes(
-                "Foul", minutes = 5, totalFat = 50.0f,
-                saturatedFat = 8.0f, carbohydrates = 24.0f
-            )
-        )
+        assertThat(result).containsExactly(expectedRecipe)
     }
 
-    @DisplayName("should return recipes sorted from low to high based on (total fat+saturated fat+carbohydrates)" +
-            "when list contains multiple recipes")
     @Test
-    fun sortedRecipes(){
+    fun `should return recipes sorted from low to high based on (total fat+saturated fat+carbohydrates) when list contains multiple recipes`() {
         //Given
+        val expectedRecipeOne = createRecipeForHealthyRecipes(
+            "Foul", minutes = 5, totalFat = 50.0f,
+            saturatedFat = 8.0f, carbohydrates = 24.0f
+        )
+        val expectedRecipeTwo = createRecipeForHealthyRecipes(
+            "Pizza", minutes = 15, totalFat = 100.0f,
+            saturatedFat = 10.0f, carbohydrates = 30.0f
+        )
+        val expectedRecipeThree = createRecipeForHealthyRecipes(
+            "Fish", minutes = 8, totalFat = 120.0f,
+            saturatedFat = 22.0f, carbohydrates = 20.0f
+        )
         every { recipesRepository.getAllRecipes() } returns listOf(
-            createRecipeForHealthyRecipes( // 140
-                "Pizza", minutes = 15, totalFat = 100.0f,
-                saturatedFat = 10.0f, carbohydrates = 30.0f
-            ),
+            expectedRecipeTwo,
             createRecipeForHealthyRecipes(
                 "Cake", minutes = 14, totalFat = null,
                 saturatedFat = null, carbohydrates = 30.0f
             ),
-            createRecipeForHealthyRecipes( // 162
-                "Fish", minutes = 8, totalFat = 120.0f,
-                saturatedFat = 22.0f, carbohydrates = 20.0f
-            ),
-            createRecipeForHealthyRecipes( // 82
-                "Foul", minutes = 5, totalFat = 50.0f,
-                saturatedFat = 8.0f, carbohydrates = 24.0f
-            ),
+            expectedRecipeThree,
+            expectedRecipeOne,
         )
         // When
         val recipesCount = 3
         val result = healthyRecipesUseCase.getHealthyRecipes(recipesCount)
         //Then
-        assertTrue(result == listOf(
-                createRecipeForHealthyRecipes( // 82
-                    "Foul", minutes = 5, totalFat = 50.0f,
-                    saturatedFat = 8.0f, carbohydrates = 24.0f
-                ),
-                createRecipeForHealthyRecipes( // 140
-                    "Pizza", minutes = 15, totalFat = 100.0f,
-                    saturatedFat = 10.0f, carbohydrates = 30.0f
-                ),
-                createRecipeForHealthyRecipes( // 162
-                    "Fish", minutes = 8, totalFat = 120.0f,
-                    saturatedFat = 22.0f, carbohydrates = 20.0f
-                )
+        assertTrue(
+            result == listOf(
+                expectedRecipeOne, // 82
+                expectedRecipeTwo, // 140
+                expectedRecipeThree // 162
             )
         )
     }
 
     @Test
-    fun `should return 2 recipes that can be prepared in 15 minutes or less when input count of recipes is 5`(){
+    fun `should return 2 recipes that can be prepared in 15 minutes or less when input count of recipes is 5`() {
         //Given
+        val expectedRecipeOne = createRecipeForHealthyRecipes(
+            "Foul", minutes = 5, totalFat = 50.0f,
+            saturatedFat = 8.0f, carbohydrates = 24.0f
+        )
+        val expectedRecipeTwo = createRecipeForHealthyRecipes(
+            "Pizza", minutes = 15, totalFat = 100.0f,
+            saturatedFat = 10.0f, carbohydrates = 30.0f
+        )
         every { recipesRepository.getAllRecipes() } returns listOf(
+            expectedRecipeTwo,
             createRecipeForHealthyRecipes(
-                "Pizza", minutes = 15, totalFat = 100.0f,
-                saturatedFat = 10.0f, carbohydrates = 30.0f
-            ),
-            createRecipeForHealthyRecipes(
-                "Cake", minutes = 40, totalFat = null,
-                saturatedFat = null, carbohydrates = 30.0f
+                "Cake", minutes = 40, totalFat = 60.0f,
+                saturatedFat = 40.0f, carbohydrates = 30.0f
             ),
             createRecipeForHealthyRecipes(
                 "Fish", minutes = 30, totalFat = 120.0f,
                 saturatedFat = 22.0f, carbohydrates = 20.0f
             ),
-            createRecipeForHealthyRecipes(
-                "Foul", minutes = 5, totalFat = 50.0f,
-                saturatedFat = 8.0f, carbohydrates = 24.0f
-            ),
+            expectedRecipeOne
         )
         // When
         val recipesCount = 5
         val result = healthyRecipesUseCase.getHealthyRecipes(recipesCount)
         //Then
-        assertThat(result).containsExactly(
-            createRecipeForHealthyRecipes(
-                "Foul", minutes = 5, totalFat = 50.0f,
-                saturatedFat = 8.0f, carbohydrates = 24.0f
-            ),
-            createRecipeForHealthyRecipes(
-                "Pizza", minutes = 15, totalFat = 100.0f,
-                saturatedFat = 10.0f, carbohydrates = 30.0f
-            )
-        )
+        assertThat(result).containsExactly(expectedRecipeOne, expectedRecipeTwo)
     }
 
     @Test
     fun `should return 1 recipe that can be prepared in 15 minutes or less when minutes parameter is null`() {
         //Given
+        val expectedRecipe = createRecipeForHealthyRecipes(
+            "Foul", minutes = 5, totalFat = 50.0f,
+            saturatedFat = 8.0f, carbohydrates = 24.0f
+        )
         every { recipesRepository.getAllRecipes() } returns listOf(
             createRecipeForHealthyRecipes(
                 "Pizza", minutes = null, totalFat = 100.0f,
@@ -454,35 +458,28 @@ class HealthyRecipesUseCaseTest {
                 "Fish", minutes = 30, totalFat = 120.0f,
                 saturatedFat = 22.0f, carbohydrates = 20.0f
             ),
-            createRecipeForHealthyRecipes(
-                "Foul", minutes = 5, totalFat = 50.0f,
-                saturatedFat = 8.0f, carbohydrates = 24.0f
-            ),
+            expectedRecipe
         )
         // When
         val recipesCount = 1
         val result = healthyRecipesUseCase.getHealthyRecipes(recipesCount)
         //Then
-        assertThat(result).containsExactly(
-            createRecipeForHealthyRecipes(
-                "Foul", minutes = 5, totalFat = 50.0f,
-                saturatedFat = 8.0f, carbohydrates = 24.0f
-            )
-        )
+        assertThat(result).containsExactly(expectedRecipe)
     }
 
     @Test
     fun `should return 2 recipes that can be prepared in 15 minutes or less when recipe name parameter is null`() {
         //Given
+        val expectedRecipeOne = createRecipeForHealthyRecipes(
+            "Pizza", minutes = 12, totalFat = 100.0f,
+            saturatedFat = 10.0f, carbohydrates = 30.0f
+        )
+        val expectedRecipeTwo = createRecipeForHealthyRecipes(
+            "Cake", minutes = 14, totalFat = 25.0f,
+            saturatedFat = 20.0f, carbohydrates = 30.0f
+        )
         every { recipesRepository.getAllRecipes() } returns listOf(
-            createRecipeForHealthyRecipes(
-                "Pizza", minutes = 12, totalFat = 100.0f,
-                saturatedFat = 10.0f, carbohydrates = 30.0f
-            ),
-            createRecipeForHealthyRecipes(
-                "Cake", minutes = 14, totalFat = 25.0f,
-                saturatedFat = 20.0f, carbohydrates = 30.0f
-            ),
+            expectedRecipeOne, expectedRecipeTwo,
             createRecipeForHealthyRecipes(
                 "Fish", minutes = 30, totalFat = 120.0f,
                 saturatedFat = 22.0f, carbohydrates = 20.0f
@@ -496,30 +493,22 @@ class HealthyRecipesUseCaseTest {
         val recipesCount = 2
         val result = healthyRecipesUseCase.getHealthyRecipes(recipesCount)
         //Then
-        assertThat(result).containsExactly(
-            createRecipeForHealthyRecipes(
-                "Pizza", minutes = 12, totalFat = 100.0f,
-                saturatedFat = 10.0f, carbohydrates = 30.0f
-            ),
-            createRecipeForHealthyRecipes(
-                "Cake", minutes = 14, totalFat = 25.0f,
-                saturatedFat = 20.0f, carbohydrates = 30.0f
-            )
-        )
+        assertThat(result).containsExactly(expectedRecipeOne, expectedRecipeTwo)
     }
 
     @Test
-    fun `should return 1 recipe that can be prepared in 15 minutes or less when recipe name and minutes is null`(){
+    fun `should return 1 recipe that can be prepared in 15 minutes or less when recipe name and minutes is null`() {
         //Given
+        val expectedRecipe = createRecipeForHealthyRecipes(
+            "Pizza", minutes = 12, totalFat = 100.0f,
+            saturatedFat = 10.0f, carbohydrates = 30.0f
+        )
         every { recipesRepository.getAllRecipes() } returns listOf(
-            createRecipeForHealthyRecipes(
-                "Pizza", minutes = 12, totalFat = 100.0f,
-                saturatedFat = 10.0f, carbohydrates = 30.0f
-            ),
             createRecipeForHealthyRecipes(
                 "Cake", minutes = 40, totalFat = 25.0f,
                 saturatedFat = 20.0f, carbohydrates = 30.0f
             ),
+            expectedRecipe,
             createRecipeForHealthyRecipes(
                 null, minutes = 30, totalFat = 120.0f,
                 saturatedFat = 22.0f, carbohydrates = 20.0f
@@ -533,16 +522,11 @@ class HealthyRecipesUseCaseTest {
         val recipesCount = 2
         val result = healthyRecipesUseCase.getHealthyRecipes(recipesCount)
         //Then
-        assertThat(result).containsExactly(
-            createRecipeForHealthyRecipes(
-                "Pizza", minutes = 12, totalFat = 100.0f,
-                saturatedFat = 10.0f, carbohydrates = 30.0f
-            )
-        )
+        assertThat(result).containsExactly(expectedRecipe)
     }
 
     @Test
-    fun `should no return recipes when list doesn't contains recipes can be prepared in 15 minutes or less`(){
+    fun `should no return recipes when list doesn't contains recipes can be prepared in 15 minutes or less`() {
         //Given
         every { recipesRepository.getAllRecipes() } returns listOf(
             createRecipeForHealthyRecipes(
@@ -570,8 +554,16 @@ class HealthyRecipesUseCaseTest {
     }
 
     @Test
-    fun `should return 2 recipes that can be prepared in 15 minutes or less when list contain null recipe`(){
+    fun `should return 2 recipes that can be prepared in 15 minutes or less when list contain null recipe`() {
         //Given
+        val expectedRecipeOne = createRecipeForHealthyRecipes(
+            "Fish", minutes = 13, totalFat = 120.0f,
+            saturatedFat = 22.0f, carbohydrates = 20.0f
+        )
+        val expectedRecipeTwo = createRecipeForHealthyRecipes(
+            "Foul", minutes = 5, totalFat = 50.0f,
+            saturatedFat = 8.0f, carbohydrates = 24.0f
+        )
         every { recipesRepository.getAllRecipes() } returns listOf(
             createRecipeForHealthyRecipes(
                 null, minutes = null, totalFat = null,
@@ -581,28 +573,36 @@ class HealthyRecipesUseCaseTest {
                 "Cake", minutes = 40, totalFat = 25.0f,
                 saturatedFat = 20.0f, carbohydrates = 30.0f
             ),
-            createRecipeForHealthyRecipes(
-                "Fish", minutes = 13, totalFat = 120.0f,
-                saturatedFat = 22.0f, carbohydrates = 20.0f
-            ),
-            createRecipeForHealthyRecipes(
-                "Foul", minutes = 5, totalFat = 50.0f,
-                saturatedFat = 8.0f, carbohydrates = 24.0f
-            ),
+            expectedRecipeOne, expectedRecipeTwo
         )
         // When
         val recipesCount = 3
         val result = healthyRecipesUseCase.getHealthyRecipes(recipesCount)
         //Then
-        assertThat(result).containsExactly(
-            createRecipeForHealthyRecipes(
-                "Fish", minutes = 13, totalFat = 120.0f,
-                saturatedFat = 22.0f, carbohydrates = 20.0f
-            ),
-            createRecipeForHealthyRecipes(
-                "Foul", minutes = 5, totalFat = 50.0f,
-                saturatedFat = 8.0f, carbohydrates = 24.0f
-            )
-        )
+        assertThat(result).containsExactly(expectedRecipeOne, expectedRecipeTwo)
     }
+
+    @Test
+    fun `should all recipes returned has not null nutrition when list have some recipes with nutrition null`() {
+        //Given
+        val nullNutritionRecipe = createRecipeForHealthyRecipes(
+            "Fish", minutes = 13, nutrition = null, totalFat = null, saturatedFat = null, carbohydrates = null
+        )
+        val notNullNutritionRecipe = createRecipeForHealthyRecipes(
+            "Foul", minutes = 5, totalFat = 50.0f, saturatedFat = 8.0f, carbohydrates = 24.0f
+        )
+        every { recipesRepository.getAllRecipes() } returns listOf(
+            createRecipeForHealthyRecipes(
+                "Cake", minutes = 40, totalFat = 25.0f, saturatedFat = 20.0f, carbohydrates = 30.0f
+            ),
+            nullNutritionRecipe,
+            notNullNutritionRecipe
+        )
+        // When
+        val recipesCount = 3
+        val result = healthyRecipesUseCase.getHealthyRecipes(recipesCount)
+        //Then
+        assertThat(result).containsExactly(notNullNutritionRecipe)
+    }
+
 }
