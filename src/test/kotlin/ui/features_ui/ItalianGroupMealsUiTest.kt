@@ -3,6 +3,7 @@ package ui.features_ui
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
+import io.mockk.verifyOrder
 import org.example.error.RecipeNotFoundException
 import org.example.logic.use_case.ItalianGroupMealsUseCase
 import org.example.ui.Viewer
@@ -46,10 +47,14 @@ class ItalianGroupMealsUiTest {
     @Test
     fun `print italian meal names when meals found`() {
         every { italianGroupMealsUseCase.getItalianGroupMeals() } returns listOf(
-            createItalianRecipeHelper("Italian Meal", listOf("italian", "for-large-groups")),
+            createItalianRecipeHelper("Italian Meal 1", listOf("italian", "for-large-groups")),
+            createItalianRecipeHelper("Italian Meal 2", listOf("italian", "healthy", "for-large-groups")),
         )
         italianGroupMealsUi.show()
-        verify { viewer.printCorrectOutput("1. Italian Meal ") }
+        verifyOrder {
+            viewer.printCorrectOutput("1. Italian Meal 1 ")
+            viewer.printCorrectOutput("2. Italian Meal 2 ")
+        }
     }
 
 }
