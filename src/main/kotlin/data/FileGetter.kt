@@ -1,5 +1,6 @@
 package org.example.data
 
+import org.example.error.FileDoesNotExistException
 import java.io.File
 
 class FileGetter {
@@ -12,5 +13,3 @@ class FileGetter {
         }
     }
 }
-
-class FileDoesNotExistException: Exception()
