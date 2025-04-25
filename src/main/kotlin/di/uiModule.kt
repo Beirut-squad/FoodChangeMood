@@ -42,6 +42,5 @@ val uiModule = module {
     singleOf(::IngredientsGuessingGameUi)
     singleOf(::SearchByNameUI)
     singleOf(::Colors)
-
 }
 
