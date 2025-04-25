@@ -30,21 +30,21 @@ class GlobalFoodCultureUseCaseTest {
         countryName: String
     ) {
         val recipes = listOf(
-            createRecipeHelper(name = "Egyptian Koshari"),
-            createRecipeHelper(name = "Italian Pizza"),
+            createRecipeHelper(name = "Egyptian Koshari", description = "This is an Egyptian Meal"),
+            createRecipeHelper(name = "Italian Pizza", description = "This is an Italian Meal"),
         )
         every { recipesRepository.getAllRecipes() } returns recipes
 
         val result = globalFoodCultureUseCase.getRandomMealsByCountry(countryName)
         assertThat(result).containsExactly(
-            createRecipeHelper(name = "Egyptian Koshari"),
+            createRecipeHelper(name = "Egyptian Koshari", description = "This is an Egyptian Meal"),
         )
     }
 
     @Test
     fun `should return exactly 20 recipes list when there are more than 20 recipes in the list`() {
         val recipes = (1..RECIPE_COLLECTION_SIZE).map {
-            createRecipeHelper(name = "Egyptian Koshari")
+            createRecipeHelper(name = "Egyptian Koshari", description = "This is an Egyptian Meal")
         }
         every { recipesRepository.getAllRecipes() } returns recipes
         val result = globalFoodCultureUseCase.getRandomMealsByCountry("egypt")
@@ -54,28 +54,40 @@ class GlobalFoodCultureUseCaseTest {
     @Test
     fun `should return recipes matching country name in description`() {
         val recipes = listOf(
-            createRecipeHelper(description = "A famous dish from Mexico"),
-            createRecipeHelper(description = "Spaghetti from Italy")
+            createRecipeHelper(name = "Mexican Meal", description = "A famous dish from Mexico"),
+            createRecipeHelper(name = "Italian", description = "Spaghetti from Italy")
         )
         every { recipesRepository.getAllRecipes() } returns recipes
 
         val result = globalFoodCultureUseCase.getRandomMealsByCountry("Mexico")
         assertThat(result).containsExactly(
-            createRecipeHelper(description = "A famous dish from Mexico"),
+            createRecipeHelper(name = "Mexican Meal", description = "A famous dish from Mexico"),
         )
     }
 
     @Test
     fun `should return recipes matching country name in tags`() {
         val recipes = listOf(
-            createRecipeHelper(tags = listOf("Korean", "Spicy")),
-            createRecipeHelper(tags = listOf("Indian", "Curry"))
+            createRecipeHelper(
+                name = "Korean Meal",
+                description = "This is Korean Meal",
+                tags = listOf("Korean", "Spicy")
+            ),
+            createRecipeHelper(
+                name = "Some Meal",
+                description = "This is an Indian Meal",
+                tags = listOf("India", "Curry")
+            )
         )
         every { recipesRepository.getAllRecipes() } returns recipes
 
-        val result = globalFoodCultureUseCase.getRandomMealsByCountry("Indian")
+        val result = globalFoodCultureUseCase.getRandomMealsByCountry("India")
         assertThat(result).containsExactly(
-            createRecipeHelper(tags = listOf("Indian", "Curry"))
+            createRecipeHelper(
+                name = "Some Meal",
+                description = "This is an Indian Meal",
+                tags = listOf("India", "Curry")
+            )
 
         )
     }
@@ -83,15 +95,28 @@ class GlobalFoodCultureUseCaseTest {
     @Test
     fun `should return throw RecipeNotFoundException if no recipes match country`() {
         val recipes = listOf(
-            createRecipeHelper(name = "French Toast"),
-            createRecipeHelper(description = "Delicious Canadian poutine"),
-            createRecipeHelper(tags = listOf("Indian", "Curry"))
+            createRecipeHelper(name = "French Toast", description = "This is a French Meal"),
         )
         every { recipesRepository.getAllRecipes() } returns recipes
 
         assertThrows<RecipeNotFoundException> {
             globalFoodCultureUseCase.getRandomMealsByCountry("Japan")
         }
+    }
+
+    @Test
+    fun `should ignore recipes when name or description is null`() {
+        val recipes = listOf(
+            createRecipeHelper(name = null, description = "This is a Canadian Meal"),
+            createRecipeHelper(name = "Canada", description = null),
+            createRecipeHelper(name = "Canada", description = "This is a Meal from Canada"),
+        )
+        every { recipesRepository.getAllRecipes() } returns recipes
+
+        val result = globalFoodCultureUseCase.getRandomMealsByCountry("Canada")
+        assertThat(result).containsExactly(
+            createRecipeHelper(name = "Canada", description = "This is a Meal from Canada"),
+        )
     }
 
     companion object {
