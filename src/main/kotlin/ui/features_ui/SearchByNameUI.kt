@@ -19,7 +19,7 @@ class SearchByNameUI(
             // Perform search using searchByNameUseCase
             val recipes: List<Recipe>? = searchByNameUseCase.searchRecipeByName(userInput)
 
-            if (recipes != null && recipes.isNotEmpty()) {
+            if (!recipes.isNullOrEmpty()) {
                 println(colors.blue("\n-------------------------------\n"))
                 println(colors.green("Found ${recipes.size} recipes:"))
                 println(colors.blue("-------------------------------\n"))
