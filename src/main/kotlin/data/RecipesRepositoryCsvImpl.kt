@@ -7,7 +7,7 @@ class RecipesRepositoryCsvImpl(
     private val csvReader: CsvReader,
     private val csvParser: CsvParser
 ): RecipesRepository {
-    val recipes: MutableList<Recipe> = mutableListOf()
+    private val recipes: MutableList<Recipe> = mutableListOf()
 
     override fun getAllRecipes(): List<Recipe> {
         return recipes.ifEmpty {
