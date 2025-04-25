@@ -16,7 +16,7 @@ class Validator {
             ?: false
     }
 
-    fun vaildateIsAlphabetic(input: String): Boolean {
+    fun validateIsAlphabetic(input: String): Boolean {
         return input.isNotEmpty() && input.all { it.isLetter()  }
     }
 
