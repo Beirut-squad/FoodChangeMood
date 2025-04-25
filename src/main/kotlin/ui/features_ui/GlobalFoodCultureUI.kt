@@ -28,7 +28,7 @@ class GlobalFoodCultureUI(
                 showInputError()
                 true
             }
-            !validator.vaildateIsAlphabetic(input) -> {
+            !validator.validateIsAlphabetic(input) -> {
                 showCountryNameWithoutLetters()
                 true
             }
