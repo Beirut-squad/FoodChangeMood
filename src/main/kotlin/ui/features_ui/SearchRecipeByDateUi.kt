@@ -29,11 +29,13 @@ class SearchRecipeByDateUi(
                 }
                 askUserIfHeWantDetailsOfRecipe()
             } ?: viewer.printError("Please enter a valid date")
-        }catch (parseException: ParseException) {
+        } catch (illegalArgumentException: IllegalArgumentException) {
+            viewer.printError("Invalid date.")
+        } catch (parseException: ParseException) {
             viewer.printError("Incorrect date format ,Please enter a valid date")
-        }catch (dateTimeException: DateTimeParseException) {
+        } catch (dateTimeException: DateTimeParseException) {
             viewer.printError("Incorrect date format ,Please enter a valid date")
-        }catch (noRecipesFoundForTheGivenDateException: NoRecipesFoundForTheGivenDateException) {
+        } catch (noRecipesFoundForTheGivenDateException: NoRecipesFoundForTheGivenDateException) {
             println(noRecipesFoundForTheGivenDateException.message)
         }
     }
