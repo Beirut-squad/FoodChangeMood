@@ -3,25 +3,29 @@ package org.example.model
 import java.time.LocalDate
 
 data class Recipe(
-    val name: String?,
-    val id: String?,
-    val minutes: Int?,
-    val contributorId: String?,
-    val submittedDate: LocalDate?,
-    val tags: List<String>?,
-    val nutrition: Nutrition?,
-    val numberOfSteps: Int?,
-    val steps: List<String>?,
-    val description: String?,
-    val ingredients: List<String>?,
-    val numberOfIngredients: Int?
+    val name: String? = null,
+    val id: String? = null,
+    val minutes: Int? = null,
+    val contributorId: String? = null,
+    val submittedDate: LocalDate? = null,
+    val tags: List<String>? = null,
+    val nutrition: Nutrition? = null,
+    val numberOfSteps: Int? = null,
+    val steps: List<String>? = null,
+    val description: String? = null,
+    val ingredients: List<String>? = null,
+    val numberOfIngredients: Int? = null
 )
- fun Recipe.isComplete(): Boolean {
-    return ingredients != null &&
+fun Recipe.isComplete(): Boolean {
+    return !ingredients.isNullOrEmpty() &&
             name != null &&
-            nutrition != null &&
             description != null &&
-            steps != null &&
+            !steps.isNullOrEmpty() &&
             minutes != null &&
-            tags != null
+            !tags.isNullOrEmpty() &&
+            nutrition != null &&
+            nutrition?.run {
+                calories != null && totalFat != null && sugar != null && sodium != null &&
+                        protein != null && saturatedFat != null && carbohydrates != null
+            } != false
 }
