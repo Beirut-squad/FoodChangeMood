@@ -5,16 +5,16 @@ import org.example.error.RecipeNotFoundException
 import org.example.model.Recipe
 import utils.toDate
 import org.example.logic.RecipesRepository
-
+import java.time.LocalDate
 
 class SearchRecipeByDateUseCase (
     private val recipesRepository: RecipesRepository
 ){
-
     fun searchRecipeByDate(enteredDate:String): List<Pair<String, String>>{
+        val validDate = validateAndParseDate(enteredDate)
         return recipesRepository.getAllRecipes()
             .filter(::checkNoNullValue)
-            .filter { it.submittedDate == enteredDate.toDate() }
+            .filter { it.submittedDate == validDate }
             .takeIf { it.isNotEmpty() }
             ?.map {recipe->
                 (recipe.id)!! to recipe.name!!
@@ -27,10 +27,15 @@ class SearchRecipeByDateUseCase (
             .let { it.getOrNull(0) ?: throw RecipeNotFoundException("Recipe Not Found")}
     }
 
-
     private fun checkNoNullValue(recipe: Recipe): Boolean{
         return recipe.name != null && recipe.id != null
     }
 
-
+    private fun validateAndParseDate(enteredDate: String): LocalDate {
+        val parsedDate = enteredDate.toDate()
+        if (parsedDate > LocalDate.now()) {
+            throw IllegalArgumentException("Date cannot be in the future")
+        }
+        return parsedDate
+    }
 }
