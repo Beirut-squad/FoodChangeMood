@@ -12,6 +12,10 @@ class SearchByNameUseCase(
 ) {
     fun searchRecipeByName(foodNameToSearch: String): List<Recipe>? {
         val normalizedQuery = foodNameToSearch.trim().lowercase()
+        if (normalizedQuery.isBlank()) {
+            return emptyList()
+        }
+
         //  Get all words from Trie
         val allTrieWords = trie.getAllWords()
         //  Use KMP to filter matching words
