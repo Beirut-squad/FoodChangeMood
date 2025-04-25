@@ -30,12 +30,13 @@ class IngredientsGuessingGameUiTest {
 
     @Test
     fun `should show game instructions when game starts`() {
+        //Given
         every { ingredientGuessingGameUseCase.startGame() } just Runs
         every { ingredientGuessingGameUseCase.getFinalScore() } returns 0
         every { ingredientGuessingGameUseCase.isGameOver() } returns true
-
+        //When
         ingredientsGuessingGameUi.show()
-
+        //Then
         verify { viewer.printTitle("\nWelcome to the Ingredient Guessing Game!") }
         verify { viewer.printInfoLine("Guess the correct ingredient for each meal.") }
         verify { viewer.printInfoLine("Earn 1000 points per correct guess. 15 correct answers wins!") }
@@ -43,6 +44,7 @@ class IngredientsGuessingGameUiTest {
 
     @Test
     fun `should display correct answer feedback when user guesses correctly`() {
+        //Given
         val recipe = createRecipe()
         val ingredients = recipe.ingredients
         every { ingredientGuessingGameUseCase.startGame() } just Runs
@@ -52,14 +54,15 @@ class IngredientsGuessingGameUiTest {
         every { ingredientGuessingGameUseCase.getCurrentRecipe() } returns recipe
         every { reader.readInput() } returns "1"
         every { ingredientGuessingGameUseCase.submitAnswer(any()) } returns true
-
+        //When
         ingredientsGuessingGameUi.show()
-
+        //Then
         verify { viewer.printCorrectOutput("Correct! Current score: 1000") }
     }
 
     @Test
     fun `should display error when user enters invalid number`() {
+        //Given
         val recipe = createRecipe()
         val ingredients = recipe.ingredients
         every { ingredientGuessingGameUseCase.startGame() } just Runs
@@ -68,14 +71,15 @@ class IngredientsGuessingGameUiTest {
         every { ingredientGuessingGameUseCase.getNextRound() } returns ingredients
         every { ingredientGuessingGameUseCase.getCurrentRecipe() } returns recipe
         every { reader.readInput() } returns "5"
-
+        //When
         ingredientsGuessingGameUi.show()
-
+        //Then
         verify { viewer.printError("Please enter a number between 1 and 3") }
     }
 
     @Test
     fun `should end game and show correct answer when user guesses wrong`() {
+        //Given
         val recipe = createRecipe()
         val ingredients = recipe.ingredients
         every { ingredientGuessingGameUseCase.startGame() } just Runs
@@ -87,15 +91,16 @@ class IngredientsGuessingGameUiTest {
         every { ingredientGuessingGameUseCase.getCurrentCorrectGuess() } returns "Ingredient1"
         every { ingredientGuessingGameUseCase.endGame() } just Runs
         every { reader.readInput() } returns "1"
-
+        //When
         ingredientsGuessingGameUi.show()
-
+        //Then
         verify { viewer.printError("Wrong answer! Game over!") }
         verify { viewer.printInfoLine("Correct ingredient was: Ingredient1") }
     }
 
     @Test
     fun `should handle null input from user`() {
+        //Given
         val recipe = createRecipe()
         val ingredients = recipe.ingredients
         every { ingredientGuessingGameUseCase.startGame() } just Runs
@@ -104,20 +109,21 @@ class IngredientsGuessingGameUiTest {
         every { ingredientGuessingGameUseCase.getNextRound() } returns ingredients
         every { ingredientGuessingGameUseCase.getCurrentRecipe() } returns recipe
         every { reader.readInput() } returns null
-
+        //When
         ingredientsGuessingGameUi.show()
-
+        //When
         verify { viewer.printError("Invalid input. Please enter a number 1-3") }
     }
 
     @Test
     fun `should show game over message with final score`() {
+        //Given
         every { ingredientGuessingGameUseCase.startGame() } just Runs
         every { ingredientGuessingGameUseCase.getFinalScore() } returns 15000
         every { ingredientGuessingGameUseCase.isGameOver() } returns true
-
+        //When
         ingredientsGuessingGameUi.show()
-
+        //Then
         verify { viewer.printTitle("\nGame Over! Final Score: 15000") }
         verify { viewer.printInfoLine("Thanks for playing!") }
     }
@@ -125,15 +131,15 @@ class IngredientsGuessingGameUiTest {
 
     @Test
     fun `should return early if getNextRound is null`() {
+        //Given
         every { ingredientGuessingGameUseCase.startGame() } just Runs
         every { ingredientGuessingGameUseCase.getFinalScore() } returns 0
         every { ingredientGuessingGameUseCase.isGameOver() } returns false
         every { ingredientGuessingGameUseCase.getNextRound() } returns null
         every { ingredientGuessingGameUseCase.isGameOver() } returns true
-
-
+        //When
         ingredientsGuessingGameUi.show()
-
+        //Then
         verify(exactly = 0) { viewer.printLoader(any()) }
         verify(exactly = 0) { viewer.printInfoLine("Which ingredient belongs to this recipe?") }
         verify(exactly = 0) { viewer.printPlainText("Enter your guess (1-3): ", false) }
@@ -141,13 +147,14 @@ class IngredientsGuessingGameUiTest {
 
     @Test
     fun `should handle all possible getNextRound null scenarios`() {
+        //Given
         every { ingredientGuessingGameUseCase.startGame() } just Runs
         every { ingredientGuessingGameUseCase.getFinalScore() } returnsMany listOf(0, 0)
         every { ingredientGuessingGameUseCase.isGameOver() } returnsMany listOf(false, true)
         every { ingredientGuessingGameUseCase.getNextRound() } returns null
-
+        //When
         ingredientsGuessingGameUi.show()
-
+        //Then
         verify(exactly = 0) { viewer.printInfoLine("Which ingredient belongs to this recipe?") }
         verify(exactly = 0) { reader.readInput() }
 
@@ -155,19 +162,18 @@ class IngredientsGuessingGameUiTest {
 
     @Test
     fun `should display error when guess is not between 1 and 3`() {
+        //Given
         val recipe = createRecipe()
         val ingredients = recipe.ingredients
-
         every { ingredientGuessingGameUseCase.startGame() } just Runs
         every { ingredientGuessingGameUseCase.getFinalScore() } returnsMany listOf(0, 0)
         every { ingredientGuessingGameUseCase.isGameOver() } returnsMany listOf(false, true)
         every { ingredientGuessingGameUseCase.getNextRound() } returns ingredients
         every { ingredientGuessingGameUseCase.getCurrentRecipe() } returns recipe
-
         every { reader.readInput() } returns "0"
-
+        //When
         ingredientsGuessingGameUi.show()
-
+        //Then
         verify { viewer.printError("Please enter a number between 1 and 3") }
     }
 
