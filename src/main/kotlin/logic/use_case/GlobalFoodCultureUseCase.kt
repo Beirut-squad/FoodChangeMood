@@ -11,11 +11,15 @@ class GlobalFoodCultureUseCase(private val recipesRepository: RecipesRepository)
 
     fun getRandomMealsByCountry(countryName: String): List<Recipe> {
         return recipesRepository.getAllRecipes()
-            .filter { isRecipeRelatedToCountry(it, countryName) }
+            .filter { recipe -> isValidNameAndDescription(recipe) && isRecipeRelatedToCountry(recipe, countryName) }
             .shuffled()
             .take(NUMBER_OF_RECIPES)
             .ifEmpty { throw RecipeNotFoundException("No Recipes Found") }
+    }
 
+    private fun isValidNameAndDescription(recipe: Recipe): Boolean {
+        return !recipe.name.isNullOrBlank() &&
+                !recipe.description.isNullOrBlank()
     }
 
     private fun isRecipeRelatedToCountry(recipe: Recipe, countryName: String): Boolean {
