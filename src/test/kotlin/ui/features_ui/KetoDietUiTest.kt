@@ -27,6 +27,8 @@ class KetoDietUiTest{
 
     @Test
     fun `should show a welcome message to the user`(){
+        every { reader.readInput() } returns "2"
+
         // When
         ketoDietUi.show()
 
@@ -36,6 +38,9 @@ class KetoDietUiTest{
 
     @Test
     fun `should ask user to enter the number of recipes`(){
+        every { reader.readInput() } returns "1"
+        every { reader.readInput() } returns "2"
+
         // When
         ketoDietUi.show()
 
@@ -46,9 +51,10 @@ class KetoDietUiTest{
     @Test
     fun `should show recipe name and asks user if he or she wants to proceed with recipe details when the user enters valid input`(){
         // Given
-        every { reader.readInput() } returns "1"
+        every { reader.readInput() } returnsMany listOf("1","2")
         val fakeRecipe = mockk<Recipe>(relaxed = true)
         every { ketoDietUseCase.suggestKetoRecipe() } returns fakeRecipe
+
 
         // When
         ketoDietUi.show()
@@ -61,7 +67,7 @@ class KetoDietUiTest{
     @Test
     fun `should show recipe details when the user enters Y`(){
         // Given
-        every { reader.readInput() } returnsMany listOf("1","Y")
+        every { reader.readInput() } returnsMany listOf("1","Y","2")
         val fakeRecipe = mockk<Recipe>(relaxed = true)
         every { ketoDietUseCase.suggestKetoRecipe() } returns fakeRecipe
 
@@ -75,7 +81,7 @@ class KetoDietUiTest{
     @Test
     fun `should ask user to enter a valid input when the user enters invalid input`(){
         // Given
-        every { reader.readInput() } returns "5"
+        every { reader.readInput() } returnsMany listOf("5","2")
 
         // When
         ketoDietUi.show()
@@ -101,7 +107,7 @@ class KetoDietUiTest{
     @Test
     fun `should not show recipe details when the user enters n`(){
         // Given
-        every { reader.readInput() } returnsMany listOf("1","n")
+        every { reader.readInput() } returnsMany listOf("1","n","2")
         val fakeRecipe = mockk<Recipe>(relaxed = true)
 
         // When

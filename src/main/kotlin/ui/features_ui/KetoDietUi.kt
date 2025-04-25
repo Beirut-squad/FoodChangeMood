@@ -15,7 +15,7 @@ class KetoDietUi(
 ) : Display{
      override fun show(){
         viewer.printTitle("Welcome to Keto Meal Suggester ")
-        for (i in 0..MAX_ITERATIONS){
+          while(true){
             viewer.printInfoLine("1. Suggest a Keto Recipe \n2. Go Back ")
             val input: String? = reader.readInput()
             when(input){
@@ -37,10 +37,6 @@ class KetoDietUi(
         if (input == "Y"){
             viewer.printRecipeDetails(recipe)
         }
-    }
-
-    companion object {
-        private const val MAX_ITERATIONS = 100
     }
 }
 
