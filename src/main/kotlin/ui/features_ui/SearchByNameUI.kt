@@ -12,19 +12,22 @@ class SearchByNameUI(
 ) {
     fun show() {
         val nameToSearch = Scanner(System.`in`)
-        println(colors.cyan("Enter the name of the dish or part of it to search for:"))
+        println(colors.cyan("Enter the name of the Repice to search for:"))
         val userInput = nameToSearch.nextLine()
 
         try {
-            //search in input by fun searchByNameUseCase
-            val recipe: Recipe? = searchByNameUseCase.searchRecipeByName(userInput)
-            if (recipe != null) { // found recipe
+            // Perform search using searchByNameUseCase
+            val recipes: List<Recipe>? = searchByNameUseCase.searchRecipeByName(userInput)
+
+            if (recipes != null && recipes.isNotEmpty()) {
                 println(colors.blue("\n-------------------------------\n"))
-                println(colors.green("Found the recipe: ${recipe.name}"))
+                println(colors.green("Found ${recipes.size} recipes:"))
                 println(colors.blue("-------------------------------\n"))
-                printRecipe(recipe)  // print repice's contants
+                recipes.forEach { recipe ->
+                    printRecipe(recipe)  // Print details of each recipe
+                }
             } else {
-                println(colors.red("\nSorry, we couldn't find a recipe that matches the name you entered."))
+                println(colors.red("\nSorry, we couldn't find any recipes that match the name you entered."))
             }
 
         } catch (e: ThereIsNoNameException) {
@@ -36,19 +39,14 @@ class SearchByNameUI(
         println(
             colors.green("Recipe Details: ------------------------------------------------\nName: ${recipe.name}\n" +
                     "Minutes: ${recipe.minutes}\nContributor Id: ${recipe.contributorId}\n" +
-                    "Submitted Date: ${recipe.submittedDate}\nTags:\n${recipe.tags}\n" +
-                    "Nutrition:\nCalories = ${recipe.nutrition?.calories}\t" +
-                    "Total Fat = ${recipe.nutrition?.totalFat}\t" +
-                    "Sugar = ${recipe.nutrition?.sugar}\t" +
-                    "Sodium = ${recipe.nutrition?.sodium}\t" +
                     "Protein = ${recipe.nutrition?.protein}\t" +
                     "Saturated Fat = ${recipe.nutrition?.saturatedFat}\t" +
                     "Carbohydrates = ${recipe.nutrition?.carbohydrates}\n" +
                     "Number Of Steps: ${recipe.numberOfSteps}\n" +
                     "Steps:\n${recipe.steps}\n" +
-                    "Description: ${recipe.description}\n" +
-                    "Ingredients:\n${recipe.ingredients}\n" +
-                    "Number Of Ingredients: ${recipe.numberOfIngredients}"
-        ))
+                    "Description: ${recipe.description}\n"
+            )
+        )
+
     }
 }
