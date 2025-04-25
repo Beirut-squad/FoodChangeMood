@@ -105,7 +105,21 @@ class ThinProblemUseCaseTest {
   assertThat(useCase.findThinProblem())
 
   }
+@Test
+ fun `GIVEN recipe with nagitive calories`() {
+  // Given
+  val incompleteRecipe = createIncompleteRecipe_NullCalories("Incomplete Recipe",-1.0f)
+
+  every { repository.getAllRecipes() } returns listOf(incompleteRecipe)
+
+  // When & Then
+  assertThat(useCase.findThinProblem())
+
  }
+
+}
+
+
 
  // Helpers
  private fun createCompleteRecipe(name: String, calories: Float): Recipe {

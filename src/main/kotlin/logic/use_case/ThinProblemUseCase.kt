@@ -14,7 +14,7 @@ class ThinProblemUseCase (
             .filter { (it.nutrition?.calories != null && it.nutrition?.calories!! > CALORIES_IN_MEAL) }
             .shuffled().firstOrNull()
     }
-    //
+
     companion object{
         private const val CALORIES_IN_MEAL =700
     }
