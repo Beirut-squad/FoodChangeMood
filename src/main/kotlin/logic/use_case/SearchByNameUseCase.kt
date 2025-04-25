@@ -12,6 +12,7 @@ class SearchByNameUseCase(
 ) {
     fun searchRecipeByName(foodNameToSearch: String): List<Recipe>? {
         val normalizedQuery = foodNameToSearch.trim().lowercase()
+
         if (normalizedQuery.isBlank()) {
             return emptyList()
         }
