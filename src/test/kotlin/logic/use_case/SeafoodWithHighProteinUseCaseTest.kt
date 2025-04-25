@@ -113,5 +113,24 @@ class SeafoodWithHighProteinUseCaseTest{
         assertThat(result).isEmpty()
     }
 
+    @Test
+    fun `should discard recipe if its tag is null`(){
+        // Given
+        every { recipesRepository.getAllRecipes() } returns listOf(
+            createRecipe("butterfly shrimp" , nutrition = createNutrition(protein = 30f)),
+            createRecipe("chicken soup" , tags = listOf("chicken" , "good" ,"30-min")),
+            createRecipe("tuna sandwich" , tags = listOf("tasty" , "tuna" ,"seafood") , nutrition = createNutrition(protein = 40f)),
+            createRecipe("easy pizza" , tags = listOf("pizza" , "easy" ,"15-min")),
+        )
+
+        // When
+        val result = seafoodWithHighProteinUseCase.getSeafoodWithProteinRecipes()
+
+        // Then
+        assertThat(result).containsExactly(
+            createRecipe("tuna sandwich" , tags = listOf("tasty" , "tuna" ,"seafood") , nutrition = createNutrition(protein = 40f)),
+        )
+    }
+
 
 }
