@@ -18,7 +18,8 @@ class SearchByNameUseCase(
 
         //  Get all words from Trie
         val allTrieWords = trie.getAllWords()
-        //  Use KMP to filter matching words
+        // Use KMP to filter matching words
+
         val matchingWords = allTrieWords.filter { word ->
             KMP.contains(word, normalizedQuery) // Ensure KMP matches correctly
         }

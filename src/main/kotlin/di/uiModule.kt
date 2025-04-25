@@ -24,7 +24,6 @@ val uiModule = module {
         trie
     }
     // UseCase that depends on the Trie and Repo
-    single { SearchByNameUseCase(get(), get()) }
     singleOf(::FoodChangeMoodUi)
     singleOf(::EasyFoodSuggestionUI)
     singleOf(::IraqiMealsUi)
@@ -42,5 +41,7 @@ val uiModule = module {
     singleOf(::IngredientsGuessingGameUi)
     singleOf(::SearchByNameUI)
     singleOf(::Colors)
+    singleOf(::Viewer)
+    singleOf(::Reader)
 }
 
