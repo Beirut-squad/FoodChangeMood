@@ -1,0 +1,246 @@
+package logic
+
+import org.example.logic.Validator
+import org.junit.jupiter.api.Test
+import kotlin.test.assertFalse
+import kotlin.test.assertTrue
+
+class ValidatorTest {
+    private var validator = Validator()
+
+    @Test
+    fun `should return true when gym helper use case called and add protein and calories`() {
+        //Given
+        val calories = "30.0"
+        val protein = "22.0"
+        //When
+        val result = validator.validateGymHelperInput(calories, protein)
+        //Then
+        assertTrue { result }
+
+    }
+
+    @Test
+    fun `should return false when gym helper use case called calories is blank`() {
+        //Given
+        val calories = " "
+        val protein = "22.0"
+        //When
+        val result = validator.validateGymHelperInput(calories, protein)
+        //Then
+        assertFalse { result }
+
+    }
+
+    @Test
+    fun `should return false when gym helper use case called protein is blank`() {
+        //Given
+        val calories = "22"
+        val protein = " "
+        //When
+        val result = validator.validateGymHelperInput(calories, protein)
+        //Then
+        assertFalse { result }
+
+    }
+
+    @Test
+    fun `should return false when gym helper use case called protein and calories both are blank`() {
+        //Given
+        val calories = " "
+        val protein = " "
+        //When
+        val result = validator.validateGymHelperInput(calories, protein)
+        //Then
+        assertFalse { result }
+
+    }
+
+    @Test
+    fun `should return false when gym helper use case called calories is null`() {
+        //Given
+        val calories = null
+        val protein = "12.3"
+        //When
+        val result = validator.validateGymHelperInput(calories, protein)
+        //Then
+        assertFalse { result }
+
+    }
+
+    @Test
+    fun `should return false when gym helper use case called protein is null`() {
+        //Given
+        val calories = "12.3"
+        val protein = null
+        //When
+        val result = validator.validateGymHelperInput(calories, protein)
+        //Then
+        assertFalse { result }
+
+    }
+
+    @Test
+    fun `should return false when gym helper use case called calories and protein both are null`() {
+        //Given
+        val calories = null
+        val protein = null
+        //When
+        val result = validator.validateGymHelperInput(calories, protein)
+        //Then
+        assertFalse { result }
+
+    }
+
+    @Test
+    fun `should return false when input is number and bigger than zero `() {
+        //Given
+        val input = 0
+        //When
+        val result = validator.validateRecipesCountInput(input)
+        //Then
+        assertFalse { result }
+    }
+
+
+
+    @Test
+    fun `should return false when gym helper use case calories input is not number `() {
+        //Given
+        val calories = "string"
+        val protein = "22.0"
+        //When
+        val result = validator.validateGymHelperInput(calories, protein)
+        //Then
+        assertFalse { result }
+
+    }
+
+    @Test
+    fun `should return false when gym helper use case protein input is not number `() {
+        //Given
+        val calories = "22.3"
+        val protein = "float"
+        //When
+        val result = validator.validateGymHelperInput(calories, protein)
+        //Then
+        assertFalse { result }
+
+    }
+    @Test
+    fun `should return false when gym helper use case protein input is negative number `() {
+        //Given
+        val calories = "-1"
+        val protein = "0"
+        //When
+        val result = validator.validateGymHelperInput(calories, protein)
+        //Then
+        assertFalse { result }
+
+    }
+
+    @Test
+    fun `should return false when gym helper use case protein and calories inputs are not number `() {
+        //Given
+        val calories = "I am not a number"
+        val protein = "float"
+        //When
+        val result = validator.validateGymHelperInput(calories, protein)
+        //Then
+        assertFalse { result }
+
+    }
+
+    @Test
+    fun `should return true when input is alphabetic `() {
+        //Given
+        val input = "Egypt"
+        //When
+        val result = validator.validateIsAlphabetic(input)
+        //Then
+        assertTrue { result }
+    }
+
+    @Test
+    fun `should return false when input is not alphabetic `() {
+        //Given
+        val input = "22"
+        //When
+        val result = validator.validateIsAlphabetic(input)
+        //Then
+        assertFalse { result }
+    }
+
+    @Test
+    fun `should return false when input is empty `() {
+        //Given
+        val input = ""
+        //When
+        val result = validator.validateIsAlphabetic(input)
+        //Then
+        assertFalse { result }
+    }
+
+    @Test
+    fun `should return false when input is blank `() {
+        //Given
+        val input = " "
+        //When
+        val result = validator.validateIsAlphabetic(input)
+        //Then
+        assertFalse { result }
+    }
+
+    @Test
+    fun `should return false when input is mixed alphabetic and numbers  and start with alphabetic`() {
+        //Given
+        val input = "Egy22pt"
+        //When
+        val result = validator.validateIsAlphabetic(input)
+        //Then
+        assertFalse { result }
+    }
+
+    @Test
+    fun `should return false when input is mixed alphabetic and numbers and start with number`() {
+        //Given
+        val input = "22Egypt"
+        //When
+        val result = validator.validateIsAlphabetic(input)
+        //Then
+        assertFalse { result }
+    }
+
+    @Test
+    fun `should return true when input is number and bigger than zero `() {
+        //Given
+        val input = 100
+        //When
+        val result = validator.validateRecipesCountInput(input)
+        //Then
+        assertTrue { result }
+    }
+
+    @Test
+    fun `should return false when input is number equals zero `() {
+        //Given
+        val input = 0
+        //When
+        val result = validator.validateRecipesCountInput(input)
+        //Then
+        assertFalse { result }
+    }
+
+    @Test
+    fun `should return false when input is number is negative `() {
+        //Given
+        val input = -12
+        //When
+        val result = validator.validateRecipesCountInput(input)
+        //Then
+        assertFalse { result }
+    }
+
+
+
+}
