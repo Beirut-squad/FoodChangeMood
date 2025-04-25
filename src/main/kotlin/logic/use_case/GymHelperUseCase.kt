@@ -17,8 +17,8 @@ class GymHelperUseCase(
         }
         val result = recipesRepository.getAllRecipes()
             .filter { recipe ->
-                val mealCalories = recipe.nutrition?.calories ?: throw RecipeNotFoundException("Calories is null")
-                val mealProtein = recipe.nutrition.protein ?: throw RecipeNotFoundException("Protein is null")
+                val mealCalories = recipe.nutrition?.calories ?: Float.MIN_VALUE
+                val mealProtein = recipe.nutrition?.protein ?: Float.MIN_VALUE
 
                 isCaloriesAmountInApproximateRange(calories, mealCalories) &&
                         isProteinAmountInApproximateRange(protein, mealProtein)
@@ -30,6 +30,7 @@ class GymHelperUseCase(
         demandedCalories: Float,
         mealCalories: Float
     ): Boolean {
+        if (mealCalories == Float.MIN_VALUE) return false
         return demandedCalories in
                 (mealCalories - CALORIES_APPROXIMATE_RANGE..mealCalories + CALORIES_APPROXIMATE_RANGE)
     }
@@ -38,6 +39,7 @@ class GymHelperUseCase(
         demandedProtein: Float,
         mealProtein: Float
     ): Boolean {
+        if (mealProtein == Float.MIN_VALUE) return false
         return demandedProtein in
                 (mealProtein - PROTEIN_APPROXIMATE_RANGE..mealProtein + PROTEIN_APPROXIMATE_RANGE)
     }

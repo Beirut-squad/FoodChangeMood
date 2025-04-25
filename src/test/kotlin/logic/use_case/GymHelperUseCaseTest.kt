@@ -250,5 +250,123 @@ class GymHelperUseCaseTest {
         }
     }
 
+    @Test
+    fun `should not include recipes with null nutrition`() {
+        // Given
+        every { repository.getAllRecipes() } returns listOf(
+            createRecipeWithNullNutritionHelper(),
+            createGymHelper(5f, 5f)
+        )
 
+        // When
+        val result = gymHelperUseCase.getRecipesMatchOrApproximateAmountOfCaloriesAndProtein(5f, 5f)
+
+        // Then
+        assertThat(result).containsNoneOf(createRecipeWithNullNutritionHelper(), createRecipeWithNullNutritionHelper())
+    }
+
+    @Test
+    fun `should not include recipes with minimum default value calories`() {
+        // Given
+        every { repository.getAllRecipes() } returns listOf(
+            createGymHelper(5f, 5f),
+            createGymHelper(Float.MIN_VALUE, 5f)
+        )
+
+        // When
+        val result = gymHelperUseCase.getRecipesMatchOrApproximateAmountOfCaloriesAndProtein(5f, 5f)
+
+        // Then
+        assertThat(result).containsNoneOf(createGymHelper(Float.MIN_VALUE, 5f), createGymHelper(Float.MIN_VALUE, 5f))
+    }
+
+    @Test
+    fun `should not include recipes with minimum float value protein`() {
+        // Given
+        every { repository.getAllRecipes() } returns listOf(
+            createGymHelper(5f, 5f),
+            createGymHelper(5f, Float.MIN_VALUE)
+        )
+
+        // When
+        val result = gymHelperUseCase.getRecipesMatchOrApproximateAmountOfCaloriesAndProtein(5f, 5f)
+
+        // Then
+        assertThat(result).containsNoneOf(createGymHelper(5f, Float.MIN_VALUE), createGymHelper(5f, Float.MIN_VALUE))
+    }
+
+    @Test
+    fun `should not include recipes with minimum float value protein and calories`() {
+        // Given
+        every { repository.getAllRecipes() } returns listOf(
+            createGymHelper(Float.MIN_VALUE, Float.MIN_VALUE),
+            createGymHelper(Float.MIN_VALUE, Float.MIN_VALUE)
+        )
+
+        // When && Then
+        assertThrows<RecipeNotFoundException> {
+            gymHelperUseCase.getRecipesMatchOrApproximateAmountOfCaloriesAndProtein(5f, 5f)
+        }
+    }
+
+    @Test
+    fun `should exclude recipes with protein value outside range`() {
+        // Given
+        every { repository.getAllRecipes() } returns listOf(
+            createGymHelper(50f, 5f),
+            createGymHelper(50f, 50f)
+        )
+
+        // When
+        val result = gymHelperUseCase.getRecipesMatchOrApproximateAmountOfCaloriesAndProtein(50f, 50f)
+
+        // Then
+        assertThat(result).containsNoneOf(createGymHelper(50f, 5f), createGymHelper(50f, 5f))
+    }
+
+    @Test
+    fun `should exclude recipes with calories value outside range`() {
+        // Given
+        every { repository.getAllRecipes() } returns listOf(
+            createGymHelper(5f, 50f),
+            createGymHelper(50f, 50f)
+        )
+
+        // When
+        val result = gymHelperUseCase.getRecipesMatchOrApproximateAmountOfCaloriesAndProtein(50f, 50f)
+
+        // Then
+        assertThat(result).containsNoneOf(createGymHelper(5f, 50f), createGymHelper(5f, 50f))
+    }
+
+    @Test
+    fun `should exclude recipes with calories and protein values outside range`() {
+        // Given
+        every { repository.getAllRecipes() } returns listOf(
+            createGymHelper(5f, 5f),
+            createGymHelper(50f, 50f)
+        )
+
+        // When
+        val result = gymHelperUseCase.getRecipesMatchOrApproximateAmountOfCaloriesAndProtein(50f, 50f)
+
+        // Then
+        assertThat(result).containsNoneOf(createGymHelper(5f, 5f), createGymHelper(5f, 5f))
+    }
+
+    @Test
+    fun `should include recipes with right amount of calories and protein`() {
+        // Given
+        every { repository.getAllRecipes() } returns listOf(
+            createGymHelper(5f, 5f),
+            createGymHelper(10f, 4f)
+        )
+
+        // When
+        val result = gymHelperUseCase.getRecipesMatchOrApproximateAmountOfCaloriesAndProtein(4f, 4f)
+
+        // Then
+        assertThat(result).contains(createGymHelper(5f, 5f))
+        assertThat(result).contains(createGymHelper(10f, 4f))
+    }
 }

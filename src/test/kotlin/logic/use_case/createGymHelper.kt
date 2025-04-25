@@ -4,22 +4,22 @@ import org.example.model.Nutrition
 import org.example.model.Recipe
 
 
-fun createGymHelper (
+fun createGymHelper(
     calories: Float?,
     protein: Float?
-)= Recipe (
+) = Recipe(
     name = null,
- id= null,
- minutes= null,
- contributorId= null,
- submittedDate= null,
- tags= null,
- nutrition= createNutritionHelper(calories,protein),
- numberOfSteps= null,
- steps= null,
- description= null,
- ingredients= null,
- numberOfIngredients= null
+    id = null,
+    minutes = null,
+    contributorId = null,
+    submittedDate = null,
+    tags = null,
+    nutrition = createNutritionHelper(calories, protein),
+    numberOfSteps = null,
+    steps = null,
+    description = null,
+    ingredients = null,
+    numberOfIngredients = null
 )
 
 
@@ -27,11 +27,28 @@ fun createNutritionHelper(
     calories: Float?,
     protein: Float?,
 ) = Nutrition(
-        calories = calories,
-        totalFat = null,
-        sugar = null,
-        sodium = null,
-        protein = protein,
-        saturatedFat = null,
-        carbohydrates = null
+    calories = calories,
+    totalFat = null,
+    sugar = null,
+    sodium = null,
+    protein = protein,
+    saturatedFat = null,
+    carbohydrates = null
+)
+
+fun createRecipeWithNullNutritionHelper(): Recipe {
+    return Recipe (
+        name = null,
+        id= null,
+        minutes= null,
+        contributorId= null,
+        submittedDate= null,
+        tags= null,
+        nutrition= null,
+        numberOfSteps= null,
+        steps= null,
+        description= null,
+        ingredients= null,
+        numberOfIngredients= null
     )
+}
