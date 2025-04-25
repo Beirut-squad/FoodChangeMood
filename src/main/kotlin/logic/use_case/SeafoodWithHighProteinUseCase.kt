@@ -12,7 +12,7 @@ class SeafoodWithHighProteinUseCase(
             .filter {
                 isSeaFoodMeal(it) &&
                 it.nutrition?.protein != null
-            }.sortedByDescending { it.nutrition?.protein }
+            }.sortedByDescending { it.nutrition!!.protein }
     }
 
     private fun isSeaFoodMeal(recipe: Recipe): Boolean {
