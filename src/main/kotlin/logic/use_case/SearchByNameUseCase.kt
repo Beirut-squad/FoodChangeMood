@@ -12,13 +12,18 @@ class SearchByNameUseCase(
 ) {
     fun searchRecipeByName(foodNameToSearch: String): List<Recipe>? {
         val normalizedQuery = foodNameToSearch.trim().lowercase()
-        // Step 1: Get all words from Trie
+        if (normalizedQuery.isBlank()) {
+            return emptyList()
+        }
+
+        // Get all words from Trie
         val allTrieWords = trie.getAllWords()
-        // Step 2: Use KMP to filter matching words
+        // Use KMP to filter matching words
+
         val matchingWords = allTrieWords.filter { word ->
             KMP.contains(word, normalizedQuery) // Ensure KMP matches correctly
         }
-        // Step 3: If we found matches, pick the closest one with Levenshtein
+        // If we found matches, pick the closest one with Levenshtein
         if (matchingWords.isNotEmpty()) {
             val bestMatch = matchingWords.minByOrNull {
                 LevenshteinDistance.levenshteinDistance(normalizedQuery, it)
@@ -29,7 +34,7 @@ class SearchByNameUseCase(
                 .take(3) // Top 3 matches
         }
 
-        // Step 4: Fallback to comparing against all recipes if no trie match
+        // Fallback to comparing against all recipes if no trie match
         return recipesRepository.getAllRecipes()
             .map { recipe ->
                 val name = recipe.name ?: throw IllegalArgumentException("Recipe name cannot be null.")
