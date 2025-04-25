@@ -3,10 +3,12 @@ import io.mockk.mockk
 import org.example.logic.use_case.SearchByNameUseCase
 import org.example.logic.RecipesRepository
 import org.example.model.Recipe
+import org.example.utils.RecipeTestData
 import org.junit.jupiter.api.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertNull
 import org.example.utils.SearchByNameAlgo.Trie
+import org.junit.jupiter.api.BeforeEach
 import kotlin.test.assertTrue
 
 class SearchByNameUseCaseTest {
@@ -15,19 +17,22 @@ class SearchByNameUseCaseTest {
     private val trie = mockk<Trie>()
     private val searchByNameUseCase = SearchByNameUseCase(recipesRepository, trie)
 
+    @BeforeEach
+    fun setUp() {
+      val  recipes = listOf(
+            RecipeTestData.createDefaultRecipe(name = "Pizza", id = "1"),
+            RecipeTestData.createDefaultRecipe(name = "Pasta", id = "2")
+        )
+        every { recipesRepository.getAllRecipes() } returns recipes
+    }
+
     @Test
     fun `should return exact match when recipe name matches exactly`() {
         //Given
         val recipes = listOf(
-            Recipe(name = "Pizza", id = "1", minutes = 30, contributorId = "123",
-                submittedDate = null, tags = null, nutrition = null,
-                numberOfSteps = null, steps = null, description = null,
-                ingredients = null, numberOfIngredients = null),
-            Recipe(name = "Pasta", id = "2", minutes = 25, contributorId = "124",
-                submittedDate = null, tags = null, nutrition = null, numberOfSteps = null,
-                steps = null, description = null, ingredients = null, numberOfIngredients = null)
+        RecipeTestData.createDefaultRecipe(name = "Pizza", id = "1"),
+        RecipeTestData.createDefaultRecipe(name = null, id = "2")
         )
-        every { recipesRepository.getAllRecipes() } returns recipes
         every { trie.getAllWords() } returns listOf("pizza")
 
         //When
@@ -41,18 +46,10 @@ class SearchByNameUseCaseTest {
     @Test
     fun `should return closest match when recipe name does not match exactly`() {
         val recipes = listOf(
-            //Given
-            Recipe(name = "easy strawberry pie with pizazz", id = "1",
-                minutes = 30, contributorId = "123", submittedDate = null,
-                tags = null, nutrition = null, numberOfSteps = null,
-                steps = null, description = null, ingredients = null,
-                numberOfIngredients = null),
-            Recipe(name = "Pasta", id = "2", minutes = 25, contributorId = "124",
-                submittedDate = null, tags = null, nutrition = null, numberOfSteps = null,
-                steps = null, description = null, ingredients = null, numberOfIngredients = null)
+            RecipeTestData.createDefaultRecipe(name = "easy strawberry pie with pizazz", id = "1"),
+            RecipeTestData.createDefaultRecipe(name = "Pasta", id = "2")
         )
 
-        every { recipesRepository.getAllRecipes() } returns recipes
         every { trie.getAllWords() } returns listOf("piza")
         //when
         val result = searchByNameUseCase.searchRecipeByName("piza")
@@ -64,12 +61,8 @@ class SearchByNameUseCaseTest {
     fun `should throw exception if recipe name is null in fallback`() {
         //  Given
         val recipes = listOf(
-            Recipe(name = null, id = "3", minutes = 10, contributorId = "997",
-                submittedDate = null, tags = null, nutrition = null, numberOfSteps = null,
-                steps = null, description = null, ingredients = null, numberOfIngredients = null)
+            RecipeTestData.createDefaultRecipe(name = null, id = "3")
         )
-        every { recipesRepository.getAllRecipes() } returns recipes
-        every { trie.getAllWords() } returns emptyList()
         //When and Then
         try {
             searchByNameUseCase.searchRecipeByName("anything")
@@ -82,19 +75,12 @@ class SearchByNameUseCaseTest {
     fun `should return top 3 closest matches based on Levenshtein distance`() {
         // Given
         val recipes = listOf(
-            Recipe(name = "Pizza", id = "1", minutes = 30, contributorId = "123",
-                submittedDate = null, tags = null, nutrition = null, numberOfSteps = null,
-                steps = null, description = null, ingredients = null, numberOfIngredients = null),
-            Recipe(name = "Pasta", id = "2", minutes = 25, contributorId = "124",
-                submittedDate = null, tags = null, nutrition = null, numberOfSteps = null,
-                steps = null, description = null, ingredients = null, numberOfIngredients = null),
-            Recipe(name = "Pineapple Pizza", id = "3", minutes = 20, contributorId = "125",
-                submittedDate = null, tags = null, nutrition = null, numberOfSteps = null,
-                steps = null, description = null, ingredients = null, numberOfIngredients = null)
+            RecipeTestData.createDefaultRecipe(name = "Pizza", id = "1"),
+            RecipeTestData.createDefaultRecipe(name = "Pasta", id = "2"),
+            RecipeTestData.createDefaultRecipe(name = "Pineapple Pizza", id = "3")
         )
 
 
-        every { recipesRepository.getAllRecipes() } returns recipes
         every { trie.getAllWords() } returns listOf("piza", "pasta", "pineapple")
         // When
         val result = searchByNameUseCase.searchRecipeByName("pizza")
@@ -107,23 +93,14 @@ class SearchByNameUseCaseTest {
         assertEquals("Pizza", bestMatch)
     }
 
-
-
     @Test
     fun `should return null when input is blank`() {
         //Given
         val recipes = listOf(
-            Recipe(name = "easy strawberry pie with pizazz", id = "1",
-                minutes = 30, contributorId = "123", submittedDate = null,
-                tags = null, nutrition = null, numberOfSteps = null,
-                steps = null, description = null, ingredients = null,
-                numberOfIngredients = null),
-            Recipe(name = "Pasta", id = "2", minutes = 25, contributorId = "124",
-                submittedDate = null, tags = null, nutrition = null, numberOfSteps = null,
-                steps = null, description = null, ingredients = null, numberOfIngredients = null)
+            RecipeTestData.createDefaultRecipe(name = "easy strawberry pie with pizazz", id = "1"),
+            RecipeTestData.createDefaultRecipe(name = "Pasta", id = "2")
         )
 
-        every { recipesRepository.getAllRecipes() } returns recipes
         every { trie.getAllWords() } returns listOf("piza")
         //When
         val result = searchByNameUseCase.searchRecipeByName("   ")
@@ -133,7 +110,6 @@ class SearchByNameUseCaseTest {
 
     @Test
     fun `should return null when no recipes exist`() {
-        every { recipesRepository.getAllRecipes() } returns emptyList()
         every { trie.getAllWords() } returns emptyList()
 
         val result = searchByNameUseCase.searchRecipeByName("   ")
@@ -145,13 +121,10 @@ class SearchByNameUseCaseTest {
     fun `should return null when no recipe name matches`() {
         //Given
         val recipes = listOf(
-            Recipe(name = "Pizza", id = "1", minutes = 30, contributorId = "123",
-                submittedDate = null, tags = null, nutrition = null, numberOfSteps = null,
-                steps = null, description = null, ingredients = null, numberOfIngredients = null)
+            RecipeTestData.createDefaultRecipe(name = "Pizza", id = "1")
         )
 
 
-        every { recipesRepository.getAllRecipes() } returns recipes
         every { trie.getAllWords() } returns listOf("burger")
 
         // When
@@ -165,12 +138,11 @@ class SearchByNameUseCaseTest {
     fun `should return closest matches when multiple recipes are available`() {
         //Given
         val recipes = listOf(
-            Recipe(name = "Pizza", id = "1", minutes = 30, contributorId = "123", submittedDate = null, tags = null, nutrition = null, numberOfSteps = null, steps = null, description = null, ingredients = null, numberOfIngredients = null),
-            Recipe(name = "easy spaghetti bake", id = "2", minutes = 25, contributorId = "124", submittedDate = null, tags = null, nutrition = null, numberOfSteps = null, steps = null, description = null, ingredients = null, numberOfIngredients = null),
-            Recipe(name = "easy spaghetti", id = "3", minutes = 45, contributorId = "125", submittedDate = null, tags = null, nutrition = null, numberOfSteps = null, steps = null, description = null, ingredients = null, numberOfIngredients = null)
+            RecipeTestData.createDefaultRecipe(name = "Pizza", id = "1"),
+            RecipeTestData.createDefaultRecipe(name = "easy spaghetti bake", id = "2"),
+            RecipeTestData.createDefaultRecipe(name = "easy spaghetti", id = "3")
         )
 
-        every { recipesRepository.getAllRecipes() } returns recipes
         every { trie.getAllWords() } returns listOf("spaghetti")
         //When
         val result = searchByNameUseCase.searchRecipeByName("aghe")
