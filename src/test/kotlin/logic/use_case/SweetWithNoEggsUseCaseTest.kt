@@ -8,6 +8,8 @@ import org.example.logic.use_case.SweetWithNoEggsUseCase
 import org.junit.Assert.assertThrows
 import org.junit.jupiter.api.BeforeEach
 import kotlin.test.Test
+import kotlin.test.assertEquals
+import kotlin.test.assertNotEquals
 import kotlin.test.assertTrue
 
 class SweetWithNoEggsUseCaseTest {
@@ -44,7 +46,7 @@ class SweetWithNoEggsUseCaseTest {
         // When
         val result = sweetWithNoEggsUseCase.findSweetsFreeEggs()
         // Then
-        assertTrue { result?.name == "Coconut Ladoo sweet" || result?.name == "Peanut Butter Oat Balls"}
+        assertEquals(result?.name,"Coconut Ladoo sweet")
     }
 
     @Test
@@ -101,7 +103,7 @@ class SweetWithNoEggsUseCaseTest {
         // When
         val result = sweetWithNoEggsUseCase.findSweetsFreeEggs()
         // Then
-        assertTrue { result?.name == "Chocolate Fudge Bites"}
+        assertEquals(result?.name , "Chocolate Fudge Bites")
     }
 
     @Test
@@ -126,7 +128,7 @@ class SweetWithNoEggsUseCaseTest {
         // When
         val result = sweetWithNoEggsUseCase.findSweetsFreeEggs()
         // Then
-        assertTrue { result?.name == "Chocolate Fudge Bites"}
+        assertEquals(result?.name , "Chocolate Fudge Bites")
     }
 
     @Test
@@ -179,7 +181,7 @@ class SweetWithNoEggsUseCaseTest {
         // When
         val result = sweetWithNoEggsUseCase.findSweetsFreeEggs()
         // Then
-        assertTrue { result?.name == "Coconut Ladoo"}
+        assertEquals(result?.name , "Coconut Ladoo")
     }
 
     @Test
@@ -205,7 +207,7 @@ class SweetWithNoEggsUseCaseTest {
         // When
         val result = sweetWithNoEggsUseCase.findSweetsFreeEggs()
         // Then
-        assertTrue { result?.name == "Coconut Ladoo"}
+        assertEquals(result?.name , "Coconut Ladoo")
     }
 
     @Test
@@ -231,7 +233,7 @@ class SweetWithNoEggsUseCaseTest {
         // When
         val result = sweetWithNoEggsUseCase.findSweetsFreeEggs()
         // Then
-        assertTrue { result?.name == "Coconut Ladoo"}
+        assertEquals(result?.name , "Coconut Ladoo")
     }
 
     @Test
@@ -257,7 +259,7 @@ class SweetWithNoEggsUseCaseTest {
         // When
         val result = sweetWithNoEggsUseCase.findSweetsFreeEggs()
         // Then
-        assertTrue { result?.name == "Peanut Butter Oat Balls sweet"}
+        assertEquals(result?.name , "Peanut Butter Oat Balls sweet")
     }
 
     @Test
@@ -309,7 +311,7 @@ class SweetWithNoEggsUseCaseTest {
         // When
         val result = sweetWithNoEggsUseCase.findSweetsFreeEggs()
         // Then
-        assertTrue {result != null}
+        assertNotEquals(result, null)
     }
 
 
