@@ -1,26 +1,33 @@
 package data
 
+import io.mockk.every
+import io.mockk.mockk
 import org.example.data.CsvReader
+import org.example.data.FileGetter
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.assertThrows
+import org.koin.core.error.InstanceCreationException
 import java.io.File
 import kotlin.test.assertEquals
 
 
 class CsvReaderTest {
-    private lateinit var tempFile: File
+    private val tempFile: File = mockk(relaxed = true)
+    private val fileGetter: FileGetter = mockk(relaxed = true)
     private lateinit var csvReader: CsvReader
 
 
     @BeforeEach
     fun setup() {
-        tempFile = File.createTempFile("test", ".csv")
-        tempFile.writeText("name,age\nJohn,30\n\"Jane, A.\",28")
-        csvReader = CsvReader(tempFile)
+        csvReader = CsvReader(tempFile, fileGetter)
     }
 
     @Test
     fun `should return list of strings when read a content from file`() {
+        // Given
+        every { fileGetter.getFile(any()) } returns "name,age\nJohn,30\n\"Jane, A.\",28"
+
         // When
         val rows = csvReader.readCsv()
 
@@ -32,11 +39,21 @@ class CsvReaderTest {
     }
 
     @Test
+    fun `should return exception when file does not exist`() {
+        // Given
+        every { fileGetter.getFile(any()) } throws InstanceCreationException("", Exception())
+
+        // When && Then
+        assertThrows<InstanceCreationException> {
+            csvReader.readCsv()
+        }
+
+    }
+
+    @Test
     fun `should correctly split lines with newlines inside quotes`() {
         // Given
-        val content = "name,description\n\"item1\",\"line1\nline2\"\nitem2,desc2"
-        tempFile.writeText(content)
-        csvReader = CsvReader(tempFile)
+        every { fileGetter.getFile(any()) } returns "name,description\n\"item1\",\"line1\nline2\"\nitem2,desc2"
 
         // When
         val result = csvReader.readCsv()
@@ -51,7 +68,7 @@ class CsvReaderTest {
     @Test
     fun `should return nothing when file is empty`() {
         // Given
-        tempFile.writeText("")
+        every { fileGetter.getFile(any()) } returns ""
 
         // When
         val result = csvReader.readCsv()
