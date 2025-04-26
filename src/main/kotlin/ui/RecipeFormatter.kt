@@ -29,6 +29,7 @@ object RecipeFormatter {
             appendLine("\tCarbohydrates:  ${recipe.nutrition?.carbohydrates}")
         }
     }
+
     private fun formatIngredients(items: List<String>?): String {
         return if (items.isNullOrEmpty()) " - No ingredients listed."
         else items.joinToString(separator = "\n") { "\t- ${it.replace("'", "")}" }

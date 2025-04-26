@@ -1,32 +1,45 @@
 package org.example.ui.features_ui
 
 import org.example.logic.use_case.SweetWithNoEggsUseCase
+import org.example.model.Recipe
+import org.example.ui.Reader
 import org.example.ui.RecipeFormatter
+import org.example.ui.Viewer
 import org.example.utils.Colors
 
 class SweetWithoutEggsUi(
     private val sweetWithNoEggs: SweetWithNoEggsUseCase,
-    private val colors: Colors
+    private val viewer: Viewer,
+    private val reader: Reader,
 ) {
-     fun show() {
+    private var suggestion: Recipe? = null
+
+    fun show() {
+        suggestionSweetRecipeWithNoEggs()
+        printSweetWithNoEggs()
         while (true) {
-            val suggestion = sweetWithNoEggs.findSweetsFreeEggs()
-            printSweetWithNoEggs()
-            val choice = readln().toIntOrNull()
-            when(choice) {
-                1 -> suggestion?.let { println(RecipeFormatter.format(it)) }
+            val choice = reader.readInput()?.toIntOrNull()
+            when (choice) {
+                1 -> suggestion?.let { viewer.printPlainText(RecipeFormatter.format(it)) }
                 0 -> break
-                else -> printSweetWithNoEggs()
+                else -> {
+                    suggestionSweetRecipeWithNoEggs()
+                    printSweetWithNoEggs()
+                }
             }
         }
     }
-    private fun printSweetWithNoEggs(){
-        val suggestion = sweetWithNoEggs.findSweetsFreeEggs()
-        println(colors.green("Suggested Sweet: ${suggestion?.name}"))
-        println(colors.green("Description: ${suggestion?.description}"))
-        println(colors.yellow("If you like this sweet, enter 1."))
-        println(colors.yellow("If you want to see another sweet, enter anything else:"))
-        println(colors.yellow("If you want to go out press 0. "))
+
+    private fun suggestionSweetRecipeWithNoEggs() {
+        suggestion = sweetWithNoEggs.findSweetsFreeEggs()
+    }
+
+    private fun printSweetWithNoEggs() {
+        viewer.printCorrectOutput("Suggested Sweet: ${suggestion?.name}")
+        viewer.printCorrectOutput("Description: ${suggestion?.description}")
+        viewer.printInfoLine("If you like this sweet, enter 1.")
+        viewer.printInfoLine("If you want to see another sweet, enter anything else:")
+        viewer.printInfoLine("If you want to go out press 0. ")
     }
 
 }
