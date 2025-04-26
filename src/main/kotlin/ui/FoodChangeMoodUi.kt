@@ -2,7 +2,6 @@ package org.example.ui
 
 
 import org.example.ui.features_ui.*
-import org.example.utils.Colors
 
 class FoodChangeMoodUi(
     private val iraqiMealsUi: IraqiMealsUi,
@@ -20,7 +19,8 @@ class FoodChangeMoodUi(
     private val recipesTimeGuessGameUi: RecipesTimeGuessGameUi,
     private val ingredientsGuessingGameUi: IngredientsGuessingGameUi,
     private val globalFoodCultureUI: GlobalFoodCultureUI,
-    private val colors: Colors
+    private val viewer: Viewer,
+    private val reader: Reader
 ) {
 
     fun start() {
@@ -29,8 +29,7 @@ class FoodChangeMoodUi(
     }
 
     private fun presentAvailableFeatures() {
-        var isRunning = true
-        while (isRunning) {
+        while (true) {
             showOptions()
             val input = getUserInput()
             when (input) {
@@ -50,44 +49,41 @@ class FoodChangeMoodUi(
                 14 -> seafoodWithHighProteinUi.show()
                 15 -> italianGroupMealsUi.show()
                 0 -> {
-                    println(colors.yellow("Goodbye :)"))
-                    isRunning = false
+                    viewer.printGoodbyeMessage("Goodbye :)")
+                    break
                 }
 
-                else -> println(colors.red("Invalid input, try again"))
+                else -> viewer.printError("Invalid input, try again")
             }
         }
     }
 
     private fun showWelcomeMessage() {
-        println(colors.cyan("Welcome to Food Change Mood App"))
+        viewer.printWelcomeMessage("Welcome to Food Change Mood App")
     }
 
     private fun showOptions() {
-        println(colors.purple("\n=== Please enter the number of the service you want: "))
-        printOption("1- Get Quick and Healthy Meals")
-        printOption("2- Smart Meal Search (By name) ")
-        printOption("3- Iraq Food")
-        printOption("4- Easy Food Suggestion")
-        printOption("5- Time Guess Game")
-        printOption("6- Sweets with no eggs")
-        printOption("7- Keto Diet Food Suggestion ")
-        printOption("8- Search Recipe by add date")
-        printOption("9- Gym Helper")
-        printOption("10- Global Food Culture")
-        printOption("11- Ingredients Guessing Game")
-        printOption("12- I love potato ")
-        printOption("13- Thin problem Suggestion ")
-        printOption("14- Seafood with High Protein ")
-        printOption("15- Italian Group Meals ")
-        println(colors.red("0- Enter 0 to exit the app"))
+        viewer.printOption("\n=== Please enter the number of the service you want: ")
+        viewer.printOption("1- Get Quick and Healthy Meals")
+        viewer.printOption("2- Smart Meal Search (By name) ")
+        viewer.printOption("3- Iraq Food")
+        viewer.printOption("4- Easy Food Suggestion")
+        viewer.printOption("5- Time Guess Game")
+        viewer.printOption("6- Sweets with no eggs")
+        viewer.printOption("7- Keto Diet Food Suggestion ")
+        viewer.printOption("8- Search Recipe by add date")
+        viewer.printOption("9- Gym Helper")
+        viewer.printOption("10- Global Food Culture")
+        viewer.printOption("11- Ingredients Guessing Game")
+        viewer.printOption("12- I love potato ")
+        viewer.printOption("13- Thin problem Suggestion ")
+        viewer.printOption("14- Seafood with High Protein ")
+        viewer.printOption("15- Italian Group Meals ")
+        viewer.printExitOption("0- Enter 0 to exit the app")
     }
 
     private fun getUserInput(): Int? {
-        return readlnOrNull()?.toIntOrNull()
+        return reader.readInput()?.toIntOrNull()
     }
 
-    private fun printOption(text: String) {
-        println(colors.purple(text))
-    }
 }

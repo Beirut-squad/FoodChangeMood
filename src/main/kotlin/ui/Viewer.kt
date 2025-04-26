@@ -68,6 +68,30 @@ class Viewer(
         }
     }
 
+    fun printExitOption(
+        text: String,
+        withNewLine: Boolean = true
+    ) {
+        val coloredText = colors.red(text)
+        if (withNewLine) {
+            println(coloredText)
+        } else {
+            print(coloredText)
+        }
+    }
+
+    fun printWelcomeMessage(
+        text: String,
+        withNewLine: Boolean = true
+    ) {
+        val coloredText = colors.cyan(text)
+        if (withNewLine) {
+            println(coloredText)
+        } else {
+            print(coloredText)
+        }
+    }
+
     fun printInfoLine(
         text: String,
         withNewLine: Boolean = true
@@ -90,6 +114,19 @@ class Viewer(
             print(text)
         }
     }
+
+    fun printGoodbyeMessage(
+        text: String,
+        withNewLine: Boolean = true
+    ) {
+        val coloredText = colors.yellow(text)
+        if (withNewLine) {
+            println(coloredText)
+        } else {
+            print(coloredText)
+        }
+    }
+
 
 
     fun printRecipeDetails(recipe: Recipe) {
