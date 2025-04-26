@@ -8,11 +8,12 @@ class HealthyRecipesUseCase(
 ) {
     fun getHealthyRecipes(count: Int): List<Recipe> {
         return recipesRepository.getAllRecipes()
-            .filter { isQuickRecipe(it) && hasRequiredNutritionValues(it) }
+            .filter { isQuickRecipe(it) && it.nutrition != null}
             .sortedBy { recipe ->
-                val saturatedFat = recipe.nutrition?.saturatedFat ?: Float.MAX_VALUE
-                val totalFat = recipe.nutrition?.totalFat ?: Float.MAX_VALUE
-                val carbohydrates = recipe.nutrition?.carbohydrates ?: Float.MAX_VALUE
+                val nutrition = recipe.nutrition!!
+                val saturatedFat = nutrition.saturatedFat ?: Float.MAX_VALUE
+                val totalFat = nutrition.totalFat ?: Float.MAX_VALUE
+                val carbohydrates = nutrition.carbohydrates ?: Float.MAX_VALUE
 
                 saturatedFat + totalFat + carbohydrates
             }.take(count)
@@ -22,12 +23,6 @@ class HealthyRecipesUseCase(
         return recipe.name != null &&
                 recipe.minutes != null &&
                 recipe.minutes <= MAX_PREPARATION_TIME_MINUTES
-    }
-
-    private fun hasRequiredNutritionValues(recipe: Recipe): Boolean {
-        return recipe.nutrition?.totalFat != null &&
-                recipe.nutrition.saturatedFat != null &&
-                recipe.nutrition.carbohydrates != null
     }
 
     companion object {
