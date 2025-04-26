@@ -16,12 +16,16 @@ data class Recipe(
     val ingredients: List<String>? = null,
     val numberOfIngredients: Int? = null
 )
- fun Recipe.isComplete(): Boolean {
-    return ingredients != null &&
+fun Recipe.isComplete(): Boolean {
+    return !ingredients.isNullOrEmpty() &&
             name != null &&
-            nutrition != null &&
             description != null &&
-            steps != null &&
+            !steps.isNullOrEmpty() &&
             minutes != null &&
-            tags != null
+            !tags.isNullOrEmpty() &&
+            nutrition != null &&
+            nutrition?.run {
+                calories != null && totalFat != null && sugar != null && sodium != null &&
+                        protein != null && saturatedFat != null && carbohydrates != null
+            } != false
 }

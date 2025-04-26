@@ -1,0 +1,238 @@
+#
+# There is insufficient memory for the Java Runtime Environment to continue.
+# Native memory allocation (mmap) failed to map 201326592 bytes. Error detail: G1 virtual space
+# Possible reasons:
+#   The system is out of physical RAM or swap space
+#   This process is running with CompressedOops enabled, and the Java Heap may be blocking the growth of the native heap
+# Possible solutions:
+#   Reduce memory load on the system
+#   Increase physical memory or swap space
+#   Check if swap backing store is full
+#   Decrease Java heap size (-Xmx/-Xms)
+#   Decrease number of Java threads
+#   Decrease Java thread stack sizes (-Xss)
+#   Set larger code cache with -XX:ReservedCodeCacheSize=
+#   JVM is running with Zero Based Compressed Oops mode in which the Java heap is
+#     placed in the first 32GB address space. The Java Heap base address is the
+#     maximum limit for the native heap growth. Please use -XX:HeapBaseMinAddress
+#     to set the Java Heap base and to place the Java Heap above 32GB virtual address.
+# This output file may be truncated or incomplete.
+#
+#  Out of Memory Error (os_windows.cpp:3707), pid=13680, tid=4668
+#
+# JRE version:  (23.0.2+7) (build )
+# Java VM: OpenJDK 64-Bit Server VM (23.0.2+7, mixed mode, sharing, tiered, compressed oops, compressed class ptrs, g1 gc, windows-amd64)
+# No core dump will be written. Minidumps are not enabled by default on client versions of Windows
+#
+
+---------------  S U M M A R Y ------------
+
+Command Line: -Dnet.bytebuddy.agent.attacher.dump= net.bytebuddy.agent.Attacher com.sun.tools.attach.VirtualMachine 3884 C:\Users\Qaiaty Store\.gradle\caches\modules-2\files-2.1\net.bytebuddy\byte-buddy-agent\1.14.17\e3c251a39dc90badaf71c83427ba46840f219d8d\byte-buddy-agent-1.14.17.jar false 
+
+Host: Intel(R) Core(TM) i7-7500U CPU @ 2.70GHz, 4 cores, 11G,  Windows 10 , 64 bit Build 19041 (10.0.19041.5678)
+Time: Fri Apr 25 16:42:06 2025 Egypt Daylight Time elapsed time: 0.203329 seconds (0d 0h 0m 0s)
+
+---------------  T H R E A D  ---------------
+
+Current thread (0x0000022554aadaa0):  JavaThread "Unknown thread" [_thread_in_vm, id=4668, stack(0x0000009c75c00000,0x0000009c75d00000) (1024K)]
+
+Stack: [0x0000009c75c00000,0x0000009c75d00000]
+Native frames: (J=compiled Java code, j=interpreted, Vv=VM code, C=native code)
+V  [jvm.dll+0x6e8fa9]  (no source info available)
+V  [jvm.dll+0x8d96b3]  (no source info available)
+V  [jvm.dll+0x8dbb3e]  (no source info available)
+V  [jvm.dll+0x8dc213]  (no source info available)
+V  [jvm.dll+0x281bc6]  (no source info available)
+V  [jvm.dll+0x6e5885]  (no source info available)
+V  [jvm.dll+0x6d980a]  (no source info available)
+V  [jvm.dll+0x36271a]  (no source info available)
+V  [jvm.dll+0x36ab46]  (no source info available)
+V  [jvm.dll+0x3570ee]  (no source info available)
+V  [jvm.dll+0x357388]  (no source info available)
+V  [jvm.dll+0x32fd1c]  (no source info available)
+V  [jvm.dll+0x3309be]  (no source info available)
+V  [jvm.dll+0x89fde5]  (no source info available)
+V  [jvm.dll+0x3c0058]  (no source info available)
+V  [jvm.dll+0x88881c]  (no source info available)
+V  [jvm.dll+0x45a36e]  (no source info available)
+V  [jvm.dll+0x45c181]  (no source info available)
+C  [jli.dll+0x5278]  (no source info available)
+C  [ucrtbase.dll+0x21bb2]  (no source info available)
+C  [KERNEL32.DLL+0x17374]  (no source info available)
+C  [ntdll.dll+0x4cc91]  (no source info available)
+
+Lock stack of current Java thread (top to bottom):
+
+
+---------------  P R O C E S S  ---------------
+
+Threads class SMR info:
+_java_thread_list=0x00007ff962d89ad8, length=0, elements={
+}
+
+Java Threads: ( => current thread )
+Total: 0
+
+Other Threads:
+  0x0000022556de8240 WorkerThread "GC Thread#0"                     [id=13396, stack(0x0000009c75e00000,0x0000009c75f00000) (1024K)]
+  0x0000022556df8100 ConcurrentGCThread "G1 Main Marker"            [id=5128, stack(0x0000009c75f00000,0x0000009c76000000) (1024K)]
+  0x0000022556df8c10 WorkerThread "G1 Conc#0"                       [id=5496, stack(0x0000009c76000000,0x0000009c76100000) (1024K)]
+
+[error occurred during error reporting (printing all threads), id 0xc0000005, EXCEPTION_ACCESS_VIOLATION (0xc0000005) at pc=0x00007ff96246338a]
+VM state: not at safepoint (not fully initialized)
+
+VM Mutex/Monitor currently owned by a thread:  ([mutex/lock_event])
+[0x00007ff962e0cde8] Heap_lock - owner thread: 0x0000022554aadaa0
+
+Heap address: 0x0000000741400000, size: 3052 MB, Compressed Oops mode: Zero based, Oop shift amount: 3
+
+CDS archive(s) mapped at: [0x0000000000000000-0x0000000000000000-0x0000000000000000), size 0, SharedBaseAddress: 0x0000000800000000, ArchiveRelocationMode: 1.
+Narrow klass base: 0x0000000000000000, Narrow klass shift: 0, Narrow klass range: 0x0
+
+GC Precious Log:
+ CardTable entry size: 512
+ Card Set container configuration: InlinePtr #cards 4 size 8 Array Of Cards #cards 16 size 48 Howl #buckets 8 coarsen threshold 3686 Howl Bitmap #cards 512 size 80 coarsen threshold 460 Card regions per heap region 1 cards per card region 4096
+
+Heap:
+ garbage-first heap   total reserved 3125248K, committed 0K, used 0K [0x0000000741400000, 0x0000000800000000)
+  region size 2048K, 0 young (0K), 0 survivors (0K)
+
+[error occurred during error reporting (printing heap information), id 0xc0000005, EXCEPTION_ACCESS_VIOLATION (0xc0000005) at pc=0x00007ff962865529]
+GC Heap History (0 events):
+No events
+
+Dll operation events (1 events):
+Event: 0.143 Loaded shared library C:\Users\Qaiaty Store\.gradle\jdks\eclipse_adoptium-23-amd64-windows.2\bin\java.dll
+
+Deoptimization events (0 events):
+No events
+
+Classes loaded (0 events):
+No events
+
+Classes unloaded (0 events):
+No events
+
+Classes redefined (0 events):
+No events
+
+Internal exceptions (0 events):
+No events
+
+VM Operations (0 events):
+No events
+
+Memory protections (0 events):
+No events
+
+Nmethod flushes (0 events):
+No events
+
+Events (0 events):
+No events
+
+
+Dynamic libraries:
+0x00007ff7ed850000 - 0x00007ff7ed85e000 	C:\Users\Qaiaty Store\.gradle\jdks\eclipse_adoptium-23-amd64-windows.2\bin\java.exe
+0x00007ffa16490000 - 0x00007ffa16688000 	C:\Windows\SYSTEM32\ntdll.dll
+0x00007ffa15720000 - 0x00007ffa157e2000 	C:\Windows\System32\KERNEL32.DLL
+0x00007ffa13ce0000 - 0x00007ffa13fd6000 	C:\Windows\System32\KERNELBASE.dll
+0x00007ffa13be0000 - 0x00007ffa13ce0000 	C:\Windows\System32\ucrtbase.dll
+0x00007ffa0b340000 - 0x00007ffa0b357000 	C:\Users\Qaiaty Store\.gradle\jdks\eclipse_adoptium-23-amd64-windows.2\bin\jli.dll
+0x00007ffa14510000 - 0x00007ffa146ad000 	C:\Windows\System32\USER32.dll
+0x00007ffa14330000 - 0x00007ffa14352000 	C:\Windows\System32\win32u.dll
+0x00007ffa16290000 - 0x00007ffa162bb000 	C:\Windows\System32\GDI32.dll
+0x00007ffa14140000 - 0x00007ffa1425a000 	C:\Windows\System32\gdi32full.dll
+0x00007ffa14410000 - 0x00007ffa144ad000 	C:\Windows\System32\msvcp_win.dll
+0x00007ffa03100000 - 0x00007ffa0311e000 	C:\Users\Qaiaty Store\.gradle\jdks\eclipse_adoptium-23-amd64-windows.2\bin\VCRUNTIME140.dll
+0x00007ff9ff740000 - 0x00007ff9ff9da000 	C:\Windows\WinSxS\amd64_microsoft.windows.common-controls_6595b64144ccf1df_6.0.19041.4355_none_60b8b9eb71f62e16\COMCTL32.dll
+0x00007ffa158d0000 - 0x00007ffa1596e000 	C:\Windows\System32\msvcrt.dll
+0x00007ffa15ac0000 - 0x00007ffa15aef000 	C:\Windows\System32\IMM32.DLL
+0x00007ffa0d730000 - 0x00007ffa0d73c000 	C:\Users\Qaiaty Store\.gradle\jdks\eclipse_adoptium-23-amd64-windows.2\bin\vcruntime140_1.dll
+0x00007ff9e2910000 - 0x00007ff9e299d000 	C:\Users\Qaiaty Store\.gradle\jdks\eclipse_adoptium-23-amd64-windows.2\bin\msvcp140.dll
+0x00007ff962120000 - 0x00007ff962eee000 	C:\Users\Qaiaty Store\.gradle\jdks\eclipse_adoptium-23-amd64-windows.2\bin\server\jvm.dll
+0x00007ffa161e0000 - 0x00007ffa1628f000 	C:\Windows\System32\ADVAPI32.dll
+0x00007ffa15670000 - 0x00007ffa1570f000 	C:\Windows\System32\sechost.dll
+0x00007ffa14e20000 - 0x00007ffa14f43000 	C:\Windows\System32\RPCRT4.dll
+0x00007ffa13b20000 - 0x00007ffa13b47000 	C:\Windows\System32\bcrypt.dll
+0x00007ffa163e0000 - 0x00007ffa1644b000 	C:\Windows\System32\WS2_32.dll
+0x00007ffa13060000 - 0x00007ffa130ab000 	C:\Windows\SYSTEM32\POWRPROF.dll
+0x00007ff9ffb10000 - 0x00007ff9ffb37000 	C:\Windows\SYSTEM32\WINMM.dll
+0x00007ffa0bd10000 - 0x00007ffa0bd1a000 	C:\Windows\SYSTEM32\VERSION.dll
+0x00007ffa12f20000 - 0x00007ffa12f32000 	C:\Windows\SYSTEM32\UMPDC.dll
+0x00007ffa12340000 - 0x00007ffa12352000 	C:\Windows\SYSTEM32\kernel.appcore.dll
+0x00007ffa0b330000 - 0x00007ffa0b33a000 	C:\Users\Qaiaty Store\.gradle\jdks\eclipse_adoptium-23-amd64-windows.2\bin\jimage.dll
+0x00007ffa115a0000 - 0x00007ffa11784000 	C:\Windows\SYSTEM32\DBGHELP.DLL
+0x00007ff9f18c0000 - 0x00007ff9f18f4000 	C:\Windows\SYSTEM32\dbgcore.DLL
+0x00007ffa13b50000 - 0x00007ffa13bd2000 	C:\Windows\System32\bcryptPrimitives.dll
+0x00007ffa03090000 - 0x00007ffa030ae000 	C:\Users\Qaiaty Store\.gradle\jdks\eclipse_adoptium-23-amd64-windows.2\bin\java.dll
+0x00007ffa15b60000 - 0x00007ffa15c8b000 	C:\Windows\System32\ole32.dll
+0x00007ffa15240000 - 0x00007ffa15595000 	C:\Windows\System32\combase.dll
+0x00007ffa146b0000 - 0x00007ffa14e1f000 	C:\Windows\System32\SHELL32.dll
+
+dbghelp: loaded successfully - version: 4.0.5 - missing functions: none
+symbol engine: initialized successfully - sym options: 0x614 - pdb path: .;C:\Users\Qaiaty Store\.gradle\jdks\eclipse_adoptium-23-amd64-windows.2\bin;C:\Windows\SYSTEM32;C:\Windows\WinSxS\amd64_microsoft.windows.common-controls_6595b64144ccf1df_6.0.19041.4355_none_60b8b9eb71f62e16;C:\Users\Qaiaty Store\.gradle\jdks\eclipse_adoptium-23-amd64-windows.2\bin\server
+
+VM Arguments:
+jvm_args: -Dnet.bytebuddy.agent.attacher.dump= 
+java_command: net.bytebuddy.agent.Attacher com.sun.tools.attach.VirtualMachine 3884 C:\Users\Qaiaty Store\.gradle\caches\modules-2\files-2.1\net.bytebuddy\byte-buddy-agent\1.14.17\e3c251a39dc90badaf71c83427ba46840f219d8d\byte-buddy-agent-1.14.17.jar false 
+java_class_path (initial): C:\Users\Qaiaty Store\.gradle\caches\modules-2\files-2.1\net.bytebuddy\byte-buddy-agent\1.14.17\e3c251a39dc90badaf71c83427ba46840f219d8d\byte-buddy-agent-1.14.17.jar
+Launcher Type: SUN_STANDARD
+
+[Global flags]
+     intx CICompilerCount                          = 3                                         {product} {ergonomic}
+     uint ConcGCThreads                            = 1                                         {product} {ergonomic}
+     uint G1ConcRefinementThreads                  = 4                                         {product} {ergonomic}
+   size_t G1HeapRegionSize                         = 2097152                                   {product} {ergonomic}
+   size_t InitialHeapSize                          = 201326592                                 {product} {ergonomic}
+   size_t MarkStackSize                            = 4194304                                   {product} {ergonomic}
+   size_t MarkStackSizeMax                         = 536870912                                 {product} {ergonomic}
+   size_t MaxHeapSize                              = 3200253952                                {product} {ergonomic}
+   size_t MinHeapDeltaBytes                        = 2097152                                   {product} {ergonomic}
+   size_t MinHeapSize                              = 8388608                                   {product} {ergonomic}
+    uintx NonNMethodCodeHeapSize                   = 5832704                                {pd product} {ergonomic}
+    uintx NonProfiledCodeHeapSize                  = 122945536                              {pd product} {ergonomic}
+    uintx ProfiledCodeHeapSize                     = 122880000                              {pd product} {ergonomic}
+    uintx ReservedCodeCacheSize                    = 251658240                              {pd product} {ergonomic}
+     bool SegmentedCodeCache                       = true                                      {product} {ergonomic}
+   size_t SoftMaxHeapSize                          = 3200253952                             {manageable} {ergonomic}
+     bool UseCompressedOops                        = true                           {product lp64_product} {ergonomic}
+     bool UseG1GC                                  = true                                      {product} {ergonomic}
+     bool UseLargePagesIndividualAllocation        = false                                  {pd product} {ergonomic}
+
+Logging:
+Log output configuration:
+ #0: stdout all=warning uptime,level,tags foldmultilines=false
+ #1: stderr all=off uptime,level,tags foldmultilines=false
+
+Environment Variables:
+PATH=C:\Program Files\Common Files\Oracle\Java\javapath;C:\Program Files\Eclipse Adoptium\jdk-21.0.6.7-hotspot\bin;C:\Windows\system32;C:\Windows;C:\Windows\System32\Wbem;C:\Windows\System32\WindowsPowerShell\v1.0\;C:\Windows\System32\OpenSSH\;C:\Program Files (x86)\Microsoft SQL Server\100\Tools\Binn\;C:\Program Files\Microsoft SQL Server\100\Tools\Binn\;C:\Program Files\Microsoft SQL Server\100\DTS\Binn\;C:\Program Files\Microsoft SQL Server\150\Tools\Binn\;C:\Program Files\Microsoft SQL Server\Client SDK\ODBC\170\Tools\Binn\;C:\MinGW\bin;C:\Program Files\MATLAB\R2010a\runtime\win64;C:\Program Files\MATLAB\R2010a\bin;C:\Program Files (x86)\Microsoft SQL Server\160\DTS\Binn\;C:\Program Files\Azure Data Studio\bin;C:\Program Files (x86)\Microsoft SQL Server\160\Tools\Binn\;C:\Program Files\Microsoft SQL Server\160\Tools\Binn\;C:\Program Files\Microsoft SQL Server\160\DTS\Binn\;C:\Program Files\dotnet\;C:\Program Files (x86)\Windows Kits\10\Windows Performance Toolkit\;C:\Program Files\Git\cmd;C:\Users\Qaiaty Store\AppData\Local\Programs\Python\Python313\Scripts\;C:\Users\Qaiaty Store\AppData\Local\Programs\Python\Python313\;C:\Users\Qaiaty Store\AppData\Local\Programs\Python\Python37\Scripts\;C:\Users\Qaiaty Store\AppData\Local\Programs\Python\Python37\;C:\Users\Qaiaty Store\AppData\Local\Microsoft\WindowsApps;C:\Users\Qaiaty Store\AppData\Local\Programs\Microsoft VS Code\bin;C:\Program Files\Azure Data Studio\bin;F:\python\PyCharm Community Edition 2024.2.4\bin;;C:\Windows\System32\cmd.exe;C:\flutter\src\flutter\bin;C:\Users\Qaiaty Store\.dotnet\tools;;C:\Users\Qaiaty Store\AppData\Local\JetBrains\PyCharm 2024.3\bin;;C:\Program Files\JetBrains\IntelliJ IDEA 2024.3.5\bin;;C:\Program Files\JetBrains\IntelliJ IDEA Community Edition 2024.1.7\bin;
+USERNAME=Qaiaty Store
+OS=Windows_NT
+PROCESSOR_IDENTIFIER=Intel64 Family 6 Model 142 Stepping 9, GenuineIntel
+TMP=C:\Users\QAIATY~1\AppData\Local\Temp
+TEMP=C:\Users\QAIATY~1\AppData\Local\Temp
+
+
+
+
+Periodic native trim disabled
+
+---------------  S Y S T E M  ---------------
+
+OS:
+ Windows 10 , 64 bit Build 19041 (10.0.19041.5678)
+OS uptime: 2 days 6:23 hours
+
+CPU: total 4 (initial active 4) (2 cores per cpu, 2 threads per core) family 6 model 142 stepping 9 microcode 0xb4, cx8, cmov, fxsr, ht, mmx, 3dnowpref, sse, sse2, sse3, ssse3, sse4.1, sse4.2, popcnt, lzcnt, tsc, tscinvbit, avx, avx2, aes, erms, clmul, bmi1, bmi2, adx, fma, vzeroupper, clflush, clflushopt, rdtscp, f16c
+Processor Information for the first 4 processors :
+  Max Mhz: 2901, Current Mhz: 2901, Mhz Limit: 2901
+
+Memory: 4k page, system-wide physical 12204M (439M free)
+TotalPageFile size 25899M (AvailPageFile size 184M)
+current process WorkingSet (physical memory assigned to process): 11M, peak: 11M
+current process commit charge ("private bytes"): 52M, peak: 244M
+
+vm_info: OpenJDK 64-Bit Server VM (23.0.2+7) for windows-amd64 JRE (23.0.2+7), built on 2025-01-21T00:00:00Z with MS VC++ 17.7 (VS2022)
+
+END.
