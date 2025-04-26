@@ -44,4 +44,3 @@ val uiModule = module {
     singleOf(::Viewer)
     singleOf(::Reader)
 }
-
