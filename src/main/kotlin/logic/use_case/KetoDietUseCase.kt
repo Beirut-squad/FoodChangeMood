@@ -12,21 +12,12 @@ class KetoDietUseCase(private val recipesRepository: RecipesRepository) {
         return getAllKetoRecipes().shuffled().take(1)[0]
     }
 
-
-    private fun getSortedKetoRecipesDescending(): List<Recipe>{
-        return getAllKetoRecipes().sortedByDescending { ketoRecipe ->
-            ketoRecipe.nutrition?.getKetoScore()
-        }
-    }
-
-
     private fun isValidKetoRecipe(
         totalFats: Float?,
         saturatedFats: Float?,
         sugar: Float?,
         carbohydrates: Float?
     ): Boolean {
-
          if (totalFats == null || saturatedFats == null || sugar == null || carbohydrates == null)
             return false
 
@@ -37,8 +28,6 @@ class KetoDietUseCase(private val recipesRepository: RecipesRepository) {
                 carbohydrates < 10.0f &&
                 ketoScore >= 5.0f)
     }
-
-
 
      private fun getAllKetoRecipes(): List<Recipe> {
         return recipes.filter { recipe ->

@@ -3,31 +3,36 @@ package org.example.ui.features_ui
 import org.example.logic.Validator
 import org.example.logic.use_case.GymHelperUseCase
 import org.example.model.Recipe
-import org.example.utils.Colors
+import org.example.ui.Reader
+import org.example.ui.Viewer
+import ui.Display
 
-class GymHelperUi (
+class GymHelperUi(
     private val gymHelperUseCase: GymHelperUseCase,
     private val validator: Validator,
-    private val colors: Colors
-){
-    fun show() {
-        println(colors.cyan("Gym helper: Get meals that match the protein and calories amounts you choose or close to them."))
-        while (true) {
-            print(colors.blue("Enter the amount of protein: "))
-            val protein = readlnOrNull()
+    private val viewer: Viewer,
+    private val reader: Reader
 
-            print(colors.blue("Enter the amount of calories: "))
-            val calories = readlnOrNull()
+) : Display {
+    override fun show() {
+
+        viewer.printTitle("Gym helper: Get meals that match the protein and calories amounts you choose or close to them.")
+        while (true) {
+            viewer.printLoader("Enter the amount of protein: ", false)
+            val protein = reader.readInput()
+
+            viewer.printLoader("Enter the amount of calories: ", false)
+            val calories = reader.readInput()
 
             if (validator.validateGymHelperInput(calories, protein)) {
-                val recipes =  gymHelperUseCase.getRecipesMatchOrApproximateAmountOfCaloriesAndProtein(
+                val recipes = gymHelperUseCase.getRecipesMatchOrApproximateAmountOfCaloriesAndProtein(
                     calories = calories?.toFloat() ?: 0f,
                     protein = protein?.toFloat() ?: 0f
                 )
                 displayRecipesForGymHelper(recipes)
                 break
             } else {
-                println(colors.red("Invalid input."))
+                viewer.printError("Invalid input.")
             }
         }
 
@@ -37,14 +42,14 @@ class GymHelperUi (
     private fun displayRecipesForGymHelper(recipes: List<Recipe>) {
         recipes.forEachIndexed { index, recipe ->
             displaySingleRecipeForGymHelper(recipe, index + 1)
-            println()
+            viewer.printPlainText("")
         }
     }
 
     private fun displaySingleRecipeForGymHelper(recipe: Recipe, index: Int) {
-        println(colors.green("Meal $index: ${recipe.name}"))
+        viewer.printCorrectOutput("Meal $index: ${recipe.name}")
 
-        println(colors.green("Calories: ${recipe.nutrition?.calories ?: 0.0}, Protein: ${recipe.nutrition?.protein ?: 0.0}"))
+        viewer.printCorrectOutput("Calories: ${recipe.nutrition?.calories ?: 0.0}, Protein: ${recipe.nutrition?.protein ?: 0.0}")
 
         recipe.ingredients?.let { displayIngredients(recipe.ingredients) }
 
@@ -52,17 +57,17 @@ class GymHelperUi (
     }
 
     private fun displayIngredients(ingredients: List<String>) {
-        print(colors.green("Ingredients: "))
+        viewer.printCorrectOutput("Ingredients: ", false)
         ingredients.forEach {
-            print(colors.green("$it, "))
+            viewer.printCorrectOutput("$it, ", false)
         }
     }
 
     private fun displaySteps(steps: List<String>) {
-        println(colors.green("How to Make: "))
+        viewer.printCorrectOutput("How to Make: ")
         steps.forEachIndexed { stepIndex, step ->
-            print(colors.green("Step ${stepIndex + 1}: "))
-            println(step)
+            viewer.printCorrectOutput("Step ${stepIndex + 1}: ", false)
+            viewer.printPlainText(step)
         }
     }
 

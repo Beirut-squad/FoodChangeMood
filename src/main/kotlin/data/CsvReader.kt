@@ -2,10 +2,13 @@ package org.example.data
 
 import java.io.File
 
-class CsvReader(private val csvInputFile: File) {
+class CsvReader(
+    private val csvInputFile: File,
+    private val fileGetter: FileGetter
+) {
 
     fun readCsv(): List<String> {
-        val content = csvInputFile.readText()
+        val content = fileGetter.getFile(csvInputFile)
         return splitIntoRows(content)
     }
 
