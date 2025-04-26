@@ -9,15 +9,20 @@ import org.koin.core.context.startKoin
 import org.koin.mp.KoinPlatform.getKoin
 
 fun main() {
-    startKoin {
-        modules(dataModule , useCaseModule, uiModule )
-    }
+    //try {
+        startKoin {
+            modules(dataModule , useCaseModule, uiModule )
+        }
 
-    val colors = Colors()
+        val colors = Colors()
 
-    println(colors.blue("Loading data..."))
+        println(colors.blue("Loading data..."))
 
-    val ui : FoodChangeMoodUi = getKoin().get()
+        val ui : FoodChangeMoodUi = getKoin().get()
 
-    ui.start()
+        ui.start()
+//    } catch (e: Exception) {
+//        println("Something went wrong")
+//    }
+
 }

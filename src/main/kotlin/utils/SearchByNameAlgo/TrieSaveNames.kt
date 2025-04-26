@@ -1,4 +1,4 @@
-package org.example.logic.use_case
+package org.example.utils.SearchByNameAlgo
 
 class TrieNode {
     val children: MutableMap<Char, TrieNode> = mutableMapOf()
@@ -39,6 +39,13 @@ class Trie {
         collectWords(current, prefix, results)
         return results
     }
+
+    fun getAllWords(): List<String> {
+        val results = mutableListOf<String>()
+        collectWords(root, "", results)
+        return results
+    }
+
 
     // A recursive function that collects all words under a given node.
     private fun collectWords(node: TrieNode, prefix: String, results: MutableList<String>) {

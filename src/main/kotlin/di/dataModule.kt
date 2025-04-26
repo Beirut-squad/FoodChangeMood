@@ -2,6 +2,7 @@ package org.example.di
 
 import org.example.data.CsvParser
 import org.example.data.CsvReader
+import org.example.data.FileGetter
 import org.example.data.FileNames.FOOD_CSV_FILE
 import org.example.data.RecipesRepositoryCsvImpl
 import org.example.logic.RecipesRepository
@@ -18,8 +19,11 @@ val dataModule = module {
     single {
         CsvReader(
             csvInputFile = File(FOOD_CSV_FILE),
+            fileGetter = get()
         )
     }
+
+    singleOf(::FileGetter)
 
     single<RecipesRepository> {
         RecipesRepositoryCsvImpl(get(), get())
