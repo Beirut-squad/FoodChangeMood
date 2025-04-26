@@ -17,12 +17,12 @@ class Validator {
     }
 
     fun validateIsAlphabetic(input: String): Boolean {
-        return input.isNotEmpty() && input.all { it.isLetter()  }
+        return input.isNotEmpty() && input.all { it.isLetter() || it.isWhitespace() }
     }
 
     fun validateRecipesCountInput(
         count: Int
-    ) : Boolean{
+    ): Boolean {
         return (count > 0)
     }
 }
