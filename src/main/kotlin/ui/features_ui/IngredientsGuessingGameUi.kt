@@ -2,14 +2,17 @@ package org.example.ui.features_ui
 
 import org.example.logic.use_case.IngredientGuessingGameUseCase
 import org.example.model.Recipe
-import org.example.utils.Colors
+import org.example.ui.Reader
+import org.example.ui.Viewer
+import ui.Display
 
 class IngredientsGuessingGameUi(
     private val ingredientGuessingGameUseCase: IngredientGuessingGameUseCase,
-    private val colors: Colors
-) {
+    private val viewer: Viewer,
+    private val reader: Reader
+):Display {
     
-    fun show() {
+    override fun show() {
         initializeIngredientGame()
         while (isIngredientGameActive()) {
             playIngredientRound()
@@ -19,9 +22,9 @@ class IngredientsGuessingGameUi(
 
     private fun initializeIngredientGame() {
         ingredientGuessingGameUseCase.startGame()
-        println(colors.cyan("\nWelcome to the Ingredient Guessing Game!"))
-        println(colors.yellow("Guess the correct ingredient for each meal."))
-        println(colors.yellow("Earn 1000 points per correct guess. 15 correct answers wins!"))
+        viewer.printTitle("\nWelcome to the Ingredient Guessing Game!")
+        viewer.printInfoLine("Guess the correct ingredient for each meal.")
+        viewer.printInfoLine("Earn 1000 points per correct guess. 15 correct answers wins!")
     }
 
     private fun isIngredientGameActive(): Boolean {
@@ -38,10 +41,10 @@ class IngredientsGuessingGameUi(
     }
 
     private fun displayMealAndIngredients(recipe: Recipe, ingredients: List<String>) {
-        println("\n${colors.blue("Meal: ${recipe.name}")}")
-        println(colors.yellow("Which ingredient belongs to this recipe?"))
+        viewer.printLoader("\n${"Meal: ${recipe.name}"}")
+        viewer.printInfoLine("Which ingredient belongs to this recipe?")
         ingredients.forEachIndexed { index, ingredient ->
-            println("${colors.green("${index + 1}.")} $ingredient")
+            viewer.printCorrectOutput("${"${index + 1}."} $ingredient")
         }
     }
 
@@ -53,17 +56,17 @@ class IngredientsGuessingGameUi(
     }
 
     private fun getIngredientGuessInput(): Int? {
-        print("Enter your guess (1-3): ")
-        return readlnOrNull()?.toIntOrNull()
+        viewer.printPlainText("Enter your guess (1-3): ",false)
+        return reader.readInput()?.toIntOrNull()
     }
 
     private fun showInvalidInputMessage() {
-        println(colors.red("Invalid input. Please enter a number 1-3"))
+        viewer.printError("Invalid input. Please enter a number 1-3")
     }
 
     private fun processIngredientGuess(ingredients: List<String>, guess: Int) {
         when {
-            guess !in 1..3 -> println(colors.red("Please enter a number between 1 and 3"))
+            guess !in 1..3 -> viewer.printError("Please enter a number between 1 and 3")
             else -> checkIngredientAnswer(ingredients[guess - 1])
         }
     }
@@ -77,18 +80,18 @@ class IngredientsGuessingGameUi(
     }
 
     private fun showCorrectAnswerFeedback() {
-        println(colors.green("Correct! Current score: ${ingredientGuessingGameUseCase.getFinalScore()}"))
+        viewer.printCorrectOutput("Correct! Current score: ${ingredientGuessingGameUseCase.getFinalScore()}")
     }
 
     private fun showWrongAnswerFeedback() {
-        println(colors.red("Wrong answer! Game over!"))
-        println(colors.yellow("Correct ingredient was: ${ingredientGuessingGameUseCase.getCurrentCorrectGuess()}"))
+        viewer.printError("Wrong answer! Game over!")
+        viewer.printInfoLine("Correct ingredient was: ${ingredientGuessingGameUseCase.getCurrentCorrectGuess()}")
         ingredientGuessingGameUseCase.endGame()
     }
 
     private fun displayIngredientGameResults() {
-        println("\n${colors.cyan("Game Over! Final Score: ${ingredientGuessingGameUseCase.getFinalScore()}")}")
-        println(colors.yellow("Thanks for playing!"))
+        viewer.printTitle("\n${"Game Over! Final Score: ${ingredientGuessingGameUseCase.getFinalScore()}"}")
+        viewer.printInfoLine("Thanks for playing!")
     }
 
 }
