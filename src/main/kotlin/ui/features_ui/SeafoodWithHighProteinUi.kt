@@ -21,7 +21,7 @@ class SeafoodWithHighProteinUi(
         val recipes = seafoodWithHighProteinUseCase.getSeafoodWithProteinRecipes()
         recipes.forEachIndexed { index, recipe ->
             viewer.printCorrectOutput(
-                "${index + 1}. Recipe Name: ${recipe.name} \n\tProtein Amount: \n\t${recipe.nutrition?.protein}"
+                "${index + 1}. Recipe Name: ${recipe.name} \n\tProtein Amount: \n\t${recipe.nutrition!!.protein}"
             )
         }
     }
