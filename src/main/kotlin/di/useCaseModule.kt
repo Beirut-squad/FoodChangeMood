@@ -8,6 +8,7 @@ import org.example.logic.use_case.ThinProblemUseCase
 import org.example.logic.use_case.SearchRecipeByDateUseCase
 import org.example.logic.use_case.SeafoodWithHighProteinUseCase
 import org.example.logic.use_case.*
+import org.example.utils.SearchByNameAlgo.Trie
 import org.koin.core.module.dsl.singleOf
 import org.koin.dsl.module
 
