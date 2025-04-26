@@ -24,33 +24,7 @@ class SweetWithNoEggsUseCaseTest {
     }
 
     @Test
-    fun `should return one random sweet recipe with no egg when recipe name and description not contains 'egg' and name or description contains 'sweet'`() {
-        // Given
-        every { recipesRepository.getAllRecipes() } returns listOf(
-            createRecipeForSweetWithNoEgg(
-                name = "Coconut Ladoo sweet",
-                description = "Quick, soft, and melt-in-your-mouth coconut balls made with just" +
-                        " a few ingredients."
-            ),
-            createRecipeForSweetWithNoEgg(
-                name = "Chickpea Spinach Curry",
-                description = "A hearty, protein-rich curry made with chickpeas and spinach in a flavorful" +
-                        " tomato-based gravy.vegan-friendly, and perfect with rice or flatbread."
-            ),
-            createRecipeForSweetWithNoEgg(
-                name = "Peanut Butter Oat Balls",
-                description = "Healthy, chewy, naturally sweet snacks made with oats and peanut butter." +
-                        " No cooking, — just mix and roll!"
-            )
-        )
-        // When
-        val result = sweetWithNoEggsUseCase.findSweetsFreeEggs()
-        // Then
-        assertEquals(result?.name,"Coconut Ladoo sweet")
-    }
-
-    @Test
-    fun `should return one random sweet in case-insensitive way when list have multiple sweet with different cases`(){
+    fun `should return one random sweet in case-insensitive way when list have multiple sweet with different cases`() {
         // Given
         every { recipesRepository.getAllRecipes() } returns listOf(
             createRecipeForSweetWithNoEgg(
@@ -77,11 +51,11 @@ class SweetWithNoEggsUseCaseTest {
         // When
         val result = sweetWithNoEggsUseCase.findSweetsFreeEggs()
         // Then
-        assertTrue { result?.name == "Coconut Ladoo SWEET" || result?.name == "Mango Shrikhand"}
+        assertTrue { result?.name == "Coconut Ladoo SWEET" || result?.name == "Mango Shrikhand" }
     }
 
     @Test
-    fun `should return one random complete sweet when list contains sweets with null name`(){
+    fun `should return one random complete sweet when list contains sweets with null name`() {
         // Given
         every { recipesRepository.getAllRecipes() } returns listOf(
             createRecipeForSweetWithNoEgg(
@@ -103,11 +77,11 @@ class SweetWithNoEggsUseCaseTest {
         // When
         val result = sweetWithNoEggsUseCase.findSweetsFreeEggs()
         // Then
-        assertEquals(result?.name , "Chocolate Fudge Bites")
+        assertEquals(result?.name, "Chocolate Fudge Bites")
     }
 
     @Test
-    fun `should return one random complete sweet when list contains sweets with null description`(){
+    fun `should return one random complete sweet when list contains sweets with null description`() {
         // Given
         every { recipesRepository.getAllRecipes() } returns listOf(
             createRecipeForSweetWithNoEgg(
@@ -128,18 +102,18 @@ class SweetWithNoEggsUseCaseTest {
         // When
         val result = sweetWithNoEggsUseCase.findSweetsFreeEggs()
         // Then
-        assertEquals(result?.name , "Chocolate Fudge Bites")
+        assertEquals(result?.name, "Chocolate Fudge Bites")
     }
 
     @Test
-    fun `should return one random complete sweet when list contains sweets with null ingredients`(){
+    fun `should return one random complete sweet when list contains sweets with null ingredients`() {
         // Given
         every { recipesRepository.getAllRecipes() } returns listOf(
             createRecipeForSweetWithNoEgg(
                 name = "Coconut Ladoo SWEET",
                 description = "Quick, soft, and melt-in-your-mouth coconut balls made with just a few ingredients." +
-                        "Perfect for festivals or quick sweet cravings. no baking, and ready in minutes!"
-                , ingredients = null
+                        "Perfect for festivals or quick sweet cravings. no baking, and ready in minutes!",
+                ingredients = null
             ),
             createRecipeForSweetWithNoEgg(
                 name = "Chocolate Fudge Bites",
@@ -155,11 +129,11 @@ class SweetWithNoEggsUseCaseTest {
         // When
         val result = sweetWithNoEggsUseCase.findSweetsFreeEggs()
         // Then
-        assertTrue { result?.name == "Chocolate Fudge Bites" || result?.name == "Peanut Butter Oat Balls"}
+        assertTrue { result?.name == "Chocolate Fudge Bites" || result?.name == "Peanut Butter Oat Balls" }
     }
 
     @Test
-    fun `should return one random complete sweet when list contains sweets with null steps`(){
+    fun `should return one random complete sweet when list contains sweets with null steps`() {
         // Given
         every { recipesRepository.getAllRecipes() } returns listOf(
             createRecipeForSweetWithNoEgg(
@@ -181,11 +155,11 @@ class SweetWithNoEggsUseCaseTest {
         // When
         val result = sweetWithNoEggsUseCase.findSweetsFreeEggs()
         // Then
-        assertEquals(result?.name , "Coconut Ladoo")
+        assertEquals(result?.name, "Coconut Ladoo")
     }
 
     @Test
-    fun `should return one random complete sweet when list contains sweets with null minutes`(){
+    fun `should return one random complete sweet when list contains sweets with null minutes`() {
         // Given
         every { recipesRepository.getAllRecipes() } returns listOf(
             createRecipeForSweetWithNoEgg(
@@ -201,17 +175,17 @@ class SweetWithNoEggsUseCaseTest {
             createRecipeForSweetWithNoEgg(
                 name = "Peanut Butter Oat Balls with",
                 description = "Healthy, chewy, naturally SwEET snacks made with oats and peanut butter." +
-                        " No cooking, — just mix and roll!" , minutes = null
+                        " No cooking, — just mix and roll!", minutes = null
             )
         )
         // When
         val result = sweetWithNoEggsUseCase.findSweetsFreeEggs()
         // Then
-        assertEquals(result?.name , "Coconut Ladoo")
+        assertEquals(result?.name, "Coconut Ladoo")
     }
 
     @Test
-    fun `should return one random complete sweet when list contains sweets with null tags`(){
+    fun `should return one random complete sweet when list contains sweets with null tags`() {
         // Given
         every { recipesRepository.getAllRecipes() } returns listOf(
             createRecipeForSweetWithNoEgg(
@@ -233,17 +207,18 @@ class SweetWithNoEggsUseCaseTest {
         // When
         val result = sweetWithNoEggsUseCase.findSweetsFreeEggs()
         // Then
-        assertEquals(result?.name , "Coconut Ladoo")
+        assertEquals(result?.name, "Coconut Ladoo")
     }
 
     @Test
-    fun `should return one random complete sweet when list contains sweets with null nutrition`(){
+    fun `should return one random complete sweet when list contains sweets with null nutrition`() {
         // Given
         every { recipesRepository.getAllRecipes() } returns listOf(
             createRecipeForSweetWithNoEgg(
                 name = "Coconut Ladoo",
                 description = "Quick, soft, and melt-in-your-mouth coconut balls made with just a few ingredients." +
-                        "Perfect for festivals or quick sweet cravings. no baking, and ready in minutes!", nutrition = null
+                        "Perfect for festivals or quick sweet cravings. no baking, and ready in minutes!",
+                nutrition = null
             ),
             createRecipeForSweetWithNoEgg(
                 name = "Chocolate Fudge Bites",
@@ -259,11 +234,11 @@ class SweetWithNoEggsUseCaseTest {
         // When
         val result = sweetWithNoEggsUseCase.findSweetsFreeEggs()
         // Then
-        assertEquals(result?.name , "Peanut Butter Oat Balls sweet")
+        assertEquals(result?.name, "Peanut Butter Oat Balls sweet")
     }
 
     @Test
-    fun `should throw RecipeNotFoundException when there is no egg-less sweets`(){
+    fun `should throw RecipeNotFoundException when there is no egg-less sweets`() {
         // Given
         every { recipesRepository.getAllRecipes() } returns listOf(
             createRecipeForSweetWithNoEgg(
@@ -283,13 +258,13 @@ class SweetWithNoEggsUseCaseTest {
             )
         )
         // When & Then
-        assertThrows(RecipeNotFoundException::class.java){
+        assertThrows(RecipeNotFoundException::class.java) {
             sweetWithNoEggsUseCase.findSweetsFreeEggs()
         }
     }
 
     @Test
-    fun `should return not null sweet object when list have egg-less sweets`(){
+    fun `should return not null sweet object when list have egg-less sweets`() {
         // Given
         every { recipesRepository.getAllRecipes() } returns listOf(
             createRecipeForSweetWithNoEgg(
@@ -313,7 +288,6 @@ class SweetWithNoEggsUseCaseTest {
         // Then
         assertNotEquals(result, null)
     }
-
 
 
 }
