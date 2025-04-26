@@ -16,6 +16,7 @@ data class Recipe(
     val ingredients: List<String>? = null,
     val numberOfIngredients: Int? = null
 )
+
 fun Recipe.isComplete(): Boolean {
     return !ingredients.isNullOrEmpty() &&
             name != null &&
