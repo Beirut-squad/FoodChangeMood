@@ -22,6 +22,7 @@ class SearchByNameUITest {
     private lateinit var useCase: SearchByNameUseCase
     private val input = "Gaza"
     private val gazaRecipe = Recipe(name = "Gaza Recipe")
+    private val gazaRecipe2 = Recipe(name = "Original Gaza Recipe", description = "desc...")
 
     @BeforeEach
     fun setUp() {
@@ -54,19 +55,18 @@ class SearchByNameUITest {
     }
 
     @Test
-    fun `should display found recipe name when user enter recipe name and found`() {
+    fun `should display number of recipes found when user enter recipe name and found`() {
         //Given
+        val recipes = listOf(gazaRecipe, gazaRecipe2)
         every { reader.readInput() } returns input
-        every { useCase.searchRecipeByName(input) } returns gazaRecipe
+        every { useCase.searchRecipeByName(input) } returns recipes
 
         //When
         ui.show()
 
         //Then
         verify(exactly = 1) {
-            viewer.printLoader("\n-------------------------------\n")
-            viewer.printCorrectOutput(Strings.FOUNT_RECIPE.formatMessage(gazaRecipe.name))
-            viewer.printLoader("-------------------------------\n")
+            viewer.printCorrectOutput(Strings.FOUNT_RECIPE.formatMessage(recipes.size.toString()))
         }
     }
 
@@ -74,7 +74,7 @@ class SearchByNameUITest {
     fun `should display info recipe when user enter recipe name and found`() {
         //Given
         every { reader.readInput() } returns input
-        every { useCase.searchRecipeByName(input) } returns gazaRecipe
+        every { useCase.searchRecipeByName(input) } returns listOf(gazaRecipe)
 
         //When
         ui.show()
@@ -97,7 +97,6 @@ class SearchByNameUITest {
         //Then
         verify(exactly = 1) {
             viewer.printError(Strings.SORRY_COULD_NOT_FIND_RECIPE_MATCHES_NAME.message)
-
         }
     }
 

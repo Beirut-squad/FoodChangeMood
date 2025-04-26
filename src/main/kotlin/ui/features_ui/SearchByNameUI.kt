@@ -6,9 +6,8 @@ import org.example.model.Recipe
 import org.example.ui.Reader
 import org.example.ui.RecipeFormatter
 import org.example.ui.Viewer
-import org.example.utils.Colors
 import org.example.utils.Strings
-import java.util.*
+import kotlin.collections.List
 
 class SearchByNameUI(
     private val searchByNameUseCase: SearchByNameUseCase,
@@ -18,8 +17,8 @@ class SearchByNameUI(
     fun show() {
         displaySearchHeader()
         try {
-            val recipe: Recipe? = searchRecipe()
-            if (recipe != null) displayRecipe(recipe)
+            val recipes: List<Recipe>? = searchRecipe()
+            if (recipes?.isNotEmpty() == true) displayRecipe(recipes)
             else displayNoRecipeFoundMessage()
         } catch (e: ThereIsNoNameException) {
             handleSearchError(e)
@@ -30,20 +29,21 @@ class SearchByNameUI(
         viewer.printTitle(Strings.SEARCH_BY_NAME_TITLE.message)
     }
 
-    private fun searchRecipe(): Recipe? {
+    private fun searchRecipe(): List<Recipe>? {
         val userInput = reader.readInput().toString()
         return searchByNameUseCase.searchRecipeByName(userInput)
     }
 
-    private fun displayRecipe(recipe: Recipe) {
-        displayFoundRecipe(recipe)
-        displayRecipeDetails(recipe)
+    private fun displayRecipe(recipes: List<Recipe>) {
+        displayFoundRecipe(recipes)
+        recipes.forEach {
+            displayRecipeDetails(it)
+        }
     }
 
-    private fun displayFoundRecipe(recipe: Recipe) {
+    private fun displayFoundRecipe(recipes: List<Recipe>) {
         viewer.printLoader("\n-------------------------------\n")
-        viewer.printCorrectOutput(Strings.FOUNT_RECIPE.formatMessage(recipe.name))
-        viewer.printLoader("-------------------------------\n")
+        viewer.printCorrectOutput(Strings.FOUNT_RECIPE.formatMessage(recipes.size.toString()))
     }
 
     private fun displayRecipeDetails(recipe: Recipe) {
